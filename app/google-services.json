@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "225752795355",
+    "firebase_url": "https://fattyz-grill.firebaseio.com",
+    "project_id": "fattyz-grill",
+    "storage_bucket": "fattyz-grill.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225752795355:android:672859215da33e69",
+        "android_client_info": {
+          "package_name": "com.louanimashaun.fattyzgrill"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "225752795355-bi1nt0o0u47evjc6msqdhlv49ittq2ev.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.louanimashaun.fattyzgrill",
+            "certificate_hash": "bd9c8f4c0b5c4f6fb7a564864cafc30c8fcc150d"
+          }
+        },
+        {
+          "client_id": "225752795355-peaqkttubfj3hcn3j81unfuif382gb3i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCevBECTj7-o1dT8sd6cMouds8jyZTPQkI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "225752795355-peaqkttubfj3hcn3j81unfuif382gb3i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
