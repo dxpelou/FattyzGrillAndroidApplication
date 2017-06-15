@@ -1,25 +1,29 @@
 package com.louanimashaun.fattyzgrill;
 
+import com.louanimashaun.fattyzgrill.model.Meal;
+
+import java.util.List;
+
 /**
  * Created by louanimashaun on 14/06/2017.
  *
  * defines how the view and presenter communicates
  */
 
-public interface MenuContract {
+public interface MealsContract {
 
     interface View {
 
-        void showMenuItems();
+        void showMeals(List<Meal> meals);
 
-        void showNoMenuItems();
+        void showNoMeals();
 
         void setPresenter(Presenter presenter);
     }
 
     interface Presenter{
 
-        void loadMenuItems();
+        void loadMeals(boolean forceUpdate);
 
         void start();
     }

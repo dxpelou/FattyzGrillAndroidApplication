@@ -2,9 +2,12 @@ package com.louanimashaun.fattyzgrill.presenter;
 
 import android.support.annotation.NonNull;
 
-import com.louanimashaun.fattyzgrill.MenuContract;
+import com.louanimashaun.fattyzgrill.MealsContract;
 import com.louanimashaun.fattyzgrill.data.MealsRepository;
+import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.view.MealsFragment;
+
+import java.util.List;
 
 import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
@@ -13,7 +16,7 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
  *Presenter layer of application
  */
 
-public class MealsPresenter implements MenuContract.Presenter{
+public class MealsPresenter implements MealsContract.Presenter{
 
     private final MealsRepository mMealsRepository;
     private final MealsFragment mMealsView;
@@ -27,11 +30,11 @@ public class MealsPresenter implements MenuContract.Presenter{
 
     @Override
     public void start() {
-
+        loadMeals(false);
     }
 
     @Override
-    public void loadMenuItems() {
+    public void loadMeals(boolean forceUpdate) {
 
     }
 }
