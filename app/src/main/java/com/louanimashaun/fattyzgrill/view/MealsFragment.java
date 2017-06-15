@@ -62,7 +62,8 @@ public class MealsFragment extends Fragment implements MealsContract.View  {
 
     @Override
     public void showMeals(List<Meal> meals) {
-
+        checkNotNull(meals);
+        mMealsAdapter.replaceData(meals);
     }
 
     @Override

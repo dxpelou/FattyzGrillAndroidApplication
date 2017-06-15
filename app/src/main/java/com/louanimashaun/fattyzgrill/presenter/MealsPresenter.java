@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.louanimashaun.fattyzgrill.MealsContract;
 import com.louanimashaun.fattyzgrill.data.MealsRepository;
 import com.louanimashaun.fattyzgrill.model.Meal;
+import com.louanimashaun.fattyzgrill.util.ModelUtil;
 import com.louanimashaun.fattyzgrill.view.MealsFragment;
 
 import java.util.List;
@@ -21,7 +22,6 @@ public class MealsPresenter implements MealsContract.Presenter{
     private final MealsRepository mMealsRepository;
     private final MealsFragment mMealsView;
 
-
     public MealsPresenter(@NonNull MealsRepository repository, MealsFragment mealsView){
         mMealsRepository = checkNotNull(repository);
         mMealsView = checkNotNull(mealsView);
@@ -35,6 +35,7 @@ public class MealsPresenter implements MealsContract.Presenter{
 
     @Override
     public void loadMeals(boolean forceUpdate) {
-
+        List<Meal> meals = ModelUtil.createStubMealsList();
+        mMealsView.showMeals(meals);
     }
 }
