@@ -19,14 +19,14 @@ public class ScrollingActivity extends AppCompatActivity {
         setUpToolbar();
 
         MealsFragment mealsFragment = (MealsFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.menu_frame);
+                .findFragmentById(R.id.content_frame);
 
         if (mealsFragment == null){
             mealsFragment = MealsFragment.newInstance();
         }
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.menu_frame, mealsFragment);
+        transaction.add(R.id.content_frame, mealsFragment);
         transaction.commit();
 
         MealsPresenter mMealsPresenter = new MealsPresenter(

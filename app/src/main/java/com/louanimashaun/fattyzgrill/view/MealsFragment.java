@@ -51,7 +51,7 @@ public class MealsFragment extends Fragment implements MealsContract.View  {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mMealsAdapter);
-        return super.onCreateView(inflater, container, savedInstanceState);
+        return rootView;
     }
 
     @Override
