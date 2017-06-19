@@ -6,7 +6,7 @@ import java.util.List;
  * Defines the contract all DataSources follow
  */
 
-interface DataSource <T> {
+public interface DataSource <T> {
 
     interface LoadCallBack<T>{
         void LoadData(List<T> data);

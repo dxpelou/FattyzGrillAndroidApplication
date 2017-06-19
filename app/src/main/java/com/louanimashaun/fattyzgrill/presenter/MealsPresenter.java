@@ -3,6 +3,7 @@ package com.louanimashaun.fattyzgrill.presenter;
 import android.support.annotation.NonNull;
 
 import com.louanimashaun.fattyzgrill.MealsContract;
+import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealsRepository;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.util.ModelUtil;
@@ -30,12 +31,25 @@ public class MealsPresenter implements MealsContract.Presenter{
 
     @Override
     public void start() {
-        loadMeals(false);
+        loadMeals(true);
     }
 
     @Override
     public void loadMeals(boolean forceUpdate) {
-        List<Meal> meals = ModelUtil.createStubMealsList();
-        mMealsView.showMeals(meals);
+        if(forceUpdate){
+            mMealsRepository.refreshData();
+        }
+
+        mMealsRepository.loadData(new DataSource.LoadCallBack<Meal>() {
+            @Override
+            public void LoadData(List<Meal> data) {
+                mMealsView.showMeals(data);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                mMealsView.showNoMeals();
+            }
+        });
     }
 }

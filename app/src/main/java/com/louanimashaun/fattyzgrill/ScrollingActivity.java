@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.louanimashaun.fattyzgrill.data.MealsRepository;
+import com.louanimashaun.fattyzgrill.data.source.local.MealsLocalDataSoure;
+import com.louanimashaun.fattyzgrill.data.source.remote.MealsRemoteDataSource;
 import com.louanimashaun.fattyzgrill.presenter.MealsPresenter;
 import com.louanimashaun.fattyzgrill.view.MealsFragment;
 
@@ -30,7 +32,7 @@ public class ScrollingActivity extends AppCompatActivity {
         transaction.commit();
 
         MealsPresenter mMealsPresenter = new MealsPresenter(
-                MealsRepository.getInstance(), mealsFragment);
+                MealsRepository.getInstance(new MealsLocalDataSoure(), MealsRemoteDataSource.getInstance()), mealsFragment);
     }
 
     private void setUpToolbar(){

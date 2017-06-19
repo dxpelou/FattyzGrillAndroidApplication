@@ -70,4 +70,8 @@ import java.util.Map;
         mLocalDataSource.saveData(data);
         mRemoteDataSource.saveData(data);
     }
+
+    public void refreshData(){
+        mIsCacheDirty = true;
+    }
 }
