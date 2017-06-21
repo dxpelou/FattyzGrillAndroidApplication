@@ -13,7 +13,7 @@ import java.util.Map;
 
     protected static DataSource mRemoteDataSource;
 
-    protected Map<Integer, T> mCachedData;
+    protected Map<String, T> mCachedData;
 
     private boolean mIsCacheDirty;
 
@@ -49,7 +49,6 @@ import java.util.Map;
 
     private void refreshLocalDataSource(List<T> data) {
         mLocalDataSource.deleteAll();
-
         for(T dataItem : data){
             mLocalDataSource.saveData(dataItem);
         }

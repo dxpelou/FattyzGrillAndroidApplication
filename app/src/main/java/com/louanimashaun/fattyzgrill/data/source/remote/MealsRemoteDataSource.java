@@ -5,7 +5,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.louanimashaun.fattyzgrill.data.MealsRepository;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.data.DataSource;
 
@@ -42,10 +41,14 @@ public class MealsRemoteDataSource implements DataSource<Meal> {
         mMealsReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    String key = snapshot.getKey();
                     Meal meal = snapshot.getValue(Meal.class);
+                    meal.setId(key);
                     meals.add(meal);
                 }
+                callBack.LoadData(meals);
             }
 
             @Override
@@ -54,7 +57,7 @@ public class MealsRemoteDataSource implements DataSource<Meal> {
             }
         });
 
-        callBack.LoadData(meals);
+        return;
     }
 
     @Override

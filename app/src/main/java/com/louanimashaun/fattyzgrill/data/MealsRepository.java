@@ -38,7 +38,6 @@ public class MealsRepository extends AbstractRepository<Meal> {
         }else {
             mCachedData.clear();
         }
-
         for(Meal meal : data){
             mCachedData.put(meal.getId(), meal);
         }

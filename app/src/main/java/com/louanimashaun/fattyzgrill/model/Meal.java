@@ -6,11 +6,18 @@ package com.louanimashaun.fattyzgrill.model;
 
 public class Meal {
 
-    private static int id;
+    private String id;
 
     private String title;
 
     private double price;
+
+    private Meal(){}
+
+    public Meal( String title, double price) {
+        this.title = title;
+        this.price = price;
+    }
 
     public String getTitle() {
         return title;
@@ -28,17 +35,11 @@ public class Meal {
         this.price = price;
     }
 
-    public static int getId() {
+    public  String getId() {
         return id;
     }
 
-    public static void setId(int id) {
-        Meal.id = id;
-    }
-
-    public Meal(int id, String title, double price) {
-        this.id = id;
-        this.title = title;
-        this.price = price;
+    public  void setId(String id) {
+        id = id;
     }
 }

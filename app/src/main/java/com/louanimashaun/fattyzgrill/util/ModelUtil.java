@@ -26,6 +26,6 @@ public class ModelUtil {
     }
 
     public static Meal creatStubMeal(){
-        return new Meal(id++, "0", 0.0);
+        return new Meal( "0", 0.0);
     }
 }

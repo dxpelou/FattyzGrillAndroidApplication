@@ -15,9 +15,6 @@
     </string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
 
-    <!-- facebook login-->
-    <string name="facebook_app_id">121341141788258</string>
-    <string name="fb_login_protocol_scheme">fb121341141788258</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -108,4 +105,5 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_sign_in">SignInActivity</string>
 </resources>
