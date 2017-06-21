@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.READ_PROFILE"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-sdk android:minSdkVersion="16"/>
 
     <application
         android:allowBackup="true"
@@ -15,10 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <uses-sdk android:minSdkVersion="16"/>
         <activity
             android:name=".MealsActivity"
-            android:label="@string/title_activity_scrolling"
+            android:label="@string/title_activity_meals"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

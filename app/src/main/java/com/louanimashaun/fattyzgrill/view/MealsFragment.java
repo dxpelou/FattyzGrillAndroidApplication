@@ -7,13 +7,16 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.louanimashaun.fattyzgrill.MealsContract;
 import com.louanimashaun.fattyzgrill.R;
 import com.louanimashaun.fattyzgrill.model.Meal;
-import com.louanimashaun.fattyzgrill.presenter.MealsPresenter;
+import com.louanimashaun.fattyzgrill.util.ModelUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +43,7 @@ public class MealsFragment extends Fragment implements MealsContract.View  {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mMealsAdapter = new MealsAdapter(new ArrayList<Meal>());
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -52,6 +56,19 @@ public class MealsFragment extends Fragment implements MealsContract.View  {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mMealsAdapter);
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_meals, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.action_checkout){
+            CheckoutDialogFragment.newInstance(ModelUtil.createStubMealsList());
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

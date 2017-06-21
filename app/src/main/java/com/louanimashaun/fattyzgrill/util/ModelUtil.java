@@ -20,12 +20,12 @@ public class ModelUtil {
         List<Meal> meal = new ArrayList<>();
 
         for(int i = 0; i < LIST_SIZE; i++){
-            meal.add(creatStubMeal());
+            meal.add(createStubMeal());
         }
         return meal;
     }
 
-    public static Meal creatStubMeal(){
+    public static Meal createStubMeal(){
         return new Meal( "0", 0.0);
     }
 }
