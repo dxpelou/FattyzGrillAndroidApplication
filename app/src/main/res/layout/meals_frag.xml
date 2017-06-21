@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:id="@+id/menu_frame"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.louanimashaun.fattyzgrill.ScrollingActivity"
+    tools:context="com.louanimashaun.fattyzgrill.MealsActivity"
     tools:showIn="@layout/meals_act">
 
     <android.support.v7.widget.RecyclerView
