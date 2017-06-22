@@ -66,7 +66,7 @@ public class MealsFragment extends Fragment implements MealsContract.View  {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_checkout){
-            CheckoutDialogFragment.newInstance(ModelUtil.createStubMealsList());
+            CheckoutDialogFragment.newInstance(ModelUtil.createStubMealsList()).show(getFragmentManager(),"MealsFragment");
         }
         return super.onOptionsItemSelected(item);
     }

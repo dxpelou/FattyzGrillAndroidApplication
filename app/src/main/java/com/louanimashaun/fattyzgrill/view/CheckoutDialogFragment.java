@@ -8,10 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.louanimashaun.fattyzgrill.R;
 import com.louanimashaun.fattyzgrill.data.source.remote.MealsRemoteDataSource;
 import com.louanimashaun.fattyzgrill.model.Meal;
 
 import java.util.List;
+import java.util.zip.Inflater;
 
 /**
  * Created by louanimashaun on 21/06/2017.
@@ -25,8 +27,9 @@ public class CheckoutDialogFragment extends BottomSheetDialogFragment {
         return new CheckoutDialogFragment();
     }
 
+    @Nullable
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return super.onCreateDialog(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.checkout_frag,container, false);
     }
 }
