@@ -28,4 +28,14 @@ public class ModelUtil {
     public static Meal createStubMeal(){
         return new Meal( "0", 0.0);
     }
+
+    public static Meal[] toArray(List<Meal> meals){
+        Meal[] mealsArray = new Meal[meals.size()];
+
+        for (int i = 0; i < meals.size(); i++){
+            mealsArray[i] = meals.get(i);
+        }
+
+        return mealsArray;
+    }
 }

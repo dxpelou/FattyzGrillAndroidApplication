@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Created by louanimashaun on 18/06/2017.
  */
- abstract  class AbstractRepository<T> implements DataSource<T>{
+ public abstract  class AbstractRepository<T> implements DataSource<T>{
 
     protected static DataSource mLocalDataSource;
 
@@ -50,7 +50,7 @@ import java.util.Map;
     private void refreshLocalDataSource(List<T> data) {
         mLocalDataSource.deleteAll();
         for(T dataItem : data){
-            mLocalDataSource.saveData(dataItem);
+            mLocalDataSource.saveData(dataItem, null);
         }
     }
 
@@ -64,10 +64,17 @@ import java.util.Map;
     }
 
     @Override
-    public void saveData(T data) {
+    public void saveData(T data, CompletionCallback callback) {
         putDataItemInCache(data);
-        mLocalDataSource.saveData(data);
-        mRemoteDataSource.saveData(data);
+        mRemoteDataSource.saveData(data, callback);
+        mLocalDataSource.saveData(data, null);
+    }
+
+    @Override
+    public void saveData(List<T> data, CompletionCallback callback) {
+        refreshCache(data);
+        mRemoteDataSource.saveData(data, callback);
+        mLocalDataSource.saveData(data, null);
     }
 
     public void refreshData(){

@@ -5,8 +5,9 @@ import android.support.annotation.NonNull;
 import com.louanimashaun.fattyzgrill.MealsContract;
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealsRepository;
+import com.louanimashaun.fattyzgrill.data.OrdersRepository;
 import com.louanimashaun.fattyzgrill.model.Meal;
-import com.louanimashaun.fattyzgrill.util.ModelUtil;
+import com.louanimashaun.fattyzgrill.model.Order;
 import com.louanimashaun.fattyzgrill.view.MealsFragment;
 
 import java.util.List;
@@ -21,10 +22,12 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 public class MealsPresenter implements MealsContract.Presenter{
 
     private final MealsRepository mMealsRepository;
+    private final OrdersRepository mOrdersRepository;
     private final MealsFragment mMealsView;
 
-    public MealsPresenter(@NonNull MealsRepository repository, MealsFragment mealsView){
-        mMealsRepository = checkNotNull(repository);
+    public MealsPresenter(@NonNull MealsRepository mealsRepository, @NonNull OrdersRepository ordersRepository, MealsFragment mealsView){
+        mMealsRepository = checkNotNull(mealsRepository);
+        mOrdersRepository = checkNotNull(ordersRepository);
         mMealsView = checkNotNull(mealsView);
         mMealsView.setPresenter(this);
     }
@@ -49,6 +52,21 @@ public class MealsPresenter implements MealsContract.Presenter{
             @Override
             public void onDataNotAvailable() {
                 mMealsView.showNoMeals();
+            }
+        });
+    }
+
+    @Override
+    public void orderCompleted(Order order) {
+        mOrdersRepository.saveData(order, new DataSource.CompletionCallback() {
+            @Override
+            public void onComplete() {
+
+            }
+
+            @Override
+            public void onCancel() {
+
             }
         });
     }

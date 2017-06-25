@@ -12,6 +12,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import com.louanimashaun.fattyzgrill.MealsContract;
 import com.louanimashaun.fattyzgrill.R;
@@ -55,6 +57,7 @@ public class MealsFragment extends Fragment implements MealsContract.View  {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mMealsAdapter);
+
         return rootView;
     }
 
@@ -66,7 +69,7 @@ public class MealsFragment extends Fragment implements MealsContract.View  {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_checkout){
-            CheckoutDialogFragment.newInstance(ModelUtil.createStubMealsList()).show(getFragmentManager(),"MealsFragment");
+            CheckoutDialogFragment.newInstance(ModelUtil.createStubMealsList(), mMealsPresenter).show(getFragmentManager(),"MealsFragment");
         }
         return super.onOptionsItemSelected(item);
     }
@@ -92,4 +95,5 @@ public class MealsFragment extends Fragment implements MealsContract.View  {
     public void setPresenter(@NonNull MealsContract.Presenter presenter) {
         mMealsPresenter = checkNotNull(presenter);
     }
+
 }

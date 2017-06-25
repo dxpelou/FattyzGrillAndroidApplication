@@ -14,9 +14,17 @@ public interface DataSource <T> {
         void onDataNotAvailable();
     }
 
+    interface CompletionCallback{
+        void onComplete();
+
+        void onCancel();
+    }
+
     void loadData(LoadCallBack<T> loadCallBack);
 
     void deleteAll();
 
-    void saveData(T data);
+    void saveData(T data, CompletionCallback callback);
+
+    void saveData(List<T> data, CompletionCallback callback );
 }

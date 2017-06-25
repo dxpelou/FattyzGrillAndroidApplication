@@ -10,16 +10,16 @@ public class Order {
 
     private String id;
 
-    private List<Meal> orderItems;
+    private List<Meal> mOrderItems;
 
-    private double totalPrice;
+    private double mTotalPrice;
 
-    private boolean isOrderPending;
+    private boolean mIsOrderPending;
 
-    public Order(List<Meal> orderItems, double totalPrice, String orderStatus, boolean isOrderPending){
-        orderItems = orderItems;
-        totalPrice = totalPrice;
-        isOrderPending = isOrderPending;
+    public Order(List<Meal> orderItems, double totalPrice,  boolean isOrderPending){
+        mOrderItems = orderItems;
+        mTotalPrice = totalPrice;
+        mIsOrderPending = isOrderPending;
     }
     private Order(){}
 
@@ -32,27 +32,27 @@ public class Order {
     }
 
     public List<Meal> getOrderItems() {
-        return orderItems;
+        return mOrderItems;
     }
 
     public void setOrderItems(List<Meal> orderItems) {
-        this.orderItems = orderItems;
+        this.mOrderItems = orderItems;
     }
 
     public double getTotalPrice() {
-        return totalPrice;
+        return mTotalPrice;
     }
 
     public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
+        this.mTotalPrice = totalPrice;
     }
 
     public boolean isOrderPending() {
-        return isOrderPending;
+        return mIsOrderPending;
     }
 
     public void setOrderPending(boolean orderPending) {
-        isOrderPending = orderPending;
+        mIsOrderPending = orderPending;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.louanimashaun.fattyzgrill;
 
 import com.louanimashaun.fattyzgrill.model.Meal;
+import com.louanimashaun.fattyzgrill.model.Order;
 
 import java.util.List;
 
@@ -26,5 +27,7 @@ public interface MealsContract {
         void loadMeals(boolean forceUpdate);
 
         void start();
+
+        void orderCompleted(Order order);
     }
 }

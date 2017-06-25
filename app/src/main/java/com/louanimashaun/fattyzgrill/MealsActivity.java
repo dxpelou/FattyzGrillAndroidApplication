@@ -12,8 +12,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.louanimashaun.fattyzgrill.data.MealsRepository;
+import com.louanimashaun.fattyzgrill.data.OrdersRepository;
 import com.louanimashaun.fattyzgrill.data.source.local.MealsLocalDataSoure;
+import com.louanimashaun.fattyzgrill.data.source.local.OrdersLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.MealsRemoteDataSource;
+import com.louanimashaun.fattyzgrill.data.source.remote.OrdersRemoteDataSource;
 import com.louanimashaun.fattyzgrill.presenter.MealsPresenter;
 import com.louanimashaun.fattyzgrill.view.MealsFragment;
 
@@ -47,9 +50,6 @@ public class MealsActivity extends AppCompatActivity {
         transaction.add(R.id.content_frame, mealsFragment);
         transaction.commit();
 
-        MealsPresenter mMealsPresenter = new MealsPresenter(
-                MealsRepository.getInstance(new MealsLocalDataSoure(), MealsRemoteDataSource.getInstance()), mealsFragment);
-
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -69,6 +69,19 @@ public class MealsActivity extends AppCompatActivity {
                 }
             }
         };
+
+        MealsRepository mealsRepository = MealsRepository.getInstance(
+                MealsLocalDataSoure.getInstance(),
+                MealsRemoteDataSource.getInstance());
+
+        OrdersRepository ordersRepository = OrdersRepository.getInstance(
+                OrdersLocalDataSource.getInstance(),
+                OrdersRemoteDataSource.getInstance());
+
+        MealsPresenter mMealsPresenter = new MealsPresenter(
+                mealsRepository,
+                ordersRepository,
+                mealsFragment);
     }
 
     private void setUpToolbar(){

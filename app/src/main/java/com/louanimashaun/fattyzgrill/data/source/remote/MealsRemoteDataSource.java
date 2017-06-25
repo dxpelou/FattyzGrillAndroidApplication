@@ -66,8 +66,13 @@ public class MealsRemoteDataSource implements DataSource<Meal> {
     }
 
     @Override
-    public void saveData(Meal data) {
+    public void saveData(Meal data,CompletionCallback callback) {
         mMealsReference.push().setValue(data);
+    }
+
+    @Override
+    public void saveData(List<Meal> data, CompletionCallback callback) {
+        //not in use
     }
 
 
