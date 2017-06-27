@@ -37,17 +37,17 @@ public class OrdersRepository extends AbstractRepository<Order> {
             mCachedData.clear();
         }
         for(Order order : data){
-            mCachedData.put(order.getId(), order);
+            putDataItemInCache(order);
         }
     }
 
     @Override
     protected void putDataItemInCache(Order data) {
-        mCachedData.put(data.getId(), data);
+        checkNotNull(data);
+        if (mCachedData == null){
+            mCachedData = new LinkedHashMap<>();
+        }
+        //mCachedData.put(data.getId(), data);
     }
 
-    @Override
-    public void saveData(Order data, CompletionCallback callback) {
-
-    }
 }

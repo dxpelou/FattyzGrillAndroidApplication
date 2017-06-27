@@ -1,5 +1,7 @@
 package com.louanimashaun.fattyzgrill;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
@@ -27,6 +29,7 @@ public class MealsActivity extends AppCompatActivity {
     FirebaseDatabase mFirebaseDatabase;
     FirebaseAuth mFirebaseAuth;
     FirebaseAuth.AuthStateListener mAuthStateListener;
+    public static final String ACCOUNT_TYPE = "fattyz_mobile_app";
 
     private static final int RC_SIGN_IN = 1;
 
@@ -55,7 +58,9 @@ public class MealsActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null){
-                    Toast.makeText(MealsActivity.this, "You are signed in to fatties mobile app", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MealsActivity.this, "You are signed in to fatties mobile app",
+                            Toast.LENGTH_SHORT).show();
+
                 }else{
                     startActivityForResult(
                             AuthUI.getInstance()

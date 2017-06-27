@@ -39,12 +39,12 @@ public class MealsRepository extends AbstractRepository<Meal> {
             mCachedData.clear();
         }
         for(Meal meal : data){
-            mCachedData.put(meal.getId(), meal);
+            mCachedData.put(meal.getLuid(), meal);
         }
     }
 
     @Override
     protected void putDataItemInCache(Meal data) {
-        mCachedData.put(data.getId(), data);
+        mCachedData.put(data.getLuid(), data);
     }
 }

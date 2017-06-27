@@ -45,7 +45,7 @@ public class MealsRemoteDataSource implements DataSource<Meal> {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     String key = snapshot.getKey();
                     Meal meal = snapshot.getValue(Meal.class);
-                    meal.setId(key);
+                    meal.setLuid(key);
                     meals.add(meal);
                 }
                 callBack.LoadData(meals);

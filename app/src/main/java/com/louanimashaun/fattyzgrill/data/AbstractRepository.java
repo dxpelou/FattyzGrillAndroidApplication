@@ -9,9 +9,9 @@ import java.util.Map;
  */
  public abstract  class AbstractRepository<T> implements DataSource<T>{
 
-    protected static DataSource mLocalDataSource;
+    protected DataSource mLocalDataSource;
 
-    protected static DataSource mRemoteDataSource;
+    protected DataSource mRemoteDataSource;
 
     protected Map<String, T> mCachedData;
 

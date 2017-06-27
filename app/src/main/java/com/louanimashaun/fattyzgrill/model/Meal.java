@@ -5,8 +5,10 @@ package com.louanimashaun.fattyzgrill.model;
  */
 
 public class Meal {
+    
+    private String mUuid;
 
-    private String id;
+    private String mLuid;
 
     private String title;
 
@@ -35,11 +37,11 @@ public class Meal {
         this.price = price;
     }
 
-    public  String getId() {
-        return id;
+    public  String getLuid() {
+        return mLuid;
     }
 
-    public  void setId(String id) {
-        id = id;
+    public  void setLuid(String luid) {
+        luid = luid;
     }
 }
