@@ -43,9 +43,9 @@ public class MealsPresenter implements MealsContract.Presenter{
             mMealsRepository.refreshData();
         }
 
-        mMealsRepository.loadData(new DataSource.LoadCallBack<Meal>() {
+        mMealsRepository.loadData(new DataSource.LoadCallback<Meal>() {
             @Override
-            public void LoadData(List<Meal> data) {
+            public void onDataLoaded(List<Meal> data) {
                 mMealsView.showMeals(data);
             }
 

@@ -32,7 +32,12 @@ public class OrdersRemoteDataSource implements DataSource<Order> {
     }
 
     @Override
-    public void loadData(LoadCallBack<Order> loadCallBack) {
+    public void loadData(LoadCallback<Order> loadCallback) {
+        //not in use
+    }
+
+    @Override
+    public void getData(GetCallback getCallback) {
         //not in use
     }
 

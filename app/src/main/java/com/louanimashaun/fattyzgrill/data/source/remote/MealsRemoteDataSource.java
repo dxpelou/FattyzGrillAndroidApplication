@@ -35,7 +35,7 @@ public class MealsRemoteDataSource implements DataSource<Meal> {
     }
 
     @Override
-    public void loadData(final LoadCallBack<Meal> callBack) {
+    public void loadData(final LoadCallback<Meal> callBack) {
        final List<Meal> meals = new ArrayList<>();
 
         mMealsReference.addValueEventListener(new ValueEventListener() {
@@ -48,7 +48,7 @@ public class MealsRemoteDataSource implements DataSource<Meal> {
                     meal.setLuid(key);
                     meals.add(meal);
                 }
-                callBack.LoadData(meals);
+                callBack.onDataLoaded(meals);
             }
 
             @Override
@@ -58,6 +58,11 @@ public class MealsRemoteDataSource implements DataSource<Meal> {
         });
 
         return;
+    }
+
+    @Override
+    public void getData(GetCallback getCallback) {
+
     }
 
     @Override
@@ -72,7 +77,7 @@ public class MealsRemoteDataSource implements DataSource<Meal> {
 
     @Override
     public void saveData(List<Meal> data, CompletionCallback callback) {
-        //not in use
+        //not in use§
     }
 
 

@@ -23,7 +23,12 @@ public class MealsLocalDataSoure implements DataSource<Meal>{
     private MealsLocalDataSoure(){}
 
     @Override
-    public void loadData(LoadCallBack<Meal> loadCallBack) {
+    public void loadData(LoadCallback<Meal> loadCallback) {
+
+    }
+
+    @Override
+    public void getData(GetCallback getCallback) {
 
     }
 

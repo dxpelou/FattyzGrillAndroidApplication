@@ -18,9 +18,9 @@ import java.util.Map;
     private boolean mIsCacheDirty;
 
     @Override
-    public void loadData(LoadCallBack<T> callBack) {
+    public void loadData(LoadCallback<T> callBack) {
         if(!mIsCacheDirty && mCachedData != null ){
-            callBack.LoadData(new ArrayList< >(mCachedData.values()));
+            callBack.onDataLoaded(new ArrayList< >(mCachedData.values()));
             return;
         }
 
@@ -31,13 +31,13 @@ import java.util.Map;
         }
     }
 
-    private void loadDataFromRemoteDataSource(final LoadCallBack<T> callBack) {
-        mRemoteDataSource.loadData(new LoadCallBack<T>() {
+    private void loadDataFromRemoteDataSource(final LoadCallback<T> callBack) {
+        mRemoteDataSource.loadData(new LoadCallback<T>() {
             @Override
-            public void LoadData(List<T> data) {
+            public void onDataLoaded(List<T> data) {
                 refreshCache(data);
                 refreshLocalDataSource(data);
-                callBack.LoadData(data);
+                callBack.onDataLoaded(data);
             }
 
             @Override

@@ -8,8 +8,14 @@ import java.util.List;
 
 public interface DataSource <T> {
 
-    interface LoadCallBack<T>{
-        void LoadData(List<T> data);
+    interface LoadCallback<T>{
+        void onDataLoaded(List<T> data);
+
+        void onDataNotAvailable();
+    }
+
+    interface GetCallback<T>{
+        void onDataLoaded(T data);
 
         void onDataNotAvailable();
     }
@@ -20,7 +26,9 @@ public interface DataSource <T> {
         void onCancel();
     }
 
-    void loadData(LoadCallBack<T> loadCallBack);
+    void loadData(LoadCallback<T> loadCallback);
+
+    void getData(GetCallback getCallback);
 
     void deleteAll();
 

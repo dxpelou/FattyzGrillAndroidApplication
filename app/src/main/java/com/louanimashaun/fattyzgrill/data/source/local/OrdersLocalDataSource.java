@@ -1,7 +1,6 @@
 package com.louanimashaun.fattyzgrill.data.source.local;
 
 import com.louanimashaun.fattyzgrill.data.DataSource;
-import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Order;
 
 import java.util.List;
@@ -24,7 +23,12 @@ public class OrdersLocalDataSource implements DataSource<Order>{
     private OrdersLocalDataSource(){}
 
     @Override
-    public void loadData(DataSource.LoadCallBack<Order> loadCallBack) {
+    public void loadData(LoadCallback<Order> loadCallback) {
+
+    }
+
+    @Override
+    public void getData(GetCallback getCallback) {
 
     }
 
