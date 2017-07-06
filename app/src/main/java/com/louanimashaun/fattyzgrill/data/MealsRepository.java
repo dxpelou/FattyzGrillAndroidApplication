@@ -47,4 +47,9 @@ public class MealsRepository extends AbstractRepository<Meal> {
     protected void putDataItemInCache(Meal data) {
         mCachedData.put(data.getLuid(), data);
     }
+
+    @Override
+    public void getData(GetCallback<Meal> callback) {
+
+    }
 }

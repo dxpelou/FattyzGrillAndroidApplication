@@ -61,6 +61,8 @@ public class UserRemoteDataSource implements DataSource<User> {
 
                 if (user != null){
                     callback.onDataLoaded(user);
+                }else {
+                    callback.onDataNotAvailable();
                 }
             }
 

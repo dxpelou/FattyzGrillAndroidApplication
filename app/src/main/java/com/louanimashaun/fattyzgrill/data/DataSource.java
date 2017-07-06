@@ -26,9 +26,9 @@ public interface DataSource <T> {
         void onCancel();
     }
 
-    void loadData(LoadCallback<T> loadCallback);
+    void loadData(LoadCallback<T> callback);
 
-    void getData(GetCallback getCallback);
+    void getData(GetCallback<T> callback);
 
     void deleteAll();
 

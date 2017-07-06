@@ -50,4 +50,8 @@ public class OrdersRepository extends AbstractRepository<Order> {
         //mCachedData.put(data.getId(), data);
     }
 
+    @Override
+    public void getData(GetCallback<Order> callback) {
+
+    }
 }

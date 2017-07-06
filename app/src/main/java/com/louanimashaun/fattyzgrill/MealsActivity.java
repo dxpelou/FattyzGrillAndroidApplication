@@ -13,12 +13,15 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
+import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealsRepository;
 import com.louanimashaun.fattyzgrill.data.OrdersRepository;
+import com.louanimashaun.fattyzgrill.data.UserRepository;
 import com.louanimashaun.fattyzgrill.data.source.local.MealsLocalDataSoure;
 import com.louanimashaun.fattyzgrill.data.source.local.OrdersLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.MealsRemoteDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.OrdersRemoteDataSource;
+import com.louanimashaun.fattyzgrill.model.User;
 import com.louanimashaun.fattyzgrill.presenter.MealsPresenter;
 import com.louanimashaun.fattyzgrill.view.MealsFragment;
 
@@ -29,9 +32,11 @@ public class MealsActivity extends AppCompatActivity {
     FirebaseDatabase mFirebaseDatabase;
     FirebaseAuth mFirebaseAuth;
     FirebaseAuth.AuthStateListener mAuthStateListener;
-    public static final String ACCOUNT_TYPE = "fattyz_mobile_app";
 
+    public static final String ACCOUNT_TYPE = "fattyz_mobile_app";
     private static final int RC_SIGN_IN = 1;
+
+    private UserRepository mUserRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +65,14 @@ public class MealsActivity extends AppCompatActivity {
                 if(user != null){
                     Toast.makeText(MealsActivity.this, "You are signed in to fatties mobile app",
                             Toast.LENGTH_SHORT).show();
+
+                    String userId = user.getUid();
+
+
+                    //mUser Repository should be implemented through
+                    // presenter to increase testability
+                    mUserRepository.refreshData();
+                    mUserRepository.getUser(userId, null);
 
                 }else{
                     startActivityForResult(
