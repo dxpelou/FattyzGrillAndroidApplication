@@ -18,7 +18,7 @@ import java.util.List;
 public class MealsRemoteDataSource implements DataSource<Meal> {
 
     private static MealsRemoteDataSource INSTANCE = null;
-    private final FirebaseDatabase mFirebaseDatabase ;
+    private final FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mMealsReference;
     private static final String MEALS_PATH= "meals";
 
@@ -45,7 +45,7 @@ public class MealsRemoteDataSource implements DataSource<Meal> {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     String key = snapshot.getKey();
                     Meal meal = snapshot.getValue(Meal.class);
-                    meal.setLuid(key);
+                    //meal.setLuid(key);
                     meals.add(meal);
                 }
                 callBack.onDataLoaded(meals);
