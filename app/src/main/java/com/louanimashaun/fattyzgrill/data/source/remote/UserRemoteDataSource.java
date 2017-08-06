@@ -18,12 +18,14 @@ public class UserRemoteDataSource implements DataSource<User> {
 
     private static UserRemoteDataSource INSTANCE = null;
 
-
     private final FirebaseDatabase mFirebaseDatabase ;
-    private DatabaseReference mUsersReference;
+    private static DatabaseReference mUsersReference;
 
     private static final String USERS_PATH = "users";
     private static String THIS_USER_PATH = null;
+
+
+    public static final int UserNotFoundErrorCode = 0;
 
     public static  UserRemoteDataSource getInstance(){
         if (INSTANCE == null){
@@ -35,25 +37,55 @@ public class UserRemoteDataSource implements DataSource<User> {
     private UserRemoteDataSource(){
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUsersReference = mFirebaseDatabase.getReference(USERS_PATH);
-
     }
 
     @Override
     public void loadData(LoadCallback<User> loadCallback) {
-        //not in use
+        //not in
     }
 
     @Override
-    public void getData(GetCallback getCallback) {
-        if(THIS_USER_PATH == null){
+    public void getData(String id, GetCallback getCallback) {
+        String thisUserPath = USERS_PATH + "/" + id;
+        DatabaseReference thisUserReference  = mFirebaseDatabase.getReference(thisUserPath);
 
+        if(thisUserReference == null){
+            getCallback.onDataNotAvailable();
         }
-
     }
 
 
     public void getUser(String id, final GetCallback<User> callback){
         DatabaseReference mThisUserReference = mUsersReference.child("/" + id);
+        mThisUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+
+                if (user != null){
+                    callback.onDataLoaded(user);
+                }else {
+                    callback.onDataNotAvailable();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onDataNotAvailable();
+            }
+        });
+    }
+
+
+    public void getUser(String id, final GetCallback<User> callback, ErrorCallback errorCallback){
+
+        DatabaseReference mThisUserReference = mUsersReference.child("/" + id);
+
+        if(mThisUserReference == null){
+            errorCallback.onError(UserNotFoundErrorCode);
+            return;
+        }
+
         mThisUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -96,4 +128,5 @@ public class UserRemoteDataSource implements DataSource<User> {
     public void saveData(List<User> data, CompletionCallback callback) {
         //noy in use
     }
+
 }

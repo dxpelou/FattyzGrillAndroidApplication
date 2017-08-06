@@ -51,7 +51,7 @@ public class OrdersRepository extends AbstractRepository<Order> {
     }
 
     @Override
-    public void getData(GetCallback<Order> callback) {
+    public void getData(String id, GetCallback<Order> callback) {
 
     }
 }

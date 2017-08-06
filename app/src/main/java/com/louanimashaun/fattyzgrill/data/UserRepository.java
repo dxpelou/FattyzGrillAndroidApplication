@@ -1,11 +1,9 @@
 package com.louanimashaun.fattyzgrill.data;
 
-import com.louanimashaun.fattyzgrill.data.source.local.UserLocalDataSource;
+import com.louanimashaun.fattyzgrill.data.source.local.UserLocalDataSource2;
 import com.louanimashaun.fattyzgrill.data.source.remote.UserRemoteDataSource;
-import com.louanimashaun.fattyzgrill.model.Order;
 import com.louanimashaun.fattyzgrill.model.User;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
@@ -19,20 +17,20 @@ public class UserRepository implements DataSource<User> {
 
     private static UserRepository INSTANCE = null;
 
-    private static UserLocalDataSource mLocalDataSource;
+    private static UserLocalDataSource2 mLocalDataSource;
 
     private static UserRemoteDataSource mRemoteDataSource;
 
     private static boolean mIsCacheDirty = false;
 
-    public static UserRepository getInstance(UserLocalDataSource localDataSource, UserRemoteDataSource remoteDataSource){
+    public static UserRepository getInstance(UserLocalDataSource2 localDataSource, UserRemoteDataSource remoteDataSource){
         if(INSTANCE == null){
             INSTANCE = new UserRepository(localDataSource, remoteDataSource);
         }
         return INSTANCE;
     }
 
-    private UserRepository(UserLocalDataSource localDataSource, UserRemoteDataSource remoteDataSource){
+    private UserRepository(UserLocalDataSource2 localDataSource, UserRemoteDataSource remoteDataSource){
         mLocalDataSource = checkNotNull(localDataSource);
         mRemoteDataSource = checkNotNull(remoteDataSource);
     }
@@ -43,28 +41,8 @@ public class UserRepository implements DataSource<User> {
     }
 
     @Override
-    public void getData(final GetCallback callback) {
-        mLocalDataSource.getData(new GetCallback<User>() {
-            @Override
-            public void onDataLoaded(User data) {
-                callback.onDataLoaded(data);
-            }
+    public void getData(String id, final GetCallback callback) {
 
-            @Override
-            public void onDataNotAvailable() {
-            mRemoteDataSource.getData(new GetCallback<User>() {
-                @Override
-                public void onDataLoaded(User data) {
-                    mLocalDataSource.saveData(data, null);
-                }
-
-                @Override
-                public void onDataNotAvailable() {
-                    callback.onDataNotAvailable();
-                }
-            });
-            }
-        });
     }
 
     @Override
@@ -82,17 +60,17 @@ public class UserRepository implements DataSource<User> {
 
     }
 
-    public void getUser(final String userID, final GetCallback<User> callback){
+    public void getUser(final String userId, final GetCallback<User> callback, final ErrorCallback errorCallback){
 
         //TODO add network configuration in
         if(mIsCacheDirty){
-            getUserFromRemoteDataSource(userID, callback);
+            getUserFromRemoteDataSource(userId, callback, errorCallback);
             mIsCacheDirty = false;
             return;
         }
 
 
-        mLocalDataSource.getData(new GetCallback<User>() {
+        mLocalDataSource.getData(userId, new GetCallback<User>() {
             @Override
             public void onDataLoaded(User data) {
                 callback.onDataLoaded(data);
@@ -100,15 +78,15 @@ public class UserRepository implements DataSource<User> {
 
             @Override
             public void onDataNotAvailable() {
-                 getUserFromRemoteDataSource(userID, callback);
+                 getUserFromRemoteDataSource(userId, callback, errorCallback);
             }
         });
     }
 
 
-    private void getUserFromRemoteDataSource(String userID, final GetCallback callback){
+    private void getUserFromRemoteDataSource(String userId, final GetCallback callback, ErrorCallback errorCallback){
         //TODO add network configuartion in
-        mRemoteDataSource.getUser(userID, new GetCallback<User>() {
+        mRemoteDataSource.getUser(userId, new GetCallback<User>() {
 
             @Override
             public void onDataLoaded(User data) {
@@ -120,7 +98,7 @@ public class UserRepository implements DataSource<User> {
             public void onDataNotAvailable() {
                 callback.onDataNotAvailable();
             }
-        }) ;
+        }, errorCallback) ;
     }
 
 

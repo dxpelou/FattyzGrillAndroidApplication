@@ -37,7 +37,7 @@ public class OrdersRemoteDataSource implements DataSource<Order> {
     }
 
     @Override
-    public void getData(GetCallback getCallback) {
+    public void getData(String id, GetCallback getCallback) {
         //not in use
     }
 

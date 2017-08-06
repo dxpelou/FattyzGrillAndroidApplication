@@ -5,6 +5,8 @@ import com.louanimashaun.fattyzgrill.model.Order;
 
 import java.util.List;
 
+import io.realm.Realm;
+
 /**
  * Created by louanimashaun on 25/06/2017.
  */
@@ -13,6 +15,8 @@ public class OrdersLocalDataSource implements DataSource<Order>{
 
     private static OrdersLocalDataSource INSTANCE = null;
 
+    private static Realm realm;
+
     public static OrdersLocalDataSource getInstance(){
         if(INSTANCE == null){
             INSTANCE = new OrdersLocalDataSource();
@@ -20,7 +24,8 @@ public class OrdersLocalDataSource implements DataSource<Order>{
         return INSTANCE;
     }
 
-    private OrdersLocalDataSource(){}
+    private OrdersLocalDataSource(){
+    }
 
     @Override
     public void loadData(LoadCallback<Order> loadCallback) {

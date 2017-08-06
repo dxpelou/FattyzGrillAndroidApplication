@@ -26,9 +26,13 @@ public interface DataSource <T> {
         void onCancel();
     }
 
+    interface ErrorCallback {
+        void onError(int errorCode);
+    }
+
     void loadData(LoadCallback<T> callback);
 
-    void getData(GetCallback<T> callback);
+    void getData(String id, GetCallback<T> callback);
 
     void deleteAll();
 

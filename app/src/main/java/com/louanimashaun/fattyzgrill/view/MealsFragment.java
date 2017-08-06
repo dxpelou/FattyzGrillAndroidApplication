@@ -1,5 +1,6 @@
 package com.louanimashaun.fattyzgrill.view;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -52,13 +53,35 @@ public class MealsFragment extends Fragment implements MealsContract.View  {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.meals_frag,container, false);
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.meals_recycler_view);
+        return rootView;
+    }
+
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.meals_recycler_view);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mMealsAdapter);
+        recyclerView.setHasFixedSize(true);
 
-        return rootView;
+       /* recyclerView.addItemDecoration(new RecyclerView.ItemDecoration(){
+
+            @Override
+            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+                int space = 1;
+                outRect.left = space;
+                outRect.right = space;
+                outRect.bottom = space;
+
+                if(parent.getChildAdapterPosition(view) == 0){
+                    outRect.top = space;
+                }
+            }
+        });*/
     }
 
     @Override

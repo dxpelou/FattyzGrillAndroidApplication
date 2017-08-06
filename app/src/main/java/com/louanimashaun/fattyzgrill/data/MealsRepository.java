@@ -49,7 +49,7 @@ public class MealsRepository extends AbstractRepository<Meal> {
     }
 
     @Override
-    public void getData(GetCallback<Meal> callback) {
+    public void getData(String id, GetCallback<Meal> callback) {
 
     }
 }

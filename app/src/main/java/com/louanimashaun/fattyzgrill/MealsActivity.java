@@ -21,6 +21,7 @@ import com.louanimashaun.fattyzgrill.data.source.local.MealsLocalDataSoure;
 import com.louanimashaun.fattyzgrill.data.source.local.OrdersLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.MealsRemoteDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.OrdersRemoteDataSource;
+import com.louanimashaun.fattyzgrill.data.source.remote.UserRemoteDataSource;
 import com.louanimashaun.fattyzgrill.model.User;
 import com.louanimashaun.fattyzgrill.presenter.MealsPresenter;
 import com.louanimashaun.fattyzgrill.view.MealsFragment;
@@ -66,13 +67,21 @@ public class MealsActivity extends AppCompatActivity {
                     Toast.makeText(MealsActivity.this, "You are signed in to fatties mobile app",
                             Toast.LENGTH_SHORT).show();
 
-                    String userId = user.getUid();
+                    final String userId = user.getUid();
 
 
                     //mUser Repository should be implemented through
                     // presenter to increase testability
                     mUserRepository.refreshData();
-                    mUserRepository.getUser(userId, null);
+                    mUserRepository.getUser(userId, null, new DataSource.ErrorCallback() {
+                        @Override
+                        public void onError(int errorCode) {
+                            if(errorCode == UserRemoteDataSource.UserNotFoundErrorCode){
+                                User user = new User(userId, false);
+                                mUserRepository.saveData(user, null);
+                            }
+                        }
+                    });
 
                 }else{
                     startActivityForResult(

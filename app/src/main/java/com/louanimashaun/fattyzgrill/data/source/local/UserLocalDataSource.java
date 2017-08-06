@@ -1,59 +1,81 @@
 package com.louanimashaun.fattyzgrill.data.source.local;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.annotation.Nullable;
+import android.provider.ContactsContract;
 
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.model.User;
 
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
+
 /**
- * Created by louanimashaun on 03/07/2017.
+ * Created by louanimashaun on 06/08/2017.
  */
 
 public class UserLocalDataSource implements DataSource<User> {
 
     private static UserLocalDataSource INSTANCE = null;
-    private Context mContext;
-    public static final String  APP_KEY = "com.louanimashaun.fattyzgrill";
-    public static final String ADMIN_KEY = "is_admin_key";
-    public static final String USER_KEY = "user_id";
-;
+    private static Context mContext;
+    private static Realm realm;
+
+    public UserLocalDataSource getInstance(Context context){
+        if (INSTANCE == null){
+            INSTANCE = new UserLocalDataSource(context);
+        }
+        return INSTANCE;
+    }
+
+    private UserLocalDataSource(Context context){
+        mContext = context;
+        Realm.init(context);
+        realm = Realm.getDefaultInstance();
+    }
 
     @Override
-    public void loadData(LoadCallback<User> loadCallback) {
+    public void loadData(LoadCallback<User> callback) {
 
     }
 
     @Override
-    public void getData(GetCallback<User> callback) {
-        SharedPreferences sharedPref = mContext.getSharedPreferences(APP_KEY,Context.MODE_PRIVATE);
-        String defaultValue = null;
-        String userId = sharedPref.getString(USER_KEY, "");
-        //TODO change isAdmin to enum
-        boolean isAdmin = sharedPref.getBoolean(ADMIN_KEY, false);
+    public void getData(String id, GetCallback<User> callback) {
+        User user = realm.where(User.class).equalTo("id", id).findFirstAsync();
 
-        if(userId != "") {
-            callback.onDataLoaded(new User(userId, isAdmin));
-        }else {
+        if(user != null){
+            callback.onDataLoaded(user);
+        }else{
             callback.onDataNotAvailable();
         }
     }
 
     @Override
     public void deleteAll() {
-        //not in use
+
     }
 
     @Override
-    public void saveData(User data, @Nullable CompletionCallback callback) {
-        SharedPreferences.Editor editor = mContext.getSharedPreferences(APP_KEY,
-                Context.MODE_PRIVATE).edit();
-        editor.putBoolean(ADMIN_KEY, data.isAdmin());
-        editor.putString(USER_KEY, data.getUserId());
-        editor.commit();
+    public void saveData(final User data, final CompletionCallback callback) {
+       realm.executeTransactionAsync(new Realm.Transaction(){
+
+           @Override
+           public void execute(Realm realm) {
+                realm.copyToRealm(data);
+           }
+       }, new Realm.Transaction.OnSuccess(){
+           @Override
+           public void onSuccess() {
+                 callback.onComplete();
+           }
+       }, new Realm.Transaction.OnError(){
+           @Override
+           public void onError(Throwable error) {
+                callback.onCancel();
+           }
+       });
+
     }
 
     @Override
