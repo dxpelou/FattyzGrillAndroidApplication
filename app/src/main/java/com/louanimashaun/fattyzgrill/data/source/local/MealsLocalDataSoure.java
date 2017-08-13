@@ -28,7 +28,7 @@ public class MealsLocalDataSoure implements DataSource<Meal>{
     }
 
     @Override
-    public void getData(GetCallback getCallback) {
+    public void getData(String id, GetCallback getCallback) {
 
     }
 

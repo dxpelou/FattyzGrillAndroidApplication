@@ -33,7 +33,7 @@ public class OrdersLocalDataSource implements DataSource<Order>{
     }
 
     @Override
-    public void getData(GetCallback getCallback) {
+    public void getData(String id, GetCallback getCallback) {
 
     }
 

@@ -59,6 +59,9 @@ public class MealsActivity extends AppCompatActivity {
         transaction.add(R.id.content_frame, mealsFragment);
         transaction.commit();
 
+
+
+        //AuthStateListener causing problems ,may need get rid of it for admind functionality
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -69,9 +72,9 @@ public class MealsActivity extends AppCompatActivity {
 
                     final String userId = user.getUid();
 
-
                     //mUser Repository should be implemented through
                     // presenter to increase testability
+
                     mUserRepository.refreshData();
                     mUserRepository.getUser(userId, null, new DataSource.ErrorCallback() {
                         @Override
@@ -87,15 +90,22 @@ public class MealsActivity extends AppCompatActivity {
                     startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
-                                    .setIsSmartLockEnabled(false)
-                                    .setAvailableProviders(
+                                    .setIsSmartLockEnabled(false).setProviders(
                                             Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
-                                    //,new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()))
+//                                    //,new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()))
                                     .build(),
                             RC_SIGN_IN);
+
+                                    //needed
+//                                    .setAvailableProviders(
+//                                            Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+//                                    //,new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()))
+//                                    .build(),
+//                            RC_SIGN_IN);
                 }
             }
         };
+
 
         MealsRepository mealsRepository = MealsRepository.getInstance(
                 MealsLocalDataSoure.getInstance(),
@@ -114,5 +124,17 @@ public class MealsActivity extends AppCompatActivity {
     private void setUpToolbar(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     }
 }
