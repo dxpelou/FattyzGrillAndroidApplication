@@ -22,7 +22,7 @@ public class UserLocalDataSource implements DataSource<User> {
     private static Context mContext;
     private static Realm realm;
 
-    public UserLocalDataSource getInstance(Context context){
+    public static UserLocalDataSource getInstance(Context context){
         if (INSTANCE == null){
             INSTANCE = new UserLocalDataSource(context);
         }

@@ -1,6 +1,8 @@
 package com.louanimashaun.fattyzgrill.data;
 
-import com.louanimashaun.fattyzgrill.data.source.local.UserLocalDataSource2;
+import android.util.Log;
+
+import com.louanimashaun.fattyzgrill.data.source.local.UserLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.UserRemoteDataSource;
 import com.louanimashaun.fattyzgrill.model.User;
 
@@ -17,20 +19,22 @@ public class UserRepository implements DataSource<User> {
 
     private static UserRepository INSTANCE = null;
 
-    private static UserLocalDataSource2 mLocalDataSource;
+    private static UserLocalDataSource mLocalDataSource;
 
     private static UserRemoteDataSource mRemoteDataSource;
 
     private static boolean mIsCacheDirty = false;
 
-    public static UserRepository getInstance(UserLocalDataSource2 localDataSource, UserRemoteDataSource remoteDataSource){
+    private static final String TAG = "UserRepositoty";
+
+    public static UserRepository getInstance(UserLocalDataSource localDataSource, UserRemoteDataSource remoteDataSource){
         if(INSTANCE == null){
             INSTANCE = new UserRepository(localDataSource, remoteDataSource);
         }
         return INSTANCE;
     }
 
-    private UserRepository(UserLocalDataSource2 localDataSource, UserRemoteDataSource remoteDataSource){
+    private UserRepository(UserLocalDataSource localDataSource, UserRemoteDataSource remoteDataSource){
         mLocalDataSource = checkNotNull(localDataSource);
         mRemoteDataSource = checkNotNull(remoteDataSource);
     }
@@ -52,7 +56,29 @@ public class UserRepository implements DataSource<User> {
 
     @Override
     public void saveData(User data, CompletionCallback callback) {
+         mRemoteDataSource.saveData(data, new CompletionCallback() {
+             @Override
+             public void onComplete() {
+                 Log.d(TAG, "user saved to firebase");
+             }
 
+             @Override
+             public void onCancel() {
+                Log.d(TAG, "user failed to save to firebase");
+             }
+         });
+
+        mLocalDataSource.saveData(data, new CompletionCallback() {
+            @Override
+            public void onComplete() {
+                Log.d(TAG, "user saved to local realm database");
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d(TAG, "user failed to save to local realm database");
+            }
+        });
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.louanimashaun.fattyzgrill;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
@@ -19,6 +20,7 @@ import com.louanimashaun.fattyzgrill.data.OrdersRepository;
 import com.louanimashaun.fattyzgrill.data.UserRepository;
 import com.louanimashaun.fattyzgrill.data.source.local.MealsLocalDataSoure;
 import com.louanimashaun.fattyzgrill.data.source.local.OrdersLocalDataSource;
+import com.louanimashaun.fattyzgrill.data.source.local.UserLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.MealsRemoteDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.OrdersRemoteDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.UserRemoteDataSource;
@@ -59,6 +61,7 @@ public class MealsActivity extends AppCompatActivity {
         transaction.add(R.id.content_frame, mealsFragment);
         transaction.commit();
 
+        mUserRepository = UserRepository.getInstance(UserLocalDataSource.getInstance(this), UserRemoteDataSource.getInstance());
 
 
         //AuthStateListener causing problems ,may need get rid of it for admind functionality
@@ -72,19 +75,7 @@ public class MealsActivity extends AppCompatActivity {
 
                     final String userId = user.getUid();
 
-                    //mUser Repository should be implemented through
-                    // presenter to increase testability
-
-                    mUserRepository.refreshData();
-                    mUserRepository.getUser(userId, null, new DataSource.ErrorCallback() {
-                        @Override
-                        public void onError(int errorCode) {
-                            if(errorCode == UserRemoteDataSource.UserNotFoundErrorCode){
-                                User user = new User(userId, false);
-                                mUserRepository.saveData(user, null);
-                            }
-                        }
-                    });
+                    getUser(userId);
 
                 }else{
                     startActivityForResult(
@@ -102,6 +93,7 @@ public class MealsActivity extends AppCompatActivity {
 //                                    //,new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()))
 //                                    .build(),
 //                            RC_SIGN_IN);
+
                 }
             }
         };
@@ -137,4 +129,33 @@ public class MealsActivity extends AppCompatActivity {
         super.onPause();
         mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     }
+
+
+    public void getUser(final String userId){
+        //mUser Repository should be implemented through
+        // presenter to increase testability
+
+        mUserRepository.refreshData();
+        mUserRepository.getUser(userId, new DataSource.GetCallback<User>() {
+            @Override
+            public void onDataLoaded(User data) {
+
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        }, new DataSource.ErrorCallback() {
+            @Override
+            public void onError(int errorCode) {
+                if (errorCode == UserRemoteDataSource.UserNotFoundErrorCode) {
+                    User user = new User(userId, false);
+                    mUserRepository.saveData(user, null);
+                }
+            }
+        });
+    }
+
+
 }

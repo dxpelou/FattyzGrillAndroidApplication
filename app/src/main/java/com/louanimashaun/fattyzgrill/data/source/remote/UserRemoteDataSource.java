@@ -4,6 +4,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.model.User;
@@ -77,14 +78,27 @@ public class UserRemoteDataSource implements DataSource<User> {
     }
 
 
-    public void getUser(String id, final GetCallback<User> callback, ErrorCallback errorCallback){
+    public void getUser(String id, final GetCallback<User> callback,final ErrorCallback errorCallback){
 
         DatabaseReference mThisUserReference = mUsersReference.child("/" + id);
 
-        if(mThisUserReference == null){
-            errorCallback.onError(UserNotFoundErrorCode);
-            return;
-        }
+        Query query = mThisUserReference.equalTo(id, "userId");
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.exists()){
+                    errorCallback.onError(UserNotFoundErrorCode);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onDataNotAvailable();
+            }
+        });
+
 
         mThisUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -112,10 +126,10 @@ public class UserRemoteDataSource implements DataSource<User> {
 
     @Override
     public void saveData(User data, final CompletionCallback callback) {
-        mUsersReference.push().setValue(data, new DatabaseReference.CompletionListener(){
+        mUsersReference.child(data.getUserId()).setValue(data, new DatabaseReference.CompletionListener(){
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                if(databaseError != null){
+                if(databaseError == null){
                  callback.onComplete();
                     return;
                 }
