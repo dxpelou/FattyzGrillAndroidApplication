@@ -20,7 +20,7 @@ import com.louanimashaun.fattyzgrill.presenter.MealsPresenter;
 
 public class MealActivity2 extends AppCompatActivity {
 
-    private TextView mTextMessage;
+    private MealsPresenter mMealsPresenter;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -29,13 +29,28 @@ public class MealActivity2 extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    mTextMessage.setText(R.string.title_home);
+                    MealsFragment mealsFragment = MealsFragment.newInstance();
+                    replaceFragment(mealsFragment);
+
+                    MealsRepository mealsRepository = MealsRepository.getInstance(
+                            MealsLocalDataSoure.getInstance(),
+                            MealsRemoteDataSource.getInstance());
+
+                    OrdersRepository ordersRepository = OrdersRepository.getInstance(
+                            OrdersLocalDataSource.getInstance(),
+                            OrdersRemoteDataSource.getInstance());
+
+                    MealsPresenter mMealsPresenter = new MealsPresenter(
+                            mealsRepository,
+                            ordersRepository,
+                            mealsFragment);
+
                     return true;
                 case R.id.navigation_dashboard:
-                    mTextMessage.setText(R.string.title_dashboard);
+                    CheckoutFragment checkoutFragment = CheckoutFragment.newInstance();
+                    replaceFragment(checkoutFragment);
                     return true;
                 case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
                     return true;
             }
             return false;
@@ -48,7 +63,6 @@ public class MealActivity2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.meals_act2);
 
-        mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -79,6 +93,12 @@ public class MealActivity2 extends AppCompatActivity {
     private void commitFragmentTransaction(int fragmentId, Fragment fragment){
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(fragmentId, fragment);
+        transaction.commit();
+    }
+
+    private void replaceFragment(Fragment fragment){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_frame, fragment);
         transaction.commit();
     }
 
