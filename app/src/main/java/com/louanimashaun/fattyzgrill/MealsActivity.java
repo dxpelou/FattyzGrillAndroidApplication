@@ -1,14 +1,10 @@
 package com.louanimashaun.fattyzgrill;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -55,14 +51,14 @@ public class MealsActivity extends AppCompatActivity {
         setUpToolbar();
 
         MealsFragment mealsFragment = (MealsFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.content_frame);
+                .findFragmentById(R.id.content_frame2);
 
         if (mealsFragment == null){
             mealsFragment = MealsFragment.newInstance();
         }
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.content_frame, mealsFragment);
+        transaction.add(R.id.content_frame2, mealsFragment);
         transaction.commit();
 
         mUserRepository = UserRepository.getInstance(userLocalDataSource, UserRemoteDataSource.getInstance());
