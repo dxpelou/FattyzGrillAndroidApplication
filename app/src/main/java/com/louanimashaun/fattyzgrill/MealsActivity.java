@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -38,6 +39,7 @@ public class MealsActivity extends AppCompatActivity {
 
     public static final String ACCOUNT_TYPE = "fattyz_mobile_app";
     private static final int RC_SIGN_IN = 1;
+    private static final String TAG = "MealsActivity";
 
     private UserRepository mUserRepository;
 
@@ -47,6 +49,8 @@ public class MealsActivity extends AppCompatActivity {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.meals_act);
+
+        UserLocalDataSource userLocalDataSource = UserLocalDataSource.getInstance(this);
 
         setUpToolbar();
 
@@ -61,7 +65,7 @@ public class MealsActivity extends AppCompatActivity {
         transaction.add(R.id.content_frame, mealsFragment);
         transaction.commit();
 
-        mUserRepository = UserRepository.getInstance(UserLocalDataSource.getInstance(this), UserRemoteDataSource.getInstance());
+        mUserRepository = UserRepository.getInstance(userLocalDataSource, UserRemoteDataSource.getInstance());
 
 
         //AuthStateListener causing problems ,may need get rid of it for admind functionality
@@ -73,9 +77,7 @@ public class MealsActivity extends AppCompatActivity {
                     Toast.makeText(MealsActivity.this, "You are signed in to fatties mobile app",
                             Toast.LENGTH_SHORT).show();
 
-                    final String userId = user.getUid();
-
-                    getUser(userId);
+                    getUser(user);
 
                 }else{
                     startActivityForResult(
@@ -93,7 +95,6 @@ public class MealsActivity extends AppCompatActivity {
 //                                    //,new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()))
 //                                    .build(),
 //                            RC_SIGN_IN);
-
                 }
             }
         };
@@ -111,6 +112,7 @@ public class MealsActivity extends AppCompatActivity {
                 mealsRepository,
                 ordersRepository,
                 mealsFragment);
+
     }
 
     private void setUpToolbar(){
@@ -131,12 +133,13 @@ public class MealsActivity extends AppCompatActivity {
     }
 
 
-    public void getUser(final String userId){
+
+    public void getUser(final FirebaseUser firebaseUser){
         //mUser Repository should be implemented through
         // presenter to increase testability
 
         mUserRepository.refreshData();
-        mUserRepository.getUser(userId, new DataSource.GetCallback<User>() {
+        mUserRepository.getUser(firebaseUser.getUid(), new DataSource.GetCallback<User>() {
             @Override
             public void onDataLoaded(User data) {
 
@@ -150,7 +153,7 @@ public class MealsActivity extends AppCompatActivity {
             @Override
             public void onError(int errorCode) {
                 if (errorCode == UserRemoteDataSource.UserNotFoundErrorCode) {
-                    User user = new User(userId, false);
+                    User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getEmail() ,false);
                     mUserRepository.saveData(user, null);
                 }
             }

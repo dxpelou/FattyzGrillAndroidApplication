@@ -2,6 +2,7 @@ package com.louanimashaun.fattyzgrill.data.source.local;
 
 import android.content.Context;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.model.User;
@@ -9,6 +10,7 @@ import com.louanimashaun.fattyzgrill.model.User;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
@@ -22,6 +24,8 @@ public class UserLocalDataSource implements DataSource<User> {
     private static Context mContext;
     private static Realm realm;
 
+    private static final String TAG = "UserLocalDataSource";
+
     public static UserLocalDataSource getInstance(Context context){
         if (INSTANCE == null){
             INSTANCE = new UserLocalDataSource(context);
@@ -32,7 +36,14 @@ public class UserLocalDataSource implements DataSource<User> {
     private UserLocalDataSource(Context context){
         mContext = context;
         Realm.init(context);
-        realm = Realm.getDefaultInstance();
+        RealmConfiguration config = new RealmConfiguration
+                .Builder()
+                .deleteRealmIfMigrationNeeded()
+                .build();
+
+        realm = Realm.getInstance(config);
+
+        Log.d(TAG, realm.getPath());
     }
 
     @Override
@@ -42,17 +53,25 @@ public class UserLocalDataSource implements DataSource<User> {
 
     @Override
     public void getData(String id, GetCallback<User> callback) {
-        User user = realm.where(User.class).equalTo("id", id).findFirstAsync();
+        RealmResults<User> result = realm.where(User.class).equalTo("userId", id).findAllAsync();
 
-        if(user != null){
-            callback.onDataLoaded(user);
-        }else{
+        if(result.size() == 0){
             callback.onDataNotAvailable();
+        }else{
+            callback.onDataLoaded(result.first());
         }
     }
 
     @Override
     public void deleteAll() {
+        final RealmResults<User> allUsers = realm.where(User.class).findAll();
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                allUsers.deleteAllFromRealm();
+            }
+        });
 
     }
 
