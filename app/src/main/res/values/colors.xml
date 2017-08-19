@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#F4F4F4</color>
-    <color name="colorPrimaryDark">#D5D5D5</color>
+    <color name="colorPrimaryDark">#F4F4F4</color>
     <color name="colorAccent">#F7882F</color>
+    <color name="grey">#D5D5D5</color>
+    <color name="apricot">#F7882F</color>
 </resources>
 
-    <!--#F7882F apricot-->
 

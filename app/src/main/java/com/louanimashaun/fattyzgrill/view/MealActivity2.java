@@ -11,6 +11,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.BaseAdapter;
+import android.widget.ListAdapter;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -96,6 +100,11 @@ public class MealActivity2 extends AppCompatActivity {
                 mealsRepository,
                 ordersRepository,
                 mealsFragment);
+
+        String[] meals = {"chicken", "chips"};
+
+       AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView)findViewById(R.id.auto_complete_tv);
+        autoCompleteTextView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, meals));
     }
 
 
@@ -111,18 +120,18 @@ public class MealActivity2 extends AppCompatActivity {
         transaction.commit();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options_menu, menu);
-
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setIconifiedByDefault(false);
-
-
-
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.options_menu, menu);
+//
+//        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+//        searchView.setIconifiedByDefault(false);
+//
+//
+//
+//        return true;
+//    }
 
 
 }
