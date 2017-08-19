@@ -11,6 +11,8 @@ public class Meal {
 
     private double price;
 
+    private String categeory;
+
     private Meal(){}
 
     public Meal( String title, double price) {
@@ -32,6 +34,14 @@ public class Meal {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public String getCategory(){
+        return categeory;
+    }
+
+    public void setCategeory(String category){
+        this.categeory = category;
     }
 
 }

@@ -84,9 +84,9 @@ public class MealsFragment extends Fragment implements MealsContract.View  {
         });*/
     }
 
-    @Override
+    /*@Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_meals, menu);
+        inflater.inflate(R.menu.options_menu, menu);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class MealsFragment extends Fragment implements MealsContract.View  {
             CheckoutDialogFragment.newInstance(ModelUtil.createStubMealsList(), mMealsPresenter).show(getFragmentManager(),"MealsFragment");
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @Override
     public void onResume() {
