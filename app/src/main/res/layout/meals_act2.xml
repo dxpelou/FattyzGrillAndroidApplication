@@ -23,6 +23,7 @@
             android:layout_height="match_parent"
             android:src="@drawable/logof"/>
 
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -37,8 +38,8 @@
             android:layout_height="match_parent"
             android:layout_marginRight="10dp"
             android:layout_marginBottom="5dp"
-            android:background="@color/grey"
             android:textColor="@color/apricot"
+            android:background="@color/grey"
             android:hint="@string/search_title"
             android:layout_alignParentRight="true"
             android:dropDownWidth="match_parent"

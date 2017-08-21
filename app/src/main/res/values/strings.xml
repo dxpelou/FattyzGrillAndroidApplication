@@ -5,9 +5,9 @@
     <string name="order_button">Order</string>
     <string name="cancel_button">Cancel</string>
     <string name="title_activity_meal2">MealActivity2</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_menu">Menu</string>
+    <string name="title_checkout">Checkout</string>
     <string name="search_title">search</string>
 
     <array name="catergories">
