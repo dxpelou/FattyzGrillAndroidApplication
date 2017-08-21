@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -217,7 +218,17 @@ public class MealActivity2 extends AppCompatActivity {
             public void onError(int errorCode) {
                 if (errorCode == UserRemoteDataSource.UserNotFoundErrorCode) {
                     User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getEmail() ,false);
-                    mUserRepository.saveData(user, null);
+                    mUserRepository.saveData(user, new DataSource.CompletionCallback() {
+                        @Override
+                        public void onComplete() {
+                            Log.d("hi","hi");
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            Log.d("hi","hi");
+                        }
+                    });
                 }
             }
         });

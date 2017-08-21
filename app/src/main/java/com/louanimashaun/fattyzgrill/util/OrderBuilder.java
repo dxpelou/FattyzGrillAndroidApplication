@@ -5,6 +5,8 @@ import com.louanimashaun.fattyzgrill.model.Order;
 
 import java.util.List;
 
+import io.realm.RealmList;
+
 /**
  * Created by louanimashaun on 25/06/2017.
  */
@@ -17,6 +19,8 @@ public class OrderBuilder {
         for(Meal meal : meals){
             totalPrice += meal.getPrice();
         }
-        return new Order(meals, totalPrice, true);
+
+        RealmList mealsList = new RealmList<Meal>((Meal[])meals.toArray());
+        return new Order(mealsList, totalPrice, true);
     }
 }

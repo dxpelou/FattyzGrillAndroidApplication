@@ -1,6 +1,7 @@
 package com.louanimashaun.fattyzgrill.data;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.louanimashaun.fattyzgrill.data.source.local.UserLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.UserRemoteDataSource;
@@ -56,29 +57,9 @@ public class UserRepository implements DataSource<User> {
 
     @Override
     public void saveData(User data, CompletionCallback callback) {
-         mRemoteDataSource.saveData(data, new CompletionCallback() {
-             @Override
-             public void onComplete() {
-                 Log.d(TAG, "user saved to firebase");
-             }
+         mRemoteDataSource.saveData(data, callback);
 
-             @Override
-             public void onCancel() {
-                Log.d(TAG, "user failed to save to firebase");
-             }
-         });
-
-        mLocalDataSource.saveData(data, new CompletionCallback() {
-            @Override
-            public void onComplete() {
-                Log.d(TAG, "user saved to local realm database");
-            }
-
-            @Override
-            public void onCancel() {
-                Log.d(TAG, "user failed to save to local realm database");
-            }
-        });
+        mLocalDataSource.saveData(data, callback);
     }
 
     @Override

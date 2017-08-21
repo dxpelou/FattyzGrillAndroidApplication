@@ -2,26 +2,29 @@ package com.louanimashaun.fattyzgrill.model;
 
 import java.util.List;
 
+import io.realm.RealmList;
+import io.realm.RealmObject;
+
 /**
  * Created by louanimashaun on 21/06/2017.
  */
 
-public class Order {
+public class Order extends RealmObject {
 
     private String id;
 
-    private List<Meal> mOrderItems;
+    private RealmList<Meal> mOrderItems;
 
     private double mTotalPrice;
 
     private boolean mIsOrderPending;
 
-    public Order(List<Meal> orderItems, double totalPrice,  boolean isOrderPending){
+    public Order(RealmList<Meal> orderItems, double totalPrice,  boolean isOrderPending){
         mOrderItems = orderItems;
         mTotalPrice = totalPrice;
         mIsOrderPending = isOrderPending;
     }
-    private Order(){}
+    public Order(){}
 
     public String getId() {
         return id;
@@ -31,11 +34,11 @@ public class Order {
         this.id = id;
     }
 
-    public List<Meal> getOrderItems() {
+    public RealmList<Meal> getOrderItems() {
         return mOrderItems;
     }
 
-    public void setOrderItems(List<Meal> orderItems) {
+    public void setOrderItems(RealmList<Meal> orderItems) {
         this.mOrderItems = orderItems;
     }
 

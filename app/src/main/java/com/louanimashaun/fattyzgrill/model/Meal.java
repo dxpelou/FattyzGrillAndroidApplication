@@ -1,11 +1,12 @@
 package com.louanimashaun.fattyzgrill.model;
 
+import io.realm.RealmObject;
+
 /**
  * Created by louanimashaun on 14/06/2017.
  */
 
-public class Meal {
-
+public class Meal extends RealmObject {
 
     private String title;
 
@@ -13,7 +14,7 @@ public class Meal {
 
     private String categeory;
 
-    private Meal(){}
+    public Meal(){}
 
     public Meal( String title, double price) {
         this.title = title;
