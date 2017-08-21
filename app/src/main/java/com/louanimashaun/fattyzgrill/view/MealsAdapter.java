@@ -47,7 +47,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
     public void onBindViewHolder(MealViewHolder holder, int position) {
         Meal meal = mMeals.get(position);
         holder.title_tv.setText(meal.getTitle());
-        holder.price_tv.setText(String.valueOf(meal.getPrice()));
+        holder.price_tv.setText("£ " + String.valueOf(meal.getPrice()));
 
         if(currentViewType == CATEGORY_MEAL_ITEM){
             holder.category_tv.setText(meal.getCategory());

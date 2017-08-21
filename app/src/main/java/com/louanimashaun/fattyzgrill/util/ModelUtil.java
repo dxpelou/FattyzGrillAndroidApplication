@@ -14,7 +14,7 @@ import java.util.List;
 public class ModelUtil {
 
     private static int id = 0;
-    private static final int LIST_SIZE = 20;
+    private static final int LIST_SIZE = 3;
 
     private ModelUtil(){}
 

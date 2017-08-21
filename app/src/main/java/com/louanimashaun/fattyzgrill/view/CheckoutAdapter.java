@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,11 +45,15 @@ public class CheckoutAdapter extends ArrayAdapter<Meal> {
         TextView titleTextView = (TextView) rowView.findViewById(R.id.title_tv);
         TextView priceTextView = (TextView) rowView.findViewById(R.id.price_tv);
 
+
         Meal meal = meals.get(position);
         String price = "£ " + String.valueOf(meal.getPrice());
 
         titleTextView.setText(meal.getTitle());
         priceTextView.setText(price);
+
+        FloatingActionButton addBtn = (FloatingActionButton)rowView.findViewById(R.id.add_checkout);
+        addBtn.setVisibility(View.GONE);
 
         return rowView;
     }

@@ -21,18 +21,34 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.louanimashaun.fattyzgrill.MealsActivity;
 import com.louanimashaun.fattyzgrill.R;
+import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealsRepository;
 import com.louanimashaun.fattyzgrill.data.OrdersRepository;
+import com.louanimashaun.fattyzgrill.data.UserRepository;
 import com.louanimashaun.fattyzgrill.data.source.local.MealsLocalDataSoure;
 import com.louanimashaun.fattyzgrill.data.source.local.OrdersLocalDataSource;
+import com.louanimashaun.fattyzgrill.data.source.local.UserLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.MealsRemoteDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.OrdersRemoteDataSource;
+import com.louanimashaun.fattyzgrill.data.source.remote.UserRemoteDataSource;
+import com.louanimashaun.fattyzgrill.model.User;
 import com.louanimashaun.fattyzgrill.presenter.MealsPresenter;
+
+import java.util.Arrays;
 
 public class MealActivity2 extends AppCompatActivity {
 
     private MealsPresenter mMealsPresenter;
+    FirebaseAuth mFirebaseAuth;
+    private static final int RC_SIGN_IN = 1;
+    FirebaseAuth.AuthStateListener mAuthStateListener;
+
+    private UserRepository mUserRepository;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -73,10 +89,42 @@ public class MealActivity2 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mFirebaseAuth = FirebaseAuth.getInstance();
         setContentView(R.layout.meals_act2);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        mUserRepository = UserRepository.getInstance(UserLocalDataSource.getInstance(this),
+                UserRemoteDataSource.getInstance());
+
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if(user != null){
+
+                    getUser(user);
+
+                }else{
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setIsSmartLockEnabled(false).setProviders(
+                                    Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+//                                    //,new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()))
+                                    .build(),
+                            RC_SIGN_IN);
+
+                    //needed
+//                                    .setAvailableProviders(
+//                                            Arrays.asList(new AuthUI.IdpConfig.Builder(AuthUI.GOOGLE_PROVIDER).build()))
+//                                    //,new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()))
+//                                    .build(),
+//                            RC_SIGN_IN);
+                }
+            }
+        };
 
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -136,7 +184,43 @@ public class MealActivity2 extends AppCompatActivity {
 //        return true;
 //    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+    }
 
 
+    public void getUser(final FirebaseUser firebaseUser){
+        //mUser Repository should be implemented through
+        // presenter to increase testability
+
+        mUserRepository.refreshData();
+        mUserRepository.getUser(firebaseUser.getUid(), new DataSource.GetCallback<User>() {
+            @Override
+            public void onDataLoaded(User data) {
+
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        }, new DataSource.ErrorCallback() {
+            @Override
+            public void onError(int errorCode) {
+                if (errorCode == UserRemoteDataSource.UserNotFoundErrorCode) {
+                    User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getEmail() ,false);
+                    mUserRepository.saveData(user, null);
+                }
+            }
+        });
+    }
 
 }
