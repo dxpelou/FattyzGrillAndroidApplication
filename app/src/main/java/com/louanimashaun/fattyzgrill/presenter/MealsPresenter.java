@@ -8,6 +8,7 @@ import com.louanimashaun.fattyzgrill.data.MealsRepository;
 import com.louanimashaun.fattyzgrill.data.OrdersRepository;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Order;
+import com.louanimashaun.fattyzgrill.util.ModelUtil;
 import com.louanimashaun.fattyzgrill.view.MealsFragment;
 
 import java.util.List;
@@ -43,7 +44,19 @@ public class MealsPresenter implements MealsContract.Presenter{
             mMealsRepository.refreshData();
         }
 
-        mMealsRepository.loadData(new DataSource.LoadCallback<Meal>() {
+        mMealsRepository.load(new DataSource.LoadCallback() {
+            @Override
+            public void onDataLoaded(List data) {
+//                List<Meal> sortedMeal = ModelUtil.sortMealsByCategory(data);
+                mMealsView.showMeals(data);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+            }
+        });
+
+       /* mMealsRepository.loadData(new DataSource.LoadCallback<Meal>() {
             @Override
             public void onDataLoaded(List<Meal> data) {
                 mMealsView.showMeals(data);
@@ -53,7 +66,7 @@ public class MealsPresenter implements MealsContract.Presenter{
             public void onDataNotAvailable() {
                 mMealsView.showNoMeals();
             }
-        });
+        });*/
     }
 
     @Override

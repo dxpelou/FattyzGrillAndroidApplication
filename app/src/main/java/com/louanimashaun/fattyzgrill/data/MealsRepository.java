@@ -3,6 +3,7 @@ package com.louanimashaun.fattyzgrill.data;
 import android.support.annotation.NonNull;
 
 import com.louanimashaun.fattyzgrill.model.Meal;
+import com.louanimashaun.fattyzgrill.util.ModelUtil;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -38,6 +39,7 @@ public class MealsRepository extends AbstractRepository<Meal> {
         }else {
             mCachedData.clear();
         }
+
         for(Meal meal : data){
             //mCachedData.put(meal.getLuid(), meal);
         }
@@ -50,6 +52,9 @@ public class MealsRepository extends AbstractRepository<Meal> {
 
     @Override
     public void getData(String id, GetCallback<Meal> callback) {
+    }
 
+    public void load(LoadCallback callback){
+        callback.onDataLoaded(ModelUtil.createStubMealsList());
     }
 }

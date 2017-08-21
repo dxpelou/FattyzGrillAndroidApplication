@@ -66,7 +66,6 @@ public class MealsFragment extends Fragment implements MealsContract.View  {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mMealsAdapter);
-        recyclerView.setHasFixedSize(true);
 
        /* recyclerView.addItemDecoration(new RecyclerView.ItemDecoration(){
 

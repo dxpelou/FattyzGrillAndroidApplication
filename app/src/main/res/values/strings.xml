@@ -9,4 +9,11 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="search_title">search</string>
+
+    <array name="catergories">
+        <item>Sides</item>
+        <item>Burgers</item>
+        <item>Grill</item>
+        <item>Burgers</item>
+    </array>
 </resources>

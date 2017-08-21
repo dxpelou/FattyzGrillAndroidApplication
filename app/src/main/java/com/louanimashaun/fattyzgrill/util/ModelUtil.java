@@ -3,6 +3,8 @@ package com.louanimashaun.fattyzgrill.util;
 import com.louanimashaun.fattyzgrill.model.Meal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -12,21 +14,27 @@ import java.util.List;
 public class ModelUtil {
 
     private static int id = 0;
-    private static final int LIST_SIZE = 5;
+    private static final int LIST_SIZE = 20;
 
     private ModelUtil(){}
 
     public static List<Meal> createStubMealsList(){
-        List<Meal> meal = new ArrayList<>();
+        List<Meal> meals = new ArrayList<>();
 
         for(int i = 0; i < LIST_SIZE; i++){
-            meal.add(createStubMeal());
+            Meal meal = createStubMeal();
+            if(i < LIST_SIZE/2){
+                meal.setCategeory("Chicken");
+            }else{
+                meal.setCategeory("Burger");
+            }
+            meals.add(meal);
         }
-        return meal;
+        return meals;
     }
 
     public static Meal createStubMeal(){
-        return new Meal( "0", 0.0);
+        return new Meal( "2 piece chicken and chips", 3.0);
     }
 
     public static Meal[] toArray(List<Meal> meals){
@@ -37,5 +45,20 @@ public class ModelUtil {
         }
 
         return mealsArray;
+    }
+
+    public static List<Meal> sortMealsByCategory(List<Meal> meals){
+        HashMap mealsByCategory = new HashMap<String, List<Meal>>();
+
+        for (Meal meal : meals){
+            String category = meal.getCategory();
+            if(mealsByCategory.containsKey(category)){
+                ((List<Meal>) mealsByCategory.get(category)).add(meal);
+            }else {
+                mealsByCategory.put(meal.getCategory(), Arrays.asList(meal));
+            }
+        }
+        return new ArrayList<>(mealsByCategory.values());
+
     }
 }
