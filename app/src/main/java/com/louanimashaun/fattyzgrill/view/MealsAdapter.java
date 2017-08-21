@@ -35,9 +35,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
     @Override
     public MealViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = null;
-//        if(viewType == MEAL_ITEM) {
-        if(false) {
-
+        if(viewType == MEAL_ITEM) {
             itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_meal, parent, false);
         }else {
             itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_meal_with_header, parent, false);
@@ -51,7 +49,6 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
         holder.title_tv.setText(meal.getTitle());
         holder.price_tv.setText(String.valueOf(meal.getPrice()));
 
-//        if(currentViewType == CATEGORY_MEAL_ITEM){
         if(currentViewType == CATEGORY_MEAL_ITEM){
             holder.category_tv.setText(meal.getCategory());
         }
@@ -79,8 +76,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
         String previousCategory = mMeals.get(position - 1).getCategory();
         String currentCategory = mMeals.get(position).getCategory();
 
-//        if(previousCategory.equals(currentCategory)){
-        if(false){
+        if(previousCategory.equals(currentCategory)){
             currentViewType = MEAL_ITEM;
             return currentViewType;
         }else {
@@ -105,8 +101,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
             title_tv = (TextView) itemView.findViewById(R.id.title_tv);
             price_tv = (TextView) itemView.findViewById(R.id.price_tv);
 
-//            if(viewType == CATEGORY_MEAL_ITEM ) {
-            if(true ) {
+            if(viewType == CATEGORY_MEAL_ITEM ) {
                 category_tv = (TextView) itemView.findViewById(R.id.category_tv);
             }
         }
