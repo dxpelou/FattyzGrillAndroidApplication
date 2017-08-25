@@ -16,6 +16,7 @@ import com.louanimashaun.fattyzgrill.data.MealsRepository;
 import com.louanimashaun.fattyzgrill.data.OrdersRepository;
 import com.louanimashaun.fattyzgrill.data.UserRepository;
 import com.louanimashaun.fattyzgrill.data.source.local.MealsLocalDataSoure;
+import com.louanimashaun.fattyzgrill.Notifications.NotificationSharedPreference;
 import com.louanimashaun.fattyzgrill.data.source.local.OrdersLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.local.UserLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.MealsRemoteDataSource;
@@ -44,6 +45,7 @@ public class MealsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
+        NotificationSharedPreference.init(this);
         setContentView(R.layout.meals_act);
 
         UserLocalDataSource userLocalDataSource = UserLocalDataSource.getInstance(this);
@@ -154,6 +156,16 @@ public class MealsActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+        public static String getRefreshToken(){
+            NotificationSharedPreference.init(this);
+            NotificationSharedPreference noti =  NotificationSharedPreference.getInstance();
+              return noti.getRefreshToken();
+
+        }
+
+
     }
 
 

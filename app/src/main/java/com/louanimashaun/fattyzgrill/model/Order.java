@@ -19,6 +19,8 @@ public class Order extends RealmObject {
 
     private boolean mIsOrderPending;
 
+    private String mSenderNotifcationToken;
+
     public Order(RealmList<Meal> orderItems, double totalPrice,  boolean isOrderPending){
         mOrderItems = orderItems;
         mTotalPrice = totalPrice;
@@ -56,6 +58,14 @@ public class Order extends RealmObject {
 
     public void setOrderPending(boolean orderPending) {
         mIsOrderPending = orderPending;
+    }
+
+    public String getSenderNotifcationToken(){
+        return mSenderNotifcationToken;
+    }
+
+    public void setSenderNotifcationToken(String token){
+        mSenderNotifcationToken = token;
     }
 
 }
