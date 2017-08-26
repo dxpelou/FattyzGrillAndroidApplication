@@ -20,7 +20,7 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
 
         //TODO find way to pass in context into firebase instance id class
         NotificationSharedPreference notificationSharedPreference =
-                NotificationSharedPreference.getInstance(Util.getApp());
+                NotificationSharedPreference.getInstance();
 
         notificationSharedPreference.saveRefreshToken(refreshedToken);
 

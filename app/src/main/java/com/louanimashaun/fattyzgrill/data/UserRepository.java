@@ -6,6 +6,7 @@ import android.widget.Toast;
 import com.louanimashaun.fattyzgrill.data.source.local.UserLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.UserRemoteDataSource;
 import com.louanimashaun.fattyzgrill.model.User;
+import com.louanimashaun.fattyzgrill.util.AdminUtil;
 
 import java.util.List;
 
@@ -98,6 +99,8 @@ public class UserRepository implements DataSource<User> {
             @Override
             public void onDataLoaded(User data) {
                 mLocalDataSource.saveData(data, null);
+                AdminUtil.setAdminStatus(data.isAdmin());
+
                 callback.onDataLoaded(data);
             }
 

@@ -3,6 +3,8 @@ package com.louanimashaun.fattyzgrill.Notifications;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.louanimashaun.fattyzgrill.util.Util;
+
 /**
  * Created by louanimashaun on 24/08/2017.
  */
@@ -18,18 +20,15 @@ public class NotificationSharedPreference  {
          mContext = context;
      }
 
-     public static NotificationSharedPreference getInstance(Context context){
+     public static NotificationSharedPreference getInstance(){
 
          if(INSTANCE == null ) {
-             INSTANCE = new NotificationSharedPreference(context);
+             INSTANCE = new NotificationSharedPreference(Util.getApp());
          }
 
          return INSTANCE;
      }
 
-     public static void init(Context context){
-         mContext = context;
-     }
 
      public void saveRefreshToken(String token ){
         SharedPreferences sharedPreferences =  mContext.getSharedPreferences(NOTIFICATION_TAG,Context.MODE_PRIVATE);

@@ -86,14 +86,13 @@ public class UserLocalDataSource implements DataSource<User> {
        }, new Realm.Transaction.OnSuccess(){
            @Override
            public void onSuccess() {
-               if(callback != null) {
-                   callback.onComplete();
-               }
+               if(callback != null) callback.onComplete();
+
            }
        }, new Realm.Transaction.OnError(){
            @Override
            public void onError(Throwable error) {
-                callback.onCancel();
+               if(callback != null) callback.onCancel();
            }
        });
 

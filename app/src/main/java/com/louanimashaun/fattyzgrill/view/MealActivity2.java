@@ -29,6 +29,7 @@ import com.louanimashaun.fattyzgrill.data.source.remote.OrdersRemoteDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.UserRemoteDataSource;
 import com.louanimashaun.fattyzgrill.model.User;
 import com.louanimashaun.fattyzgrill.presenter.MealsPresenter;
+import com.louanimashaun.fattyzgrill.util.AdminUtil;
 
 import java.util.Arrays;
 
@@ -81,7 +82,10 @@ public class MealActivity2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFirebaseAuth = FirebaseAuth.getInstance();
-        FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.order_FCM_topic));
+
+        if(AdminUtil.isAdmin()) {
+            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.order_FCM_topic));
+        }
 
         setContentView(R.layout.meals_act2);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);

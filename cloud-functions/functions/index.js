@@ -8,13 +8,14 @@ exports.orderCreated = functions.database.ref('/orders/{orderID}')
        const val =  event.data.val();
        const id = event.params;
         console.log(val);
+        console.log(id);
 
         const topic = 'orders';
 
         var payload = {
             data: {
-                orderID : id,
-                order: val.meals
+                orderID : id.toString(),
+                //send meals in object
             }
         }
 
