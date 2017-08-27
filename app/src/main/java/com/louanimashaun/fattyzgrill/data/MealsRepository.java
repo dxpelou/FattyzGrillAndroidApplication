@@ -50,11 +50,16 @@ public class MealsRepository extends AbstractRepository<Meal> {
         //mCachedData.put(data.getLuid(), data);
     }
 
-    @Override
-    public void getData(String id, GetCallback<Meal> callback) {
-    }
-
     public void load(LoadCallback callback){
         callback.onDataLoaded(ModelUtil.createStubMealsList());
+    }
+
+    public static void destroyInstance(){
+        INSTANCE = null;
+    }
+
+    @Override
+    public void getData(String id, GetCallback<Meal> callback) {
+
     }
 }
