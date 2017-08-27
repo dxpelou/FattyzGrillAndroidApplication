@@ -79,10 +79,15 @@ import java.util.Map;
 
     @Override
     public void saveData(T data, CompletionCallback callback) {
-        putDataItemInCache(data);
+       // putDataItemInCache(data);
         mRemoteDataSource.saveData(data, callback);
+
+
         mLocalDataSource.saveData(data, null);
     }
+
+
+
 
     @Override
     public void saveData(List<T> data, CompletionCallback callback) {

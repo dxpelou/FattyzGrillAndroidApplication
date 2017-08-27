@@ -1,6 +1,5 @@
 package com.louanimashaun.fattyzgrill.view;
 
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,18 +7,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 
-import com.louanimashaun.fattyzgrill.MealsContract;
+import com.louanimashaun.fattyzgrill.contract.BasePresenter;
+import com.louanimashaun.fattyzgrill.contract.MealContract;
 import com.louanimashaun.fattyzgrill.R;
 import com.louanimashaun.fattyzgrill.model.Meal;
-import com.louanimashaun.fattyzgrill.util.ModelUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +26,9 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
  * View layer of application
  */
 
-public class MealsFragment extends Fragment implements MealsContract.View  {
+public class MealsFragment extends Fragment implements MealContract.View  {
 
-    private MealsContract.Presenter mMealsPresenter;
+    private BasePresenter mMealsPresenter;
     private MealsAdapter mMealsAdapter;
 
     public static MealsFragment newInstance(){
@@ -46,7 +40,7 @@ public class MealsFragment extends Fragment implements MealsContract.View  {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mMealsAdapter = new MealsAdapter(new ArrayList<Meal>());
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -114,7 +108,7 @@ public class MealsFragment extends Fragment implements MealsContract.View  {
     }
 
     @Override
-    public void setPresenter(@NonNull MealsContract.Presenter presenter) {
+    public void setPresenter(@NonNull BasePresenter presenter) {
         mMealsPresenter = checkNotNull(presenter);
     }
 

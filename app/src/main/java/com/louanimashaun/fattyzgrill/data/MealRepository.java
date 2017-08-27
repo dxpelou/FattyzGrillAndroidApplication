@@ -16,18 +16,18 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
  * class is used to access the meals data
  */
 
-public class MealsRepository extends AbstractRepository<Meal> {
+public class MealRepository extends AbstractRepository<Meal> {
 
-    private static MealsRepository INSTANCE;
+    private static MealRepository INSTANCE;
 
-    public static MealsRepository getInstance(@NonNull DataSource localDatasource, @NonNull DataSource remoteDataSource){
+    public static MealRepository getInstance(@NonNull DataSource localDatasource, @NonNull DataSource remoteDataSource){
         if (INSTANCE == null){
-            INSTANCE = new MealsRepository(localDatasource, remoteDataSource);
+            INSTANCE = new MealRepository(localDatasource, remoteDataSource);
         }
         return INSTANCE;
     }
 
-    private MealsRepository(DataSource localDatasource, DataSource remoteDataSource){
+    private MealRepository(DataSource localDatasource, DataSource remoteDataSource){
         mLocalDataSource = checkNotNull(localDatasource);
         mRemoteDataSource = checkNotNull(remoteDataSource);
     }
@@ -61,5 +61,17 @@ public class MealsRepository extends AbstractRepository<Meal> {
     @Override
     public void getData(String id, GetCallback<Meal> callback) {
 
+    }
+
+    public void checkoutMeal(Meal meal){
+        meal.setCheckedOut(true);
+
+        mLocalDataSource.saveData(meal, null);
+    }
+
+    public void uncheckoutMeal(Meal meal){
+        meal.setCheckedOut(false);
+
+        mLocalDataSource.saveData(meal, null);
     }
 }

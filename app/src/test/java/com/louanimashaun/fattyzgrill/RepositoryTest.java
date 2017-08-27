@@ -3,7 +3,7 @@ package com.louanimashaun.fattyzgrill;
 import android.content.Context;
 
 import com.louanimashaun.fattyzgrill.data.DataSource;
-import com.louanimashaun.fattyzgrill.data.MealsRepository;
+import com.louanimashaun.fattyzgrill.data.MealRepository;
 import com.louanimashaun.fattyzgrill.data.source.local.MealsLocalDataSoure;
 import com.louanimashaun.fattyzgrill.data.source.remote.MealsRemoteDataSource;
 
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.verify;
 
 public class RepositoryTest {
 
-    private MealsRepository mMealsRepository;
+    private MealRepository mMealRepository;
 
     @Mock
     private MealsLocalDataSoure mMealsLocalDataSource;
@@ -52,40 +52,40 @@ public class RepositoryTest {
     public void setUp(){
         MockitoAnnotations.initMocks(this);
 
-        mMealsRepository
-               =  MealsRepository.getInstance(mMealsLocalDataSource, mMealsRemoteDataSource);
+        mMealRepository
+               =  MealRepository.getInstance(mMealsLocalDataSource, mMealsRemoteDataSource);
     }
 
     @After
     public void destroyRepositoryInstance(){
-        MealsRepository.destroyInstance();
+        MealRepository.destroyInstance();
     }
 
     @Test
     public void loadData_loadsdataFromLocalDataSource(){
-        mMealsRepository.loadData(mLoadCallback);
+        mMealRepository.loadData(mLoadCallback);
 
         verify(mMealsLocalDataSource).loadData(any(DataSource.LoadCallback.class));
     }
 
     //TODO @TEST implement getData in abtract repository
     public void getData_getsDataFromLocalDataSource(){
-        mMealsRepository.getData(MEAL_ID, mGetCallback);
+        mMealRepository.getData(MEAL_ID, mGetCallback);
 
         verify(mMealsLocalDataSource).getData(eq(MEAL_ID), any(DataSource.GetCallback.class));
     }
 
     @Test
     public void refreshData_loadDataFromRemote(){
-        mMealsRepository.refreshData();
-        mMealsRepository.loadData(mLoadCallback);
+        mMealRepository.refreshData();
+        mMealRepository.loadData(mLoadCallback);
 
         verify(mMealsRemoteDataSource).loadData(any(DataSource.LoadCallback.class));
     }
 
     @Test
     public void  remoteUnavailable_loadFromLocal(){
-        mMealsRepository.loadData(mLoadCallback);
+        mMealRepository.loadData(mLoadCallback);
 
         verify(mMealsLocalDataSource).loadData(mLoadCallbackCaptor.capture());
 
@@ -96,7 +96,7 @@ public class RepositoryTest {
 
     @Test
     public void bothDataSourcesUnavailable_firesOnDataUnavailable(){
-        mMealsRepository.loadData(mLoadCallback);
+        mMealRepository.loadData(mLoadCallback);
 
         verify(mMealsLocalDataSource).loadData(mLoadCallbackCaptor.capture());
 

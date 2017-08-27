@@ -1,4 +1,4 @@
-package com.louanimashaun.fattyzgrill.Notifications;
+package com.louanimashaun.fattyzgrill.notifications;
 
 import android.app.NotificationManager;
 import android.content.Context;

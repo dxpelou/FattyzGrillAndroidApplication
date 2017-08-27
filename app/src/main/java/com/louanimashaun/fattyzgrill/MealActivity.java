@@ -1,4 +1,4 @@
-package com.louanimashaun.fattyzgrill.view;
+package com.louanimashaun.fattyzgrill;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,10 +16,9 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.louanimashaun.fattyzgrill.R;
 import com.louanimashaun.fattyzgrill.data.DataSource;
-import com.louanimashaun.fattyzgrill.data.MealsRepository;
-import com.louanimashaun.fattyzgrill.data.OrdersRepository;
+import com.louanimashaun.fattyzgrill.data.MealRepository;
+import com.louanimashaun.fattyzgrill.data.OrderRepository;
 import com.louanimashaun.fattyzgrill.data.UserRepository;
 import com.louanimashaun.fattyzgrill.data.source.local.MealsLocalDataSoure;
 import com.louanimashaun.fattyzgrill.data.source.local.OrdersLocalDataSource;
@@ -29,11 +28,14 @@ import com.louanimashaun.fattyzgrill.data.source.remote.OrdersRemoteDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.UserRemoteDataSource;
 import com.louanimashaun.fattyzgrill.model.User;
 import com.louanimashaun.fattyzgrill.presenter.MealsPresenter;
+import com.louanimashaun.fattyzgrill.presenter.OrderPresenter;
 import com.louanimashaun.fattyzgrill.util.AdminUtil;
+import com.louanimashaun.fattyzgrill.view.CheckoutFragment;
+import com.louanimashaun.fattyzgrill.view.MealsFragment;
 
 import java.util.Arrays;
 
-public class MealActivity2 extends AppCompatActivity {
+public class MealActivity extends AppCompatActivity {
 
     private MealsPresenter mMealsPresenter;
     FirebaseAuth mFirebaseAuth;
@@ -41,6 +43,9 @@ public class MealActivity2 extends AppCompatActivity {
     FirebaseAuth.AuthStateListener mAuthStateListener;
 
     private UserRepository mUserRepository;
+    private MealRepository mMealRepository;
+    private OrderRepository mOrderRepository;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -52,23 +57,16 @@ public class MealActivity2 extends AppCompatActivity {
                     MealsFragment mealsFragment = MealsFragment.newInstance();
                     replaceFragment(mealsFragment);
 
-                    MealsRepository mealsRepository = MealsRepository.getInstance(
-                            MealsLocalDataSoure.getInstance(),
-                            MealsRemoteDataSource.getInstance());
-
-                    OrdersRepository ordersRepository = OrdersRepository.getInstance(
-                            OrdersLocalDataSource.getInstance(),
-                            OrdersRemoteDataSource.getInstance());
-
-                    MealsPresenter mMealsPresenter = new MealsPresenter(
-                            mealsRepository,
-                            ordersRepository,
+                    MealsPresenter mealsPresenter = new MealsPresenter(
+                            mMealRepository,
                             mealsFragment);
 
                     return true;
                 case R.id.navigation_dashboard:
                     CheckoutFragment checkoutFragment = CheckoutFragment.newInstance();
                     replaceFragment(checkoutFragment);
+
+                    OrderPresenter orderPresenter = new OrderPresenter(mOrderRepository, checkoutFragment);
                     return true;
                 case R.id.navigation_notifications:
                     return true;
@@ -92,8 +90,6 @@ public class MealActivity2 extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        mUserRepository = UserRepository.getInstance(UserLocalDataSource.getInstance(this),
-                UserRemoteDataSource.getInstance());
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -136,17 +132,9 @@ public class MealActivity2 extends AppCompatActivity {
 
         commitFragmentTransaction(R.id.content_frame, mealsFragment);
 
-        MealsRepository mealsRepository = MealsRepository.getInstance(
-                MealsLocalDataSoure.getInstance(),
-                MealsRemoteDataSource.getInstance());
-
-        OrdersRepository ordersRepository = OrdersRepository.getInstance(
-                OrdersLocalDataSource.getInstance(),
-                OrdersRemoteDataSource.getInstance());
 
         MealsPresenter mMealsPresenter = new MealsPresenter(
-                mealsRepository,
-                ordersRepository,
+                mMealRepository,
                 mealsFragment);
 
         String[] meals = {"chicken", "chips"};
@@ -175,8 +163,6 @@ public class MealActivity2 extends AppCompatActivity {
 //
 //        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
 //        searchView.setIconifiedByDefault(false);
-//
-//
 //
 //        return true;
 //    }
@@ -228,6 +214,20 @@ public class MealActivity2 extends AppCompatActivity {
                 }
             }
         });
+    }
+
+
+    private void setUpRepositories(){
+        mUserRepository = UserRepository.getInstance(UserLocalDataSource.getInstance(this),
+                UserRemoteDataSource.getInstance());
+
+        mOrderRepository = OrderRepository.getInstance(
+                OrdersLocalDataSource.getInstance(),
+                OrdersRemoteDataSource.getInstance());
+
+        mMealRepository = MealRepository.getInstance(
+                MealsLocalDataSoure.getInstance(),
+                MealsRemoteDataSource.getInstance());
     }
 
 }

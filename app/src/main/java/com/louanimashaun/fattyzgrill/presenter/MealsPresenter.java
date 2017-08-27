@@ -2,13 +2,10 @@ package com.louanimashaun.fattyzgrill.presenter;
 
 import android.support.annotation.NonNull;
 
-import com.louanimashaun.fattyzgrill.MealsContract;
+import com.louanimashaun.fattyzgrill.contract.MealContract;
 import com.louanimashaun.fattyzgrill.data.DataSource;
-import com.louanimashaun.fattyzgrill.data.MealsRepository;
-import com.louanimashaun.fattyzgrill.data.OrdersRepository;
+import com.louanimashaun.fattyzgrill.data.MealRepository;
 import com.louanimashaun.fattyzgrill.model.Meal;
-import com.louanimashaun.fattyzgrill.model.Order;
-import com.louanimashaun.fattyzgrill.util.ModelUtil;
 import com.louanimashaun.fattyzgrill.view.MealsFragment;
 
 import java.util.List;
@@ -20,15 +17,13 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
  *Presenter layer of application
  */
 
-public class MealsPresenter implements MealsContract.Presenter{
+public class MealsPresenter implements MealContract.Presenter{
 
-    private final MealsRepository mMealsRepository;
-    private final OrdersRepository mOrdersRepository;
+    private final MealRepository mMealRepository;
     private final MealsFragment mMealsView;
 
-    public MealsPresenter(@NonNull MealsRepository mealsRepository, @NonNull OrdersRepository ordersRepository, MealsFragment mealsView){
-        mMealsRepository = checkNotNull(mealsRepository);
-        mOrdersRepository = checkNotNull(ordersRepository);
+    public MealsPresenter(@NonNull MealRepository mealRepository,  MealsFragment mealsView){
+        mMealRepository = checkNotNull(mealRepository);
         mMealsView = checkNotNull(mealsView);
         mMealsView.setPresenter(this);
     }
@@ -41,10 +36,10 @@ public class MealsPresenter implements MealsContract.Presenter{
     @Override
     public void loadMeals(boolean forceUpdate) {
         if(forceUpdate){
-            mMealsRepository.refreshData();
+            mMealRepository.refreshData();
         }
 
-        mMealsRepository.load(new DataSource.LoadCallback() {
+        mMealRepository.load(new DataSource.LoadCallback() {
             @Override
             public void onDataLoaded(List data) {
 //                List<Meal> sortedMeal = ModelUtil.sortMealsByCategory(data);
@@ -56,7 +51,7 @@ public class MealsPresenter implements MealsContract.Presenter{
             }
         });
 
-       /* mMealsRepository.loadData(new DataSource.LoadCallback<Meal>() {
+       /* mMealRepository.loadData(new DataSource.LoadCallback<Meal>() {
             @Override
             public void onDataLoaded(List<Meal> data) {
                 mMealsView.showMeals(data);
@@ -70,17 +65,10 @@ public class MealsPresenter implements MealsContract.Presenter{
     }
 
     @Override
-    public void orderCompleted(Order order) {
-        mOrdersRepository.saveData(order, new DataSource.CompletionCallback() {
-            @Override
-            public void onComplete() {
-
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
+    public void AddMealToCheckout(Meal meal) {
+        checkNotNull(meal);
+        mMealRepository.checkoutMeal(meal);
     }
+
+
 }

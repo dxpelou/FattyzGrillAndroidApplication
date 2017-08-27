@@ -13,18 +13,18 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
  * Created by louanimashaun on 24/06/2017.
  */
 
-public class OrdersRepository extends AbstractRepository<Order> {
+public class OrderRepository extends AbstractRepository<Order> {
 
-    private static OrdersRepository INSTANCE;
+    private static OrderRepository INSTANCE;
 
-    public static OrdersRepository getInstance(@NonNull DataSource localDatasource, @NonNull DataSource remoteDataSource){
+    public static OrderRepository getInstance(@NonNull DataSource localDatasource, @NonNull DataSource remoteDataSource){
         if (INSTANCE == null){
-            INSTANCE = new OrdersRepository(localDatasource, remoteDataSource);
+            INSTANCE = new OrderRepository(localDatasource, remoteDataSource);
         }
         return INSTANCE;
     }
 
-    private OrdersRepository(DataSource localDatasource, DataSource remoteDataSource){
+    private OrderRepository(DataSource localDatasource, DataSource remoteDataSource){
         mLocalDataSource = checkNotNull(localDatasource);
         mRemoteDataSource = checkNotNull(remoteDataSource);
     }

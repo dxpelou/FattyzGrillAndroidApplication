@@ -1,5 +1,7 @@
 package com.louanimashaun.fattyzgrill.model;
 
+import com.google.firebase.database.Exclude;
+
 import io.realm.RealmObject;
 
 /**
@@ -13,6 +15,9 @@ public class Meal extends RealmObject {
     private double price;
 
     private String categeory;
+
+    @Exclude
+    private boolean isCheckedOut;
 
     public Meal(){}
 
@@ -45,4 +50,11 @@ public class Meal extends RealmObject {
         this.categeory = category;
     }
 
+    public boolean isCheckedOut() {
+        return isCheckedOut;
+    }
+
+    public void setCheckedOut(boolean checkedOut) {
+        isCheckedOut = checkedOut;
+    }
 }

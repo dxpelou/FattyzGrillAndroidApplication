@@ -1,9 +1,8 @@
-package com.louanimashaun.fattyzgrill.Notifications;
+package com.louanimashaun.fattyzgrill.notifications;
 
 import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
-import com.louanimashaun.fattyzgrill.util.Util;
 
 /**
  * Created by louanimashaun on 21/08/2017.

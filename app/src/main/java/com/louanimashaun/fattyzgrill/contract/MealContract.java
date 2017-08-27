@@ -1,4 +1,4 @@
-package com.louanimashaun.fattyzgrill;
+package com.louanimashaun.fattyzgrill.contract;
 
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Order;
@@ -11,23 +11,20 @@ import java.util.List;
  * defines how the view and presenter communicates
  */
 
-public interface MealsContract {
+public interface MealContract {
 
-    interface View {
+    interface View extends BaseView {
 
         void showMeals(List<Meal> meals);
 
         void showNoMeals();
 
-        void setPresenter(Presenter presenter);
     }
 
-    interface Presenter{
+    interface Presenter extends BasePresenter{
 
         void loadMeals(boolean forceUpdate);
 
-        void start();
-
-        void orderCompleted(Order order);
+        void AddMealToCheckout(Meal meal);
     }
 }

@@ -10,10 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.louanimashaun.fattyzgrill.MealsContract;
+import com.louanimashaun.fattyzgrill.contract.MealContract;
 import com.louanimashaun.fattyzgrill.R;
 import com.louanimashaun.fattyzgrill.model.Meal;
-import com.louanimashaun.fattyzgrill.model.Order;
 import com.louanimashaun.fattyzgrill.util.OrderBuilder;
 
 import java.util.List;
@@ -27,9 +26,9 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 public class CheckoutDialogFragment extends BottomSheetDialogFragment {
 
     private List<Meal> mSelectedMeals;
-    private MealsContract.Presenter mPresenter;
+    private MealContract.Presenter mPresenter;
 
-    public static CheckoutDialogFragment newInstance(@NonNull List<Meal> selectedMeals, @NonNull MealsContract.Presenter presenter){
+    public static CheckoutDialogFragment newInstance(@NonNull List<Meal> selectedMeals, @NonNull MealContract.Presenter presenter){
         CheckoutDialogFragment checkoutDialogFragment = new CheckoutDialogFragment();
         checkoutDialogFragment.mSelectedMeals = checkNotNull(selectedMeals);
         checkoutDialogFragment.mPresenter = checkNotNull(presenter);
@@ -51,7 +50,7 @@ public class CheckoutDialogFragment extends BottomSheetDialogFragment {
             @Override
             public void onClick(View view) {
 
-                mPresenter.orderCompleted(OrderBuilder.build(mSelectedMeals));
+                //mPresenter.orderCompleted(OrderBuilder.build(mSelectedMeals));
             }
         });
 

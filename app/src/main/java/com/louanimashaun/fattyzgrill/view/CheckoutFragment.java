@@ -11,24 +11,42 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.louanimashaun.fattyzgrill.R;
+import com.louanimashaun.fattyzgrill.contract.BasePresenter;
+import com.louanimashaun.fattyzgrill.contract.OrderContract;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.util.ModelUtil;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
 /**
  * Created by louanimashaun on 16/08/2017.
  */
 
-public class CheckoutFragment extends Fragment {
+public class CheckoutFragment extends Fragment implements OrderContract.View {
 
-    private static List<Meal> mSelectedMeals;
+    private BasePresenter mCheckoutPresenter;
+
+    private CheckoutAdapter mCheckoutAdapter;
 
     public static CheckoutFragment newInstance(){
-        mSelectedMeals = ModelUtil.createStubMealsList();
         return new CheckoutFragment();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mCheckoutPresenter.start();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        mCheckoutAdapter = new CheckoutAdapter(getContext(), R.layout.item_meal,
+                new ArrayList<Meal>());
+        super.onCreate(savedInstanceState);
+    }
 
     @Nullable
     @Override
@@ -39,9 +57,25 @@ public class CheckoutFragment extends Fragment {
         Button orderButton = (Button) rootView.findViewById(R.id.order_button);
         Button cancelButton = (Button) rootView.findViewById(R.id.cancel_button);
 
-        listView.setAdapter(new CheckoutAdapter(getContext(), R.layout.item_meal,
-                mSelectedMeals));
+        listView.setAdapter(mCheckoutAdapter);
 
         return rootView;
+    }
+
+    @Override
+    public void showCheckout(List<Meal> meals) {
+        checkNotNull(meals);
+        mCheckoutAdapter.refreshData(meals);
+    }
+
+    @Override
+    public void showNoCheckout() {
+
+    }
+
+    @Override
+    public void setPresenter(BasePresenter presenter) {
+        checkNotNull(presenter);
+        mCheckoutPresenter = presenter;
     }
 }

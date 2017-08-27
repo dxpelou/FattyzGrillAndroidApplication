@@ -21,17 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MealsActivity"
-            android:label="@string/title_activity_meals"
-            android:theme="@style/AppTheme.NoActionBar">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN"/>-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
-            <!--</intent-filter>-->
-        </activity>
-        <activity
-            android:name=".view.MealActivity2"
+            android:name=".MealActivity"
             android:label="@string/title_activity_meal2"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -42,13 +32,13 @@
         </activity>
 
         <service
-            android:name=".Notifications.OrderFirebaseMessagingService">
+            android:name=".notifications.OrderFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
         <service
-            android:name=".Notifications.MyFirebaseInstanceIDService">
+            android:name=".notifications.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
