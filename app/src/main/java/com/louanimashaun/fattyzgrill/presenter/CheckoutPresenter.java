@@ -8,7 +8,11 @@ import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Order;
 import com.louanimashaun.fattyzgrill.view.CheckoutFragment;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
+
+import io.realm.RealmList;
 
 import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
@@ -22,6 +26,8 @@ public class OrderPresenter implements OrderContract.Presenter {
 
     private MealRepository mMealRepository;
     private CheckoutFragment mCheckoutFragment;
+    private List<Meal> selectedMeals;
+
 
 
     public OrderPresenter(OrderRepository orderRepository,
@@ -59,11 +65,23 @@ public class OrderPresenter implements OrderContract.Presenter {
     }
 
     @Override
-    public void checkoutOrder(Order order) {
+    public void checkoutOrder() {
+        Order order = new Order();
+        order.setId(UUID.randomUUID().toString());
+        order.setOrderItems(new RealmList<Meal>((Meal[]) selectedMeals.toArray()));
+
+        float total = 0;
+        for(Meal meal : selectedMeals){
+            total += meal.getPrice();
+        }
+
+        order.setTotalPrice(total);
+
+
         mOrderRepository.saveData(order, new DataSource.CompletionCallback() {
             @Override
             public void onComplete() {
-
+                mCheckoutFragment.notifyOrderSent();
             }
 
             @Override
@@ -71,5 +89,15 @@ public class OrderPresenter implements OrderContract.Presenter {
 
             }
         });
+    }
+
+    @Override
+    public void addMeal(Meal meal) {
+        if(selectedMeals == null){
+            selectedMeals = new ArrayList<>();
+        }
+
+        selectedMeals.add(meal);
+
     }
 }

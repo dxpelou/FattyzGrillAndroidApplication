@@ -16,11 +16,16 @@ public interface OrderContract  {
 
         void showNoCheckout();
 
+        void notifyOrderSent();
+
     }
 
     interface Presenter extends BasePresenter{
         void loadCheckout();
 
-        void checkoutOrder(Order order);
+        void checkoutOrder();
+
+        void addMeal(Meal meal);
     }
+
 }
