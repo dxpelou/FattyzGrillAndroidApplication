@@ -14,7 +14,7 @@ import java.util.List;
 public class ModelUtil {
 
     private static int id = 0;
-    private static final int LIST_SIZE = 3;
+    public static final int LIST_SIZE = 3;
 
     private ModelUtil(){}
 
@@ -24,9 +24,9 @@ public class ModelUtil {
         for(int i = 0; i < LIST_SIZE; i++){
             Meal meal = createStubMeal();
             if(i < LIST_SIZE/2){
-                meal.setCategeory("Chicken");
+                meal.setCategory("Chicken");
             }else{
-                meal.setCategeory("Burger");
+                meal.setCategory("Burger");
             }
             meals.add(meal);
         }
@@ -60,5 +60,16 @@ public class ModelUtil {
         }
         return new ArrayList<>(mealsByCategory.values());
 
+    }
+
+    public static List<String> createStubMealIDList(){
+        List<String> list = new ArrayList<>();
+        String id = "0000";
+
+        for(int i = 0; i < LIST_SIZE; i++){
+            list.add(id);
+        }
+
+        return list;
     }
 }

@@ -67,4 +67,5 @@ public class CheckoutAdapter extends ArrayAdapter<Meal> {
     private void setMeals(List<Meal> meals){
         meals = checkNotNull(meals);
     }
+
 }

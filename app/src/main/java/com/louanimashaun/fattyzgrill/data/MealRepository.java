@@ -58,20 +58,5 @@ public class MealRepository extends AbstractRepository<Meal> {
         INSTANCE = null;
     }
 
-    @Override
-    public void getData(String id, GetCallback<Meal> callback) {
 
-    }
-
-    public void checkoutMeal(Meal meal){
-        meal.setCheckedOut(true);
-
-        mLocalDataSource.saveData(meal, null);
-    }
-
-    public void uncheckoutMeal(Meal meal){
-        meal.setCheckedOut(false);
-
-        mLocalDataSource.saveData(meal, null);
-    }
 }

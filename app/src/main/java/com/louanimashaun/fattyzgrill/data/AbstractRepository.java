@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
+
 /**
  * Created by louanimashaun on 18/06/2017.
  */
@@ -45,6 +47,28 @@ import java.util.Map;
         });
     }
 
+    @Override
+    public void getData(final String id, final GetCallback<T> callback) {
+        checkNotNull(callback);
+
+        if(mIsCacheDirty){
+          getDataFromRemoteDataSource(id, callback);
+        }
+
+
+        mLocalDataSource.getData(id, new GetCallback<T>() {
+            @Override
+            public void onDataLoaded(T data) {
+                callback.onDataLoaded(data);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                getDataFromRemoteDataSource(id, callback);
+            }
+        });
+    }
+
     private void loadDataFromRemoteDataSource(final LoadCallback<T> callBack) {
         mRemoteDataSource.loadData(new LoadCallback<T>() {
             @Override
@@ -57,6 +81,21 @@ import java.util.Map;
             @Override
             public void onDataNotAvailable() {
                 callBack.onDataNotAvailable();
+            }
+        });
+    }
+
+    private void getDataFromRemoteDataSource(String id, final GetCallback<T> callback){
+        mRemoteDataSource.getData(id, new GetCallback<T>() {
+            @Override
+            public void onDataLoaded(T data) {
+                mLocalDataSource.saveData(data, null);
+                callback.onDataLoaded(data);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                callback.onDataNotAvailable();
             }
         });
     }

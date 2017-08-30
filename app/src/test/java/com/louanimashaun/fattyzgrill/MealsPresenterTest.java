@@ -23,7 +23,7 @@ import static org.mockito.Mockito.verify;
  * Created by louanimashaun on 27/08/2017.
  */
 
-public class PresenterTest {
+public class MealsPresenterTest {
 
     private MealsPresenter mPresenter;
 

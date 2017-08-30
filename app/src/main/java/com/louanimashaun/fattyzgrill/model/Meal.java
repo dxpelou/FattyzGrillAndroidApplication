@@ -3,6 +3,7 @@ package com.louanimashaun.fattyzgrill.model;
 import com.google.firebase.database.Exclude;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by louanimashaun on 14/06/2017.
@@ -10,14 +11,15 @@ import io.realm.RealmObject;
 
 public class Meal extends RealmObject {
 
+    @PrimaryKey
+    private String id;
+
     private String title;
 
     private double price;
 
-    private String categeory;
+    private String category;
 
-    @Exclude
-    private boolean isCheckedOut;
 
     public Meal(){}
 
@@ -43,18 +45,18 @@ public class Meal extends RealmObject {
     }
 
     public String getCategory(){
-        return categeory;
+        return category;
     }
 
-    public void setCategeory(String category){
-        this.categeory = category;
+    public void setCategory(String category){
+        this.category = category;
     }
 
-    public boolean isCheckedOut() {
-        return isCheckedOut;
+    public String getId() {
+        return id;
     }
 
-    public void setCheckedOut(boolean checkedOut) {
-        isCheckedOut = checkedOut;
+    public void setId(String id) {
+        this.id = id;
     }
 }

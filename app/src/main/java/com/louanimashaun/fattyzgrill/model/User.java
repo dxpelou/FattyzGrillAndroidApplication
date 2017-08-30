@@ -1,6 +1,7 @@
 package com.louanimashaun.fattyzgrill.model;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by louanimashaun on 30/06/2017.
@@ -8,14 +9,15 @@ import io.realm.RealmObject;
 
 public class User extends RealmObject {
 
-    private boolean isAdmin;
 
+    @PrimaryKey
     private String userId;
 
     private String name;
 
     private String email;
 
+    private boolean isAdmin;
 
 
     public User(){}

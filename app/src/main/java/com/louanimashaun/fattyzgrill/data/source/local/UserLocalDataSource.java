@@ -41,9 +41,10 @@ public class UserLocalDataSource implements DataSource<User> {
                 .deleteRealmIfMigrationNeeded()
                 .build();
 
+
         realm = Realm.getInstance(config);
 
-        Log.d(TAG, realm.getPath());
+        //Log.d(TAG, realm.getPath());
     }
 
     @Override

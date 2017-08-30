@@ -1,9 +1,8 @@
 package com.louanimashaun.fattyzgrill.model;
 
-import java.util.List;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by louanimashaun on 21/06/2017.
@@ -11,20 +10,21 @@ import io.realm.RealmObject;
 
 public class Order extends RealmObject {
 
+    @PrimaryKey
     private String id;
 
     private RealmList<Meal> mOrderItems;
 
     private double mTotalPrice;
 
-    private boolean mIsOrderPending;
+    private boolean mIsOrderComplete;
 
     private String mSenderNotifcationToken;
 
     public Order(RealmList<Meal> orderItems, double totalPrice,  boolean isOrderPending){
         mOrderItems = orderItems;
         mTotalPrice = totalPrice;
-        mIsOrderPending = isOrderPending;
+        mIsOrderComplete = isOrderPending;
     }
     public Order(){}
 
@@ -52,12 +52,12 @@ public class Order extends RealmObject {
         this.mTotalPrice = totalPrice;
     }
 
-    public boolean isOrderPending() {
-        return mIsOrderPending;
+    public boolean isOrderComplete() {
+        return mIsOrderComplete;
     }
 
-    public void setOrderPending(boolean orderPending) {
-        mIsOrderPending = orderPending;
+    public void setOrderComplete(boolean orderComplete) {
+        mIsOrderComplete = orderComplete;
     }
 
     public String getSenderNotifcationToken(){

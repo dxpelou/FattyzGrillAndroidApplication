@@ -2,7 +2,6 @@ package com.louanimashaun.fattyzgrill.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +11,8 @@ import android.widget.ListView;
 
 import com.louanimashaun.fattyzgrill.R;
 import com.louanimashaun.fattyzgrill.contract.BasePresenter;
-import com.louanimashaun.fattyzgrill.contract.OrderContract;
+import com.louanimashaun.fattyzgrill.contract.CheckoutContract;
 import com.louanimashaun.fattyzgrill.model.Meal;
-import com.louanimashaun.fattyzgrill.util.ModelUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +23,12 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
  * Created by louanimashaun on 16/08/2017.
  */
 
-public class CheckoutFragment extends Fragment implements OrderContract.View {
+public class CheckoutFragment extends Fragment implements CheckoutContract.View {
 
     private BasePresenter mCheckoutPresenter;
 
     private CheckoutAdapter mCheckoutAdapter;
+    private static List<String> mSelectedMeals;
 
     public static CheckoutFragment newInstance(){
         return new CheckoutFragment();
@@ -71,6 +70,11 @@ public class CheckoutFragment extends Fragment implements OrderContract.View {
     @Override
     public void showNoCheckout() {
 
+    }
+
+    @Override
+    public void notifyOrderSent() {
+        //TODO
     }
 
     @Override

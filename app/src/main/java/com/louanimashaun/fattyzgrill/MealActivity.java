@@ -28,12 +28,15 @@ import com.louanimashaun.fattyzgrill.data.source.remote.OrdersRemoteDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.UserRemoteDataSource;
 import com.louanimashaun.fattyzgrill.model.User;
 import com.louanimashaun.fattyzgrill.presenter.MealsPresenter;
-import com.louanimashaun.fattyzgrill.presenter.OrderPresenter;
+import com.louanimashaun.fattyzgrill.presenter.CheckoutPresenter;
 import com.louanimashaun.fattyzgrill.util.AdminUtil;
 import com.louanimashaun.fattyzgrill.view.CheckoutFragment;
+import com.louanimashaun.fattyzgrill.view.MealOnClickListener;
 import com.louanimashaun.fattyzgrill.view.MealsFragment;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MealActivity extends AppCompatActivity {
 
@@ -45,6 +48,8 @@ public class MealActivity extends AppCompatActivity {
     private UserRepository mUserRepository;
     private MealRepository mMealRepository;
     private OrderRepository mOrderRepository;
+    private List<String> mSelectedMealIDs;
+    private MealOnClickListener mMealOnClickListener;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -57,16 +62,22 @@ public class MealActivity extends AppCompatActivity {
                     MealsFragment mealsFragment = MealsFragment.newInstance();
                     replaceFragment(mealsFragment);
 
+                    mealsFragment.setMealClickListener(mMealOnClickListener);
+
                     MealsPresenter mealsPresenter = new MealsPresenter(
                             mMealRepository,
                             mealsFragment);
 
+                    mealsFragment.setPresenter(mealsPresenter);
+
                     return true;
-                case R.id.navigation_dashboard:
+                case R.id.navigation_checkout:
                     CheckoutFragment checkoutFragment = CheckoutFragment.newInstance();
                     replaceFragment(checkoutFragment);
 
-                    OrderPresenter orderPresenter = new OrderPresenter(mOrderRepository, checkoutFragment);
+                    CheckoutPresenter checkoutPresenter = new CheckoutPresenter(mOrderRepository, mMealRepository, checkoutFragment);
+
+                    checkoutFragment.setPresenter(checkoutPresenter);
                     return true;
                 case R.id.navigation_notifications:
                     return true;
@@ -119,9 +130,21 @@ public class MealActivity extends AppCompatActivity {
             }
         };
 
+        setUpRepositories();
+
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        mMealOnClickListener = new MealOnClickListener() {
+            @Override
+            public void onClick(String mealID) {
+                if(mSelectedMealIDs == null)
+                    mSelectedMealIDs = new ArrayList<>();
+
+                mSelectedMealIDs.add(mealID);
+            }
+        };
 
         MealsFragment mealsFragment = (MealsFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.content_frame);
@@ -130,10 +153,11 @@ public class MealActivity extends AppCompatActivity {
             mealsFragment = MealsFragment.newInstance();
         }
 
+        mealsFragment.setMealClickListener(mMealOnClickListener);
+
         commitFragmentTransaction(R.id.content_frame, mealsFragment);
 
-
-        MealsPresenter mMealsPresenter = new MealsPresenter(
+        final MealsPresenter mMealsPresenter = new MealsPresenter(
                 mMealRepository,
                 mealsFragment);
 
@@ -141,31 +165,10 @@ public class MealActivity extends AppCompatActivity {
 
        AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView)findViewById(R.id.auto_complete_tv);
         autoCompleteTextView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, meals));
+
     }
 
 
-    private void commitFragmentTransaction(int fragmentId, Fragment fragment){
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(fragmentId, fragment);
-        transaction.commit();
-    }
-
-    private void replaceFragment(Fragment fragment){
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.content_frame, fragment);
-        transaction.commit();
-    }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.options_menu, menu);
-//
-//        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-//        searchView.setIconifiedByDefault(false);
-//
-//        return true;
-//    }
 
     @Override
     protected void onResume() {
@@ -216,6 +219,18 @@ public class MealActivity extends AppCompatActivity {
         });
     }
 
+    private void commitFragmentTransaction(int fragmentId, Fragment fragment){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(fragmentId, fragment);
+        transaction.commit();
+    }
+
+    private void replaceFragment(Fragment fragment){
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_frame, fragment);
+        transaction.commit();
+    }
+
 
     private void setUpRepositories(){
         mUserRepository = UserRepository.getInstance(UserLocalDataSource.getInstance(this),
@@ -229,5 +244,6 @@ public class MealActivity extends AppCompatActivity {
                 MealsLocalDataSoure.getInstance(),
                 MealsRemoteDataSource.getInstance());
     }
+
 
 }

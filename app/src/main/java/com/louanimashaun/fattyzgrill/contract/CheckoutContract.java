@@ -9,7 +9,7 @@ import java.util.List;
  * Created by louanimashaun on 27/08/2017.
  */
 
-public interface OrderContract  {
+public interface CheckoutContract {
 
     interface View extends BaseView{
         void showCheckout(List<Meal> meals);
@@ -25,7 +25,8 @@ public interface OrderContract  {
 
         void checkoutOrder();
 
-        void addMeal(Meal meal);
+        void addSelectedMeals(List<String> selectedMeals);
+
     }
 
 }

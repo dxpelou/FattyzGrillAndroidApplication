@@ -26,6 +26,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
     private static final int CATEGORY_MEAL_ITEM = 1;
 
     private static int currentViewType;
+    private MealOnClickListener mClickListener;
 
 
     public MealsAdapter(List<Meal> meals){
@@ -52,7 +53,6 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
         if(currentViewType == CATEGORY_MEAL_ITEM){
             holder.category_tv.setText(meal.getCategory());
         }
-
     }
 
     @Override
@@ -90,7 +90,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
     }
 
 
-    public class MealViewHolder extends RecyclerView.ViewHolder{
+    public class MealViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         //TODO use butterknife
         public TextView title_tv, price_tv, category_tv;
@@ -105,5 +105,16 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
                 category_tv = (TextView) itemView.findViewById(R.id.category_tv);
             }
         }
+
+        @Override
+        public void onClick(View view) {
+            int index = getAdapterPosition();
+            String mealID = mMeals.get(index).getId();
+            mClickListener.onClick(mealID);
+        }
+    }
+
+    public void setItemClickListener(MealOnClickListener listener){
+        mClickListener = checkNotNull(listener);
     }
 }

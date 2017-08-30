@@ -1,6 +1,6 @@
 package com.louanimashaun.fattyzgrill.presenter;
 
-import com.louanimashaun.fattyzgrill.contract.OrderContract;
+import com.louanimashaun.fattyzgrill.contract.CheckoutContract;
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealRepository;
 import com.louanimashaun.fattyzgrill.data.OrderRepository;
@@ -20,43 +20,54 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
  * Created by louanimashaun on 27/08/2017.
  */
 
-public class OrderPresenter implements OrderContract.Presenter {
+public class CheckoutPresenter implements CheckoutContract.Presenter {
 
     private OrderRepository mOrderRepository;
 
     private MealRepository mMealRepository;
     private CheckoutFragment mCheckoutFragment;
-    private List<Meal> selectedMeals;
+    private List<String> mSelectedMeals;
 
 
 
-    public OrderPresenter(OrderRepository orderRepository,
-                          CheckoutFragment checkoutFragment){
+    public CheckoutPresenter(OrderRepository orderRepository, MealRepository mealRepository,
+                             CheckoutFragment checkoutFragment){
 
         mOrderRepository = checkNotNull(orderRepository);
         mCheckoutFragment = checkNotNull(checkoutFragment);
+        mMealRepository = checkNotNull(mealRepository);
     }
 
     @Override
     public void loadCheckout() {
 
-        //if data is loaded from remote checkouts will be lost
-        mMealRepository.loadData(new DataSource.LoadCallback<Meal>() {
-            @Override
-            public void onDataLoaded(List<Meal> data) {
-                for(int i = 0; i < data.size(); i++){
-                    Meal meal = data.get(i);
-                    if(!meal.isCheckedOut()){
+        if(mSelectedMeals == null){
+            mCheckoutFragment.showNoCheckout();
+            return;
+        }
 
-                    }
+        final List<Meal> checkoutList = new ArrayList<>();
+
+        for(String id : mSelectedMeals) {
+            mMealRepository.getData(id, new DataSource.GetCallback<Meal>() {
+                @Override
+                public void onDataLoaded(Meal data) {
+                    checkoutList.add(data);
                 }
-            }
 
-            @Override
-            public void onDataNotAvailable() {
+                @Override
+                public void onDataNotAvailable() {
 
-            }
-        });
+                }
+            });
+        }
+
+        if(checkoutList.size() == 0){
+            mCheckoutFragment.showNoCheckout();
+            return;
+        }
+
+        mCheckoutFragment.showCheckout(checkoutList);
     }
 
     @Override
@@ -66,12 +77,31 @@ public class OrderPresenter implements OrderContract.Presenter {
 
     @Override
     public void checkoutOrder() {
+
+        final List<Meal> meals = new ArrayList<>();
+
+        getMealsById(mSelectedMeals, new DataSource.GetCallback<Meal>() {
+            @Override
+            public void onDataLoaded(Meal data) {
+                meals.add(data);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
+
         Order order = new Order();
         order.setId(UUID.randomUUID().toString());
-        order.setOrderItems(new RealmList<Meal>((Meal[]) selectedMeals.toArray()));
+
+        RealmList<Meal> realmList = new RealmList<Meal>();
+        realmList.addAll(meals);
+        order.setOrderItems(realmList);
+       // order.setOrderItems(new RealmList<Meal>((Meal[]) meals.toArray()));
 
         float total = 0;
-        for(Meal meal : selectedMeals){
+        for(Meal meal : meals){
             total += meal.getPrice();
         }
 
@@ -92,12 +122,16 @@ public class OrderPresenter implements OrderContract.Presenter {
     }
 
     @Override
-    public void addMeal(Meal meal) {
-        if(selectedMeals == null){
-            selectedMeals = new ArrayList<>();
-        }
-
-        selectedMeals.add(meal);
-
+    public void addSelectedMeals( List<String> meals) {
+        mSelectedMeals = meals;
     }
+
+    private void getMealsById(List<String> meals, DataSource.GetCallback<Meal> callback){
+
+        for(String id : meals) {
+            mMealRepository.getData(id, callback);
+        }
+    }
+
+
 }

@@ -29,7 +29,7 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 public class MealsFragment extends Fragment implements MealContract.View  {
 
     private BasePresenter mMealsPresenter;
-    private MealsAdapter mMealsAdapter;
+    private MealsAdapter mMealsAdapter = new MealsAdapter(new ArrayList<Meal>());
 
     public static MealsFragment newInstance(){
         return new MealsFragment();
@@ -38,7 +38,6 @@ public class MealsFragment extends Fragment implements MealContract.View  {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        mMealsAdapter = new MealsAdapter(new ArrayList<Meal>());
         super.onCreate(savedInstanceState);
 //        setHasOptionsMenu(true);
     }
@@ -60,35 +59,8 @@ public class MealsFragment extends Fragment implements MealContract.View  {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mMealsAdapter);
-
-       /* recyclerView.addItemDecoration(new RecyclerView.ItemDecoration(){
-
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                int space = 1;
-                outRect.left = space;
-                outRect.right = space;
-                outRect.bottom = space;
-
-                if(parent.getChildAdapterPosition(view) == 0){
-                    outRect.top = space;
-                }
-            }
-        });*/
     }
 
-    /*@Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.options_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.action_checkout){
-            CheckoutDialogFragment.newInstance(ModelUtil.createStubMealsList(), mMealsPresenter).show(getFragmentManager(),"MealsFragment");
-        }
-        return super.onOptionsItemSelected(item);
-    }*/
 
     @Override
     public void onResume() {
@@ -110,6 +82,11 @@ public class MealsFragment extends Fragment implements MealContract.View  {
     @Override
     public void setPresenter(@NonNull BasePresenter presenter) {
         mMealsPresenter = checkNotNull(presenter);
+    }
+
+    public void setMealClickListener(@NonNull MealOnClickListener listener){
+        checkNotNull(listener);
+        mMealsAdapter.setItemClickListener(listener);
     }
 
 }
