@@ -34,16 +34,7 @@ public class UserLocalDataSource implements DataSource<User> {
     }
 
     private UserLocalDataSource(Context context){
-        mContext = context;
-        Realm.init(context);
-        RealmConfiguration config = new RealmConfiguration
-                .Builder()
-                .deleteRealmIfMigrationNeeded()
-                .build();
-
-
-        realm = Realm.getInstance(config);
-
+        realm = Realm.getDefaultInstance();
         //Log.d(TAG, realm.getPath());
     }
 

@@ -5,7 +5,6 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,12 +25,12 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 public class CheckoutAdapter extends ArrayAdapter<Meal> {
 
     private Context mContext;
-    private List<Meal> meals;
+    private List<Meal> mMeals;
 
-    public CheckoutAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Meal> objects) {
-        super(context, resource, objects);
+    public CheckoutAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Meal> meals) {
+        super(context, resource, meals);
         mContext = context;
-        meals = objects;
+        mMeals = meals;
     }
 
     @NonNull
@@ -45,8 +44,7 @@ public class CheckoutAdapter extends ArrayAdapter<Meal> {
         TextView titleTextView = (TextView) rowView.findViewById(R.id.title_tv);
         TextView priceTextView = (TextView) rowView.findViewById(R.id.price_tv);
 
-
-        Meal meal = meals.get(position);
+        Meal meal = mMeals.get(position);
         String price = "£ " + String.valueOf(meal.getPrice());
 
         titleTextView.setText(meal.getTitle());
@@ -65,7 +63,11 @@ public class CheckoutAdapter extends ArrayAdapter<Meal> {
     }
 
     private void setMeals(List<Meal> meals){
-        meals = checkNotNull(meals);
+        mMeals = checkNotNull(meals);
     }
 
+    @Override
+    public int getCount() {
+       return mMeals.size();
+    }
 }

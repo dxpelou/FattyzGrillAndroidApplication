@@ -76,7 +76,7 @@ public class MealActivity extends AppCompatActivity {
                     replaceFragment(checkoutFragment);
 
                     CheckoutPresenter checkoutPresenter = new CheckoutPresenter(mOrderRepository, mMealRepository, checkoutFragment);
-
+                    checkoutPresenter.addSelectedMeals(mSelectedMealIDs);
                     checkoutFragment.setPresenter(checkoutPresenter);
                     return true;
                 case R.id.navigation_notifications:

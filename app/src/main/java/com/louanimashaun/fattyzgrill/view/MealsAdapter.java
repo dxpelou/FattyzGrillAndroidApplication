@@ -104,6 +104,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
             if(viewType == CATEGORY_MEAL_ITEM ) {
                 category_tv = (TextView) itemView.findViewById(R.id.category_tv);
             }
+            itemView.setOnClickListener(this);
         }
 
         @Override
