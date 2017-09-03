@@ -21,9 +21,10 @@
 
 
         <TextView
+            android:id="@+id/total_price_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="£10"
+            android:text="£0"
             android:textColor="@color/apricot"
             android:gravity="center_horizontal"/>
 
