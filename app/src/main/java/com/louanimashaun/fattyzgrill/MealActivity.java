@@ -91,6 +91,7 @@ public class MealActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFirebaseAuth = FirebaseAuth.getInstance();
+        //FirebaseMessaging.getInstance().unsubscribeFromTopic(getString(R.string.order_FCM_topic));
 
         if(AdminUtil.isAdmin()) {
             FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.order_FCM_topic));

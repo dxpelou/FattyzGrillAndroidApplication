@@ -14,7 +14,7 @@ exports.orderCreated = functions.database.ref('/orders/{orderID}')
 
         var payload = {
             data: {
-                orderID : id.toString(),
+                orderID : id.toString()
                 //send meals in object
             }
         }
@@ -29,7 +29,24 @@ exports.orderCreated = functions.database.ref('/orders/{orderID}')
     });
 
 
-exports.acceptOrder = functions.database.ref('/orders/{orderID}/orderPending')
+exports.acceptOrder = functions.database.ref('/orders/{orderID}')
     .onUpdate((event) => {
-    console.log(event.data.val());
+    const wasOrderAccepted = event.data.previous.child('isOrderAccepted');
+    const isOrderAccepted = event.data.current.child('isOrderAccepted');
+
+    if(!wasOrderAccepted && isOrderAccepted){
+        var payload = {
+            data: {
+                orderStatus: 'OK'
+            }
+        }
+
+        admin.messaging().sendToDevice(event.data.current.child('senderToken'), payload)
+            .then(response => {
+                console.log('Successfully sent message: ', response);
+            })
+            .catch(error => {
+                console.log('Error sending messaging: ', error);
+            });
+    }
     });

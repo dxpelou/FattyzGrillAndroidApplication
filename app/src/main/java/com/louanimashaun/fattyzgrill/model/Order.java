@@ -1,47 +1,52 @@
 package com.louanimashaun.fattyzgrill.model;
 
+import com.google.firebase.database.Exclude;
+
+import java.util.List;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.Ignore;
 import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by louanimashaun on 21/06/2017.
  */
 
+
 public class Order extends RealmObject {
 
     @PrimaryKey
+    @Exclude
     private String id;
 
-    private RealmList<Meal> mOrderItems;
+    private RealmList<RealmString> mMealIdsRealm;
+
+    @Ignore
+    private List<String> mMealIds;
+
+    private String mUserId;
 
     private double mTotalPrice;
 
-    private boolean mIsOrderComplete;
+    private boolean mIsOrderAccepted;
 
     private String mSenderNotifcationToken;
 
-    public Order(RealmList<Meal> orderItems, double totalPrice,  boolean isOrderPending){
-        mOrderItems = orderItems;
+    public Order(RealmList<RealmString> mealIdsRealm, double totalPrice, boolean isOrderPending){
+        mMealIdsRealm = mealIdsRealm;
         mTotalPrice = totalPrice;
-        mIsOrderComplete = isOrderPending;
+        mIsOrderAccepted = isOrderPending;
     }
     public Order(){}
 
+    @Exclude
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public RealmList<Meal> getOrderItems() {
-        return mOrderItems;
-    }
-
-    public void setOrderItems(RealmList<Meal> orderItems) {
-        this.mOrderItems = orderItems;
     }
 
     public double getTotalPrice() {
@@ -52,12 +57,12 @@ public class Order extends RealmObject {
         this.mTotalPrice = totalPrice;
     }
 
-    public boolean isOrderComplete() {
-        return mIsOrderComplete;
+    public boolean isOrderAccepted() {
+        return mIsOrderAccepted;
     }
 
-    public void setOrderComplete(boolean orderComplete) {
-        mIsOrderComplete = orderComplete;
+    public void setOrderAccepted(boolean orderAccepted) {
+        mIsOrderAccepted = orderAccepted;
     }
 
     public String getSenderNotifcationToken(){
@@ -68,4 +73,28 @@ public class Order extends RealmObject {
         mSenderNotifcationToken = token;
     }
 
+    @Exclude
+    public List<RealmString> getMealIdsRealm() {
+        return mMealIdsRealm;
+    }
+
+    public void setMealIdsRealm(RealmList<RealmString> mealIdsRealm) {
+        mMealIdsRealm = mealIdsRealm;
+    }
+
+    public String getUserId() {
+        return mUserId;
+    }
+
+    public void setUserId(String userId) {
+        mUserId = userId;
+    }
+
+    public List<String> getMealIds() {
+        return mMealIds;
+    }
+
+    public void setMealIds(List<String> mealIds) {
+        mMealIds = mealIds;
+    }
 }

@@ -1,5 +1,7 @@
 package com.louanimashaun.fattyzgrill.model;
 
+import com.google.firebase.database.Exclude;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -11,6 +13,7 @@ public class User extends RealmObject {
 
 
     @PrimaryKey
+    @Exclude
     private String userId;
 
     private String name;

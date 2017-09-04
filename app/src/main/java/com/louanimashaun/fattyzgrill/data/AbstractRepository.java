@@ -36,7 +36,6 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
             @Override
             public void onDataLoaded(List<T> data) {
                 //refreshCache(data);
-                refreshLocalDataSource(data);
                 callBack.onDataLoaded(data);
             }
 
@@ -89,6 +88,7 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
         mRemoteDataSource.getData(id, new GetCallback<T>() {
             @Override
             public void onDataLoaded(T data) {
+                //convert
                 mLocalDataSource.saveData(data, null);
                 callback.onDataLoaded(data);
             }
@@ -118,10 +118,10 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
     @Override
     public void saveData(T data, CompletionCallback callback) {
-       // putDataItemInCache(data);
+        //possible convert
         mRemoteDataSource.saveData(data, callback);
 
-
+        //possible convert
         mLocalDataSource.saveData(data, null);
     }
 

@@ -12,6 +12,7 @@ import io.realm.annotations.PrimaryKey;
 public class Meal extends RealmObject {
 
     @PrimaryKey
+    @Exclude
     private String id;
 
     private String title;
@@ -19,7 +20,6 @@ public class Meal extends RealmObject {
     private double price;
 
     private String category;
-
 
     public Meal(){}
 

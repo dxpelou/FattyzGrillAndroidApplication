@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.louanimashaun.fattyzgrill.R;
 import com.louanimashaun.fattyzgrill.contract.BasePresenter;
 import com.louanimashaun.fattyzgrill.contract.CheckoutContract;
 import com.louanimashaun.fattyzgrill.model.Meal;
+import com.louanimashaun.fattyzgrill.presenter.CheckoutPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,8 @@ public class CheckoutFragment extends Fragment implements CheckoutContract.View 
     private BasePresenter mCheckoutPresenter;
 
     private CheckoutAdapter mCheckoutAdapter;
-    private static List<String> mSelectedMeals;
+    private TextView mTotalPrice_tv;
+
 
     public static CheckoutFragment newInstance(){
         return new CheckoutFragment();
@@ -55,8 +58,16 @@ public class CheckoutFragment extends Fragment implements CheckoutContract.View 
 
         Button orderButton = (Button) rootView.findViewById(R.id.order_button);
         Button cancelButton = (Button) rootView.findViewById(R.id.cancel_button);
+        mTotalPrice_tv = (TextView) rootView.findViewById(R.id.total_price_tv);
 
         listView.setAdapter(mCheckoutAdapter);
+
+        orderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendOrder();
+            }
+        });
 
         return rootView;
     }
@@ -65,11 +76,12 @@ public class CheckoutFragment extends Fragment implements CheckoutContract.View 
     public void showCheckout(List<Meal> meals) {
         checkNotNull(meals);
         mCheckoutAdapter.refreshData(meals);
+        showTotalPrice(meals);
     }
 
     @Override
     public void showNoCheckout() {
-
+        showTotalPrice(new ArrayList<Meal>());
     }
 
     @Override
@@ -81,5 +93,18 @@ public class CheckoutFragment extends Fragment implements CheckoutContract.View 
     public void setPresenter(BasePresenter presenter) {
         checkNotNull(presenter);
         mCheckoutPresenter = presenter;
+    }
+
+    private void showTotalPrice(List<Meal> meals){
+        int total = 0;
+        for(Meal meal : meals){
+            total += meal.getPrice();
+        }
+
+        mTotalPrice_tv.setText("£ " + total);
+    }
+
+    private void sendOrder(){
+        ((CheckoutPresenter)mCheckoutPresenter).checkoutOrder();
     }
 }

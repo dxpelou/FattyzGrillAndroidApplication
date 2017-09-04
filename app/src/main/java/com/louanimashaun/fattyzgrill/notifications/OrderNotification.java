@@ -4,6 +4,9 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.support.v4.app.NotificationCompat;
 
+import com.louanimashaun.fattyzgrill.R;
+import com.louanimashaun.fattyzgrill.util.Util;
+
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
@@ -30,8 +33,8 @@ public class OrderNotification {
 
 
     public void createNotification(){
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(null)
-                .setSmallIcon(0)
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(Util.getApp())
+                .setSmallIcon(R.drawable.logof)
                 .setContentTitle("New Order")
                 .setContentText("hello ");
 

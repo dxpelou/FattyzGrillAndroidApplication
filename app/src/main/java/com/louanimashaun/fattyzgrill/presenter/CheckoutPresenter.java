@@ -6,13 +6,12 @@ import com.louanimashaun.fattyzgrill.data.MealRepository;
 import com.louanimashaun.fattyzgrill.data.OrderRepository;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Order;
+import com.louanimashaun.fattyzgrill.util.ModelUtil;
 import com.louanimashaun.fattyzgrill.view.CheckoutFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import io.realm.RealmList;
 
 import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
@@ -95,11 +94,6 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
         Order order = new Order();
         order.setId(UUID.randomUUID().toString());
 
-        RealmList<Meal> realmList = new RealmList<Meal>();
-        realmList.addAll(meals);
-        order.setOrderItems(realmList);
-       // order.setOrderItems(new RealmList<Meal>((Meal[]) meals.toArray()));
-
         float total = 0;
         for(Meal meal : meals){
             total += meal.getPrice();
@@ -107,6 +101,8 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
 
         order.setTotalPrice(total);
 
+        order.setMealIdsRealm(ModelUtil.toRealmStringList(mSelectedMeals));
+        order.setMealIds(mSelectedMeals);
 
         mOrderRepository.saveData(order, new DataSource.CompletionCallback() {
             @Override

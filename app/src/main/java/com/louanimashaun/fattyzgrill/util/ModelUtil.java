@@ -1,11 +1,14 @@
 package com.louanimashaun.fattyzgrill.util;
 
 import com.louanimashaun.fattyzgrill.model.Meal;
+import com.louanimashaun.fattyzgrill.model.RealmString;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+import io.realm.RealmList;
 
 /**
  * Created by louanimashaun on 15/06/2017.
@@ -71,5 +74,19 @@ public class ModelUtil {
         }
 
         return list;
+    }
+
+
+    public static RealmList<RealmString> toRealmStringList(List<String> stringList){
+        int size = stringList.size();
+        RealmString[] array = new RealmString[stringList.size()];
+        RealmString realmString = null;
+
+        for(int i =0; i < size; i++ ){
+            realmString = new RealmString(stringList.get(i));
+            array[i] = realmString;
+        }
+
+        return new RealmList<RealmString>(array);
     }
 }

@@ -48,7 +48,8 @@ public class OrdersRemoteDataSource implements DataSource<Order> {
 
     @Override
     public void saveData(Order data, final CompletionCallback callback) {
-        mOrdersReference.push().setValue(data, new DatabaseReference.CompletionListener(){
+        String id = data.getId();
+        mOrdersReference.child(id).setValue(data, new DatabaseReference.CompletionListener(){
 
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
