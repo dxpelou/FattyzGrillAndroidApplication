@@ -6,6 +6,7 @@ import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealRepository;
 import com.louanimashaun.fattyzgrill.data.source.local.MealsLocalDataSoure;
 import com.louanimashaun.fattyzgrill.data.source.remote.MealsRemoteDataSource;
+import com.louanimashaun.fattyzgrill.util.ModelUtil;
 
 import org.junit.After;
 import org.junit.Before;
@@ -84,7 +85,7 @@ public class RepositoryTest {
     }
 
     @Test
-    public void  remoteUnavailable_loadFromLocal(){
+    public void remoteUnavailable_loadFromLocal(){
         mMealRepository.loadData(mLoadCallback);
 
         verify(mMealsLocalDataSource).loadData(mLoadCallbackCaptor.capture());
@@ -110,4 +111,67 @@ public class RepositoryTest {
 
     }
 
+    @Test
+    public void loadDataById_loadsDataFromLocalDataSource(){
+        mMealRepository.loadDataByIds(ModelUtil.createStubMealIDList(), mLoadCallback);
+
+        verify(mMealsLocalDataSource).loadDataByIds(eq(ModelUtil.createStubMealIDList()), mLoadCallbackCaptor.capture());
+
+    }
+
+
+    @Test
+    public void loadDataById_CacheIsDirty_LoadsFromRemote(){
+        mMealRepository.refreshData();
+
+        mMealRepository.loadDataByIds(ModelUtil.createStubMealIDList(), mLoadCallback);
+
+        verify(mMealsRemoteDataSource).loadDataByIds(eq(ModelUtil.createStubMealIDList()),
+                any(DataSource.LoadCallback.class));
+    }
+
+
+    public void loadDataByIds_LocalDataSourceUnavailable_LoadFromRemote(){
+        mMealRepository.loadDataByIds(ModelUtil.createStubMealIDList(), mLoadCallbackCaptor.capture());
+
+        mLoadCallbackCaptor.getValue().onDataNotAvailable();
+
+        verify(mMealsRemoteDataSource).loadDataByIds(eq(ModelUtil.createStubMealIDList()),
+                any(DataSource.LoadCallback.class));
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

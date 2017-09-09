@@ -90,6 +90,11 @@ public class CheckoutFragment extends Fragment implements CheckoutContract.View 
     }
 
     @Override
+    public void notifyOrderError() {
+        //TODO
+    }
+
+    @Override
     public void setPresenter(BasePresenter presenter) {
         checkNotNull(presenter);
         mCheckoutPresenter = presenter;

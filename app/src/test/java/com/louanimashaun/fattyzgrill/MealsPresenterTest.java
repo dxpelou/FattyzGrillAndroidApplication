@@ -46,7 +46,7 @@ public class MealsPresenterTest {
     public void loadsMeals_loadsIntoView(){
         mPresenter.loadMeals(true);
 
-        verify(mMealRepository).load(mLoadCallbackCaptor.capture());
+        verify(mMealRepository).loadData(mLoadCallbackCaptor.capture());
         mLoadCallbackCaptor.getValue().onDataLoaded(ModelUtil.createStubMealsList());
 
         ArgumentCaptor<List> showMealsArgumentCaptor = ArgumentCaptor.forClass(List.class);
@@ -59,7 +59,7 @@ public class MealsPresenterTest {
     public void mealsUnavailable_showNoMeals(){
         mPresenter.loadMeals(true);
 
-        verify(mMealRepository).load(mLoadCallbackCaptor.capture());
+        verify(mMealRepository).loadData(mLoadCallbackCaptor.capture());
         mLoadCallbackCaptor.getValue().onDataNotAvailable();
 
         verify(mMealsFragment).showNoMeals();

@@ -46,6 +46,11 @@ public class UserRemoteDataSource implements DataSource<User> {
     }
 
     @Override
+    public void loadDataByIds(List<String> ids, LoadCallback<User> callback) {
+
+    }
+
+    @Override
     public void getData(String id, GetCallback getCallback) {
         String thisUserPath = USERS_PATH + "/" + id;
         DatabaseReference thisUserReference  = mFirebaseDatabase.getReference(thisUserPath);

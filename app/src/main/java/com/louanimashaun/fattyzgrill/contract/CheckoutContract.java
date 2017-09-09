@@ -18,6 +18,8 @@ public interface CheckoutContract {
 
         void notifyOrderSent();
 
+        void notifyOrderError();
+
     }
 
     interface Presenter extends BasePresenter{

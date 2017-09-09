@@ -5,6 +5,7 @@ import com.louanimashaun.fattyzgrill.data.MealRepository;
 import com.louanimashaun.fattyzgrill.data.OrderRepository;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Order;
+import com.louanimashaun.fattyzgrill.model.RealmString;
 import com.louanimashaun.fattyzgrill.presenter.CheckoutPresenter;
 import com.louanimashaun.fattyzgrill.util.ModelUtil;
 import com.louanimashaun.fattyzgrill.view.CheckoutFragment;
@@ -17,8 +18,11 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
+
 import io.realm.RealmList;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -40,9 +44,14 @@ public class CheckoutPresenterTest {
     @Mock
     private CheckoutFragment mCheckoutFragment;
 
+    @Mock
+    private DataSource.LoadCallback mLoadCallback;
+
     @Captor
     private ArgumentCaptor<DataSource.GetCallback> mGetCallbackCaptor;
 
+    @Captor
+    private ArgumentCaptor<DataSource.LoadCallback> mLoadCallbackCaptor;
 
 
     @Before
@@ -56,34 +65,49 @@ public class CheckoutPresenterTest {
 
     @Test
     public void start_checkIsLoadedIntoView(){
+        //set SelectedMeals
+        mCheckoutPresenter.addSelectedMeals(ModelUtil.createStubMealIDList());
 
+
+        //start presenter
+        mCheckoutPresenter.start();
+
+        verify(mMealRepository).loadDataByIds(eq(ModelUtil.createStubMealIDList()), mLoadCallbackCaptor.capture());
+
+        mLoadCallbackCaptor.getValue().onDataLoaded(ModelUtil.createStubMealsList());
+
+        ArgumentCaptor<List<Meal>> mealsCaptor = ArgumentCaptor.forClass(List.class);
+        verify(mCheckoutFragment).showCheckout(mealsCaptor.capture());
+
+        assert ModelUtil.LIST_SIZE == mealsCaptor.getValue().size();
     }
 
     @Test
     public void start_NotCheckoutLoaded(){
+        mCheckoutPresenter.addSelectedMeals(ModelUtil.createStubMealIDList());
 
+        mCheckoutPresenter.start();
+
+       setMealsByIdUnavailable();
+
+        verify(mCheckoutFragment).showNoCheckout();
     }
 
-    @Test
-    public void addSelectedMeals_MealsRepositoryGetsData(){
-
-    }
 
     @Test
     public void checkoutOrder_repositorySavesOrder(){
+
         mCheckoutPresenter.addSelectedMeals(ModelUtil.createStubMealIDList());
 
         mCheckoutPresenter.checkoutOrder();
 
-        verify(mMealRepository, times(ModelUtil.LIST_SIZE)).getData(eq("0000"), mGetCallbackCaptor.capture());
-
-        mGetCallbackCaptor.getValue().onDataLoaded(ModelUtil.createStubMeal());
+       setMealsByIdAvailable();
 
         ArgumentCaptor<Order> orderArgumentCaptor = ArgumentCaptor.forClass(Order.class);
         ArgumentCaptor<DataSource.CompletionCallback> completionCallbackArgumentCaptor = ArgumentCaptor.forClass(DataSource.CompletionCallback.class);
 
         verify(mOrderRepository).saveData(orderArgumentCaptor.capture(),completionCallbackArgumentCaptor.capture());
-        RealmList<Meal> list = orderArgumentCaptor.getValue().getOrderItems();
+        List<RealmString> list = orderArgumentCaptor.getValue().getMealIdsRealm();
         int size = list.size();
 
         assert size == ModelUtil.LIST_SIZE;
@@ -91,5 +115,50 @@ public class CheckoutPresenterTest {
         completionCallbackArgumentCaptor.getValue().onComplete();
 
         verify(mCheckoutFragment).notifyOrderSent();
+    }
+
+    @Test
+    public void checkoutOrder_MealsDoNotLoad(){
+        mCheckoutPresenter.addSelectedMeals(ModelUtil.createStubMealIDList());
+
+        mCheckoutPresenter.checkoutOrder();
+
+        setMealsByIdAvailable();
+
+        ArgumentCaptor<DataSource.CompletionCallback> completionCallbackCaptor = ArgumentCaptor.forClass(DataSource.CompletionCallback.class);
+        verify(mOrderRepository).saveData(any(Order.class), completionCallbackCaptor.capture() );
+
+        completionCallbackCaptor.getValue().onComplete();
+
+        verify(mCheckoutFragment).notifyOrderSent();
+    }
+
+    @Test
+    public void checkoutOrder_MealDoesNotSave(){
+        mCheckoutPresenter.addSelectedMeals(ModelUtil.createStubMealIDList());
+
+        mCheckoutPresenter.checkoutOrder();
+
+        setMealsByIdAvailable();
+
+        ArgumentCaptor<DataSource.CompletionCallback> completionCallbackCaptor = ArgumentCaptor.forClass(DataSource.CompletionCallback.class);
+        verify(mOrderRepository).saveData(any(Order.class), completionCallbackCaptor.capture() );
+
+        completionCallbackCaptor.getValue().onCancel();
+
+        verify(mCheckoutFragment).notifyOrderError();
+
+    }
+
+    public void setMealsByIdAvailable(){
+        verify(mMealRepository).loadDataByIds(eq(ModelUtil.createStubMealIDList()), mLoadCallbackCaptor.capture());
+
+        mLoadCallbackCaptor.getValue().onDataLoaded(ModelUtil.createStubMealsList());
+    }
+
+    public void setMealsByIdUnavailable(){
+        verify(mMealRepository).loadDataByIds(eq(ModelUtil.createStubMealIDList()), mLoadCallbackCaptor.capture());
+
+        mLoadCallbackCaptor.getValue().onDataNotAvailable();
     }
 }

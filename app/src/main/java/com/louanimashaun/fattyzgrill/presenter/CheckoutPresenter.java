@@ -28,7 +28,6 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
     private List<String> mSelectedMeals;
 
 
-
     public CheckoutPresenter(OrderRepository orderRepository, MealRepository mealRepository,
                              CheckoutFragment checkoutFragment){
 
@@ -45,28 +44,18 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
             return;
         }
 
-        final List<Meal> checkoutList = new ArrayList<>();
 
-        for(String id : mSelectedMeals) {
-            mMealRepository.getData(id, new DataSource.GetCallback<Meal>() {
-                @Override
-                public void onDataLoaded(Meal data) {
-                    checkoutList.add(data);
-                }
+       mMealRepository.loadDataByIds(mSelectedMeals, new DataSource.LoadCallback<Meal>() {
+           @Override
+           public void onDataLoaded(List<Meal> data) {
+               mCheckoutFragment.showCheckout(data);
+           }
 
-                @Override
-                public void onDataNotAvailable() {
-
-                }
-            });
-        }
-
-        if(checkoutList.size() == 0){
-            mCheckoutFragment.showNoCheckout();
-            return;
-        }
-
-        mCheckoutFragment.showCheckout(checkoutList);
+           @Override
+           public void onDataNotAvailable() {
+                mCheckoutFragment.showNoCheckout();
+           }
+       });
     }
 
     @Override
@@ -79,18 +68,48 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
 
         final List<Meal> meals = new ArrayList<>();
 
-        getMealsById(mSelectedMeals, new DataSource.GetCallback<Meal>() {
+        mMealRepository.loadDataByIds(mSelectedMeals, new DataSource.LoadCallback<Meal>() {
             @Override
-            public void onDataLoaded(Meal data) {
-                meals.add(data);
+            public void onDataLoaded(List<Meal> data) {
+                Order order = createNewOrder(meals, mSelectedMeals);
+
+                mOrderRepository.saveData(order, new DataSource.CompletionCallback() {
+                    @Override
+                    public void onComplete() {
+                        mCheckoutFragment.notifyOrderSent();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        mCheckoutFragment.notifyOrderError();
+                    }
+                });
             }
 
             @Override
             public void onDataNotAvailable() {
-
+                mCheckoutFragment.notifyOrderError();
             }
         });
 
+
+    }
+
+    @Override
+    public void addSelectedMeals( List<String> meals) {
+        mSelectedMeals = meals;
+    }
+
+    private void getMealsById(List<String> meals, DataSource.GetCallback<Meal> callback){
+
+
+        //TODO change to loadByIds
+        for(String id : meals) {
+            mMealRepository.getData(id, callback);
+        }
+    }
+
+    public Order createNewOrder(List<Meal> meals , List<String> mealIds){
         Order order = new Order();
         order.setId(UUID.randomUUID().toString());
 
@@ -101,32 +120,10 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
 
         order.setTotalPrice(total);
 
-        order.setMealIdsRealm(ModelUtil.toRealmStringList(mSelectedMeals));
-        order.setMealIds(mSelectedMeals);
+        order.setMealIdsRealm(ModelUtil.toRealmStringList(mealIds));
+        order.setMealIds(mealIds);
 
-        mOrderRepository.saveData(order, new DataSource.CompletionCallback() {
-            @Override
-            public void onComplete() {
-                mCheckoutFragment.notifyOrderSent();
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
-    }
-
-    @Override
-    public void addSelectedMeals( List<String> meals) {
-        mSelectedMeals = meals;
-    }
-
-    private void getMealsById(List<String> meals, DataSource.GetCallback<Meal> callback){
-
-        for(String id : meals) {
-            mMealRepository.getData(id, callback);
-        }
+        return order;
     }
 
 

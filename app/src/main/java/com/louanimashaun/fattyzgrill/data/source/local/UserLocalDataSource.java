@@ -55,6 +55,11 @@ public class UserLocalDataSource implements DataSource<User> {
     }
 
     @Override
+    public void loadDataByIds(List<String> ids, LoadCallback<User> callback) {
+
+    }
+
+    @Override
     public void deleteAll() {
         final RealmResults<User> allUsers = realm.where(User.class).findAll();
 

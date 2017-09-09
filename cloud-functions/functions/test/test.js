@@ -22,15 +22,29 @@ before(() => {
 });
 
 
-describe('', () =>{
-    describe('',() => {
-        it('send notification', () => {
+describe('order created', () =>{
+        it('push notification is sent to topic', () => {
+
+            oldData = null;
+
+            newData = { loaded: true,
+                managed: false,
+                mealIds: [ 'meal3' ],
+                orderAccepted: false,
+                totalPrice: 1.5,
+                valid: true }
+
+
             stubEvent = {
-                data : new functions.database.DeltaSnapshot(null, null, 'old', 'new')
+                data : new functions.database.DeltaSnapshot(null, null, oldData, newData)
             }
-            //myFunctions.orderCreated(stubEvent);
+
+
+
+            myFunctions.orderCreated(stubEvent);
+
+            sinon.assert(adminInitStub.messaging.sendToTopic(null, null).calledOnce)
         });
-    });
 });
 
 

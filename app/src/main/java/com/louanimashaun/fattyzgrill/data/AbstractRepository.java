@@ -1,6 +1,5 @@
 package com.louanimashaun.fattyzgrill.data;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -68,6 +67,48 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
         });
     }
 
+
+    @Override
+    public void loadDataByIds(final List<String> ids, final LoadCallback<T> callback) {
+        checkNotNull(callback);
+
+        if(mIsCacheDirty){
+            loadDataByIdsFromRemoteDataSource(ids, callback);
+            mIsCacheDirty = false;
+            return;
+        }
+
+        mLocalDataSource.loadDataByIds(ids, new LoadCallback<T>() {
+            @Override
+            public void onDataLoaded(List<T> data) {
+                callback.onDataLoaded(data);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                loadDataByIdsFromRemoteDataSource(ids,callback );
+            }
+        });
+
+
+    }
+
+    private void loadDataByIdsFromRemoteDataSource(List<String> ids, final LoadCallback<T> callback) {
+
+        mRemoteDataSource.loadDataByIds(ids, new LoadCallback<T>() {
+            @Override
+            public void onDataLoaded(List<T> data) {
+                mLocalDataSource.saveData(data, null);
+                callback.onDataLoaded(data);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                callback.onDataNotAvailable();
+            }
+        });
+    }
+
     private void loadDataFromRemoteDataSource(final LoadCallback<T> callBack) {
         mRemoteDataSource.loadData(new LoadCallback<T>() {
             @Override
@@ -130,7 +171,6 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
     @Override
     public void saveData(List<T> data, CompletionCallback callback) {
-        refreshCache(data);
         mRemoteDataSource.saveData(data, callback);
         mLocalDataSource.saveData(data, null);
     }

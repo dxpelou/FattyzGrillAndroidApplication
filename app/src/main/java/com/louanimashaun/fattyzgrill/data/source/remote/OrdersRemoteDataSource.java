@@ -37,6 +37,11 @@ public class OrdersRemoteDataSource implements DataSource<Order> {
     }
 
     @Override
+    public void loadDataByIds(List<String> ids, LoadCallback<Order> callback) {
+
+    }
+
+    @Override
     public void getData(String id, GetCallback getCallback) {
         //not in use
     }

@@ -47,6 +47,11 @@ public class UserRepository implements DataSource<User> {
     }
 
     @Override
+    public void loadDataByIds(List<String> ids, LoadCallback<User> callback) {
+
+    }
+
+    @Override
     public void getData(String id, final GetCallback callback) {
 
     }
