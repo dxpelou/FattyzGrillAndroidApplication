@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.realm.RealmList;
 
@@ -88,5 +89,16 @@ public class ModelUtil {
         }
 
         return new RealmList<RealmString>(array);
+    }
+
+
+    public static Map<String,String> convertToTitleIdMap(List<Meal> meals){
+        Map<String, String> mealsMap = new HashMap<>();
+
+        for(Meal meal : meals){
+            mealsMap.put(meal.getId(), meal.getTitle());
+        }
+
+        return mealsMap;
     }
 }

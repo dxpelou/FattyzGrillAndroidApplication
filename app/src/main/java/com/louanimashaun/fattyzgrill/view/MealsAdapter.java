@@ -90,6 +90,19 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
     }
 
 
+    public int getPositionById(String id){
+        for(int i = 0; i < mMeals.size(); i++){
+           Meal meal = mMeals.get(i);
+
+            if(meal.getId().equals(id)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+
     public class MealViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         //TODO use butterknife

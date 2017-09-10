@@ -126,5 +126,4 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
         return order;
     }
 
-
 }

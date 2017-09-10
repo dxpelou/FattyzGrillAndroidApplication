@@ -5,8 +5,10 @@ import android.support.annotation.NonNull;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.util.ModelUtil;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
@@ -57,6 +59,27 @@ public class MealRepository extends AbstractRepository<Meal> {
     public static void destroyInstance(){
         INSTANCE = null;
     }
+
+
+    /*public void loadMealTitlesWithId(){
+        loadData(new LoadCallback<Meal>() {
+            @Override
+            public void onDataLoaded(List<Meal> data) {
+
+                Map<String, String> mealTitles = new HashMap<String, String>();
+
+                for(Meal meal : data){
+                    mealTitles.put(data.)
+                }
+
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
+    }*/
 
 
 }

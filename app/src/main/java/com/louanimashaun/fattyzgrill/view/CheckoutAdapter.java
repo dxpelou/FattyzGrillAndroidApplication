@@ -39,7 +39,7 @@ public class CheckoutAdapter extends ArrayAdapter<Meal> {
         LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        View rowView = inflater.inflate(R.layout.item_meal, parent, false);
+        View rowView = inflater.inflate(R.layout.item_checkout_meal, parent, false);
 
         TextView titleTextView = (TextView) rowView.findViewById(R.id.title_tv);
         TextView priceTextView = (TextView) rowView.findViewById(R.id.price_tv);
@@ -50,8 +50,8 @@ public class CheckoutAdapter extends ArrayAdapter<Meal> {
         titleTextView.setText(meal.getTitle());
         priceTextView.setText(price);
 
-        FloatingActionButton addBtn = (FloatingActionButton)rowView.findViewById(R.id.add_checkout);
-        addBtn.setVisibility(View.GONE);
+//        FloatingActionButton addBtn = (FloatingActionButton)rowView.findViewById(R.id.add_checkout);
+//        addBtn.setVisibility(View.GONE);
 
         return rowView;
     }

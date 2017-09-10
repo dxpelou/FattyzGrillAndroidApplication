@@ -9,8 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,10 +29,12 @@ import com.louanimashaun.fattyzgrill.data.source.local.UserLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.MealsRemoteDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.OrdersRemoteDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.UserRemoteDataSource;
+import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.User;
 import com.louanimashaun.fattyzgrill.presenter.MealsPresenter;
 import com.louanimashaun.fattyzgrill.presenter.CheckoutPresenter;
 import com.louanimashaun.fattyzgrill.util.AdminUtil;
+import com.louanimashaun.fattyzgrill.util.ModelUtil;
 import com.louanimashaun.fattyzgrill.view.CheckoutFragment;
 import com.louanimashaun.fattyzgrill.view.MealOnClickListener;
 import com.louanimashaun.fattyzgrill.view.MealsFragment;
@@ -147,6 +152,7 @@ public class MealActivity extends AppCompatActivity {
             }
         };
 
+        //TODO app crashes when using instant run
         MealsFragment mealsFragment = (MealsFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.content_frame);
 
@@ -162,11 +168,7 @@ public class MealActivity extends AppCompatActivity {
                 mMealRepository,
                 mealsFragment);
 
-        String[] meals = {"chicken", "chips"};
-
-       AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView)findViewById(R.id.auto_complete_tv);
-        autoCompleteTextView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, meals));
-
+        setupAutoCompleteTextView();
     }
 
 
@@ -246,5 +248,31 @@ public class MealActivity extends AppCompatActivity {
                 MealsRemoteDataSource.getInstance());
     }
 
+
+    private void setupAutoCompleteTextView(){
+        mMealRepository.loadData(new DataSource.LoadCallback<Meal>() {
+            @Override
+            public void onDataLoaded(List<Meal> data) {
+                String[] meals = ModelUtil.convertToTitleIdMap(data).values().toArray(new String[data.size()]);
+
+                AutoCompleteTextView autoCompleteTextView =
+                        (AutoCompleteTextView)findViewById(R.id.auto_complete_tv);
+                autoCompleteTextView.setAdapter(
+                        new ArrayAdapter<String>(MealActivity.this, android.R.layout.simple_list_item_1, meals));
+
+                autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Toast.makeText(MealActivity.this, "click listener", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
+    }
 
 }

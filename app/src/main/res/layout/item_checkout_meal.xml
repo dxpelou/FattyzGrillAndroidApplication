@@ -35,11 +35,11 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"/>
 
-        <ImageButton
+        <ImageView
             android:id="@+id/quantity_plus_ib"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
-
+            android:layout_height="wrap_content"
+            android:src="@drawable/plus"/>
     </LinearLayout>
 
 </LinearLayout>

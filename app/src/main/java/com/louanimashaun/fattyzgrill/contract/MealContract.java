@@ -19,6 +19,8 @@ public interface MealContract {
 
         void showNoMeals();
 
+        void scrollToMealWithId(String id);
+
     }
 
     interface Presenter extends BasePresenter{

@@ -45,7 +45,7 @@ public class CheckoutFragment extends Fragment implements CheckoutContract.View 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        mCheckoutAdapter = new CheckoutAdapter(getContext(), R.layout.item_meal,
+        mCheckoutAdapter = new CheckoutAdapter(getContext(), R.layout.item_checkout_meal,
                 new ArrayList<Meal>());
         super.onCreate(savedInstanceState);
     }

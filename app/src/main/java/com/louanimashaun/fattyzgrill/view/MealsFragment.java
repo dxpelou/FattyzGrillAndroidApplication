@@ -31,6 +31,7 @@ public class MealsFragment extends Fragment implements MealContract.View  {
 
     private BasePresenter mMealsPresenter;
     private MealsAdapter mMealsAdapter = new MealsAdapter(new ArrayList<Meal>());
+    private RecyclerView.LayoutManager mLayoutManager;
 
     public static MealsFragment newInstance(){
         return new MealsFragment();
@@ -40,7 +41,7 @@ public class MealsFragment extends Fragment implements MealContract.View  {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setHasOptionsMenu(true);
+     //     setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -57,8 +58,8 @@ public class MealsFragment extends Fragment implements MealContract.View  {
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.meals_recycler_view);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+         mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(mMealsAdapter);
     }
 
@@ -81,6 +82,16 @@ public class MealsFragment extends Fragment implements MealContract.View  {
     }
 
     @Override
+    public void scrollToMealWithId(String id) {
+        checkNotNull(id);
+        int position = mMealsAdapter.getPositionById(id);
+
+        if(position != -1){
+            mLayoutManager.scrollToPosition(position);
+        }
+    }
+
+    @Override
     public void setPresenter(@NonNull BasePresenter presenter) {
         mMealsPresenter = checkNotNull(presenter);
     }
@@ -89,5 +100,4 @@ public class MealsFragment extends Fragment implements MealContract.View  {
         checkNotNull(listener);
         mMealsAdapter.setItemClickListener(listener);
     }
-
 }
