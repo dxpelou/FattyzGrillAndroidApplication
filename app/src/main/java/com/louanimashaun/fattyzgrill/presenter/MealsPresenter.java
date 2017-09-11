@@ -64,11 +64,4 @@ public class MealsPresenter implements MealContract.Presenter{
             }
         });
     }
-
-    @Override
-    public void AddMealToCheckout(Meal meal) {
-        checkNotNull(meal);
-    }
-
-
 }

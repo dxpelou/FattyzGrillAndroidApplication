@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -14,32 +15,36 @@
         android:layout_gravity="center_vertical"
         android:maxLines="1"/>
 
-    <TextView
-        android:id="@+id/price_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1"/>
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/quantity_minus_ib"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:background="@color/apricot"
+            android:layout_marginRight="1dp"
+            app:srcCompat="@drawable/checkout_quantity_minus"/>
 
         <TextView
-            android:id="@+id/quantity_tv"
+            android:id="@+id/price_tv"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:background="@color/apricot"
+            android:textColor="@color/white"
+            android:padding="1dp"
+            />
 
         <ImageView
             android:id="@+id/quantity_plus_ib"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/plus"/>
+            android:background="@color/apricot"
+            android:layout_marginLeft="1dp"
+            app:srcCompat="@drawable/checkout_quantity_plus"/>
     </LinearLayout>
 
 </LinearLayout>

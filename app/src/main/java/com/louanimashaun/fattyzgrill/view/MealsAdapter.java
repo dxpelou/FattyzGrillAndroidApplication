@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.louanimashaun.fattyzgrill.R;
 import com.louanimashaun.fattyzgrill.model.Meal;
+import com.louanimashaun.fattyzgrill.util.ModelUtil;
+import com.louanimashaun.fattyzgrill.util.StringUtil;
 
 import org.w3c.dom.Text;
 
@@ -47,11 +49,11 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
     @Override
     public void onBindViewHolder(MealViewHolder holder, int position) {
         Meal meal = mMeals.get(position);
-        holder.title_tv.setText(meal.getTitle());
+        holder.title_tv.setText(StringUtil.convertToCamelCase(meal.getTitle()));
         holder.price_tv.setText("£ " + String.valueOf(meal.getPrice()));
 
         if(currentViewType == CATEGORY_MEAL_ITEM){
-            holder.category_tv.setText(meal.getCategory());
+            holder.category_tv.setText(StringUtil.convertToCamelCase(meal.getCategory()));
         }
     }
 

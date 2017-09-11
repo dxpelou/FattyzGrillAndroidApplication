@@ -27,6 +27,5 @@ public interface MealContract {
 
         void loadMeals(boolean forceUpdate);
 
-        void AddMealToCheckout(Meal meal);
     }
 }

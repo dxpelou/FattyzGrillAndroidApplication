@@ -45,7 +45,7 @@ public class CheckoutAdapter extends ArrayAdapter<Meal> {
         TextView priceTextView = (TextView) rowView.findViewById(R.id.price_tv);
 
         Meal meal = mMeals.get(position);
-        String price = "£ " + String.valueOf(meal.getPrice());
+        String price = String.valueOf(meal.getPrice());
 
         titleTextView.setText(meal.getTitle());
         priceTextView.setText(price);

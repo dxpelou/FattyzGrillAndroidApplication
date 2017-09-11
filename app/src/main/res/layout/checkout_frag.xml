@@ -2,7 +2,7 @@
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
@@ -14,7 +14,8 @@
             android:gravity="center_horizontal"
             android:text="@string/title_checkout_frag"
             android:textColor="@color/apricot"
-            android:layout_alignParentTop="true"/>
+            android:layout_alignParentTop="true"
+            android:textStyle="bold"/>
 
         <ListView
             android:id="@+id/selected_meals_lv"
@@ -32,7 +33,7 @@
             android:gravity="center_horizontal"
             android:layout_below="@id/selected_meals_lv"/>
 
-            <LinearLayout
+        <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

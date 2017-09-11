@@ -258,7 +258,7 @@ public class MealActivity extends AppCompatActivity {
                 AutoCompleteTextView autoCompleteTextView =
                         (AutoCompleteTextView)findViewById(R.id.auto_complete_tv);
                 autoCompleteTextView.setAdapter(
-                        new ArrayAdapter<String>(MealActivity.this, android.R.layout.simple_list_item_1, meals));
+                        new ArrayAdapter<>(MealActivity.this, android.R.layout.simple_list_item_1, meals));
 
                 autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override

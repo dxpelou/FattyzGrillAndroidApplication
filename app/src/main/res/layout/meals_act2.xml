@@ -23,7 +23,6 @@
             android:layout_height="match_parent"
             android:src="@drawable/logof"/>
 
-
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -52,7 +51,6 @@
         android:layout_height="match_parent"
         android:layout_weight="1">
     </FrameLayout>
-
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"
