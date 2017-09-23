@@ -1,5 +1,7 @@
 package com.louanimashaun.fattyzgrill.data;
 
+import com.louanimashaun.fattyzgrill.util.NetworkUtil;
+
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +27,7 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
             return;
         }*/
 
-        if(mIsCacheDirty){
+        if(mIsCacheDirty && NetworkUtil.getConnectionStatus()){
             loadDataFromRemoteDataSource(callBack);
             mIsCacheDirty = false;
             return;

@@ -34,12 +34,9 @@ describe('order created', () =>{
                 totalPrice: 1.5,
                 valid: true }
 
-
             stubEvent = {
                 data : new functions.database.DeltaSnapshot(null, null, oldData, newData)
             }
-
-
 
             myFunctions.orderCreated(stubEvent);
 

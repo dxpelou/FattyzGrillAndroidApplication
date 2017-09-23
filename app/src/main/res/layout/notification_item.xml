@@ -5,12 +5,12 @@
               android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/notification_title_tv"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"/>
 
     <TextView
-        android:id="@+id/message_tv"
+        android:id="@+id/notifcation_message_tv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

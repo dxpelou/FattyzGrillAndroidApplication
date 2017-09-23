@@ -45,6 +45,7 @@ public class UserLocalDataSource implements DataSource<User> {
 
     @Override
     public void getData(String id, GetCallback<User> callback) {
+        //Why findAllAsync?
         RealmResults<User> result = realm.where(User.class).equalTo("userId", id).findAllAsync();
 
         if(result.size() == 0){

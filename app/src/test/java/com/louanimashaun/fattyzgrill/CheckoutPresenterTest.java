@@ -66,7 +66,7 @@ public class CheckoutPresenterTest {
     @Test
     public void start_checkIsLoadedIntoView(){
         //set SelectedMeals
-        mCheckoutPresenter.addSelectedMeals(ModelUtil.createStubMealIDList());
+        mCheckoutPresenter.addSelectedMeals(ModelUtil.createStubMealIdQuantityList());
 
 
         //start presenter
@@ -77,14 +77,14 @@ public class CheckoutPresenterTest {
         mLoadCallbackCaptor.getValue().onDataLoaded(ModelUtil.createStubMealsList());
 
         ArgumentCaptor<List<Meal>> mealsCaptor = ArgumentCaptor.forClass(List.class);
-        verify(mCheckoutFragment).showCheckout(mealsCaptor.capture());
+        verify(mCheckoutFragment).showCheckout(mealsCaptor.capture(), any(List.class));
 
         assert ModelUtil.LIST_SIZE == mealsCaptor.getValue().size();
     }
 
     @Test
     public void start_NotCheckoutLoaded(){
-        mCheckoutPresenter.addSelectedMeals(ModelUtil.createStubMealIDList());
+        mCheckoutPresenter.addSelectedMeals(ModelUtil.createStubMealIdQuantityList());
 
         mCheckoutPresenter.start();
 
@@ -97,7 +97,7 @@ public class CheckoutPresenterTest {
     @Test
     public void checkoutOrder_repositorySavesOrder(){
 
-        mCheckoutPresenter.addSelectedMeals(ModelUtil.createStubMealIDList());
+        mCheckoutPresenter.addSelectedMeals(ModelUtil.createStubMealIdQuantityList());
 
         mCheckoutPresenter.checkoutOrder();
 
@@ -119,7 +119,7 @@ public class CheckoutPresenterTest {
 
     @Test
     public void checkoutOrder_MealsDoNotLoad(){
-        mCheckoutPresenter.addSelectedMeals(ModelUtil.createStubMealIDList());
+        mCheckoutPresenter.addSelectedMeals(ModelUtil.createStubMealIdQuantityList());
 
         mCheckoutPresenter.checkoutOrder();
 
@@ -135,7 +135,7 @@ public class CheckoutPresenterTest {
 
     @Test
     public void checkoutOrder_MealDoesNotSave(){
-        mCheckoutPresenter.addSelectedMeals(ModelUtil.createStubMealIDList());
+        mCheckoutPresenter.addSelectedMeals(ModelUtil.createStubMealIdQuantityList());
 
         mCheckoutPresenter.checkoutOrder();
 

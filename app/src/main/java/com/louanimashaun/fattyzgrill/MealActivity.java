@@ -24,6 +24,7 @@ import com.louanimashaun.fattyzgrill.data.MealRepository;
 import com.louanimashaun.fattyzgrill.data.OrderRepository;
 import com.louanimashaun.fattyzgrill.data.UserRepository;
 import com.louanimashaun.fattyzgrill.data.source.local.MealsLocalDataSoure;
+import com.louanimashaun.fattyzgrill.data.source.local.NotificationLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.local.OrdersLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.local.UserLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.MealsRemoteDataSource;
@@ -33,15 +34,18 @@ import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.User;
 import com.louanimashaun.fattyzgrill.presenter.MealsPresenter;
 import com.louanimashaun.fattyzgrill.presenter.CheckoutPresenter;
+import com.louanimashaun.fattyzgrill.presenter.NotificationPresenter;
 import com.louanimashaun.fattyzgrill.util.AdminUtil;
 import com.louanimashaun.fattyzgrill.util.ModelUtil;
 import com.louanimashaun.fattyzgrill.view.CheckoutFragment;
-import com.louanimashaun.fattyzgrill.view.MealOnClickListener;
+import com.louanimashaun.fattyzgrill.view.Listeners.MealOnClickListener;
 import com.louanimashaun.fattyzgrill.view.MealsFragment;
+import com.louanimashaun.fattyzgrill.view.NotificationFragment;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MealActivity extends AppCompatActivity {
 
@@ -54,7 +58,10 @@ public class MealActivity extends AppCompatActivity {
     private MealRepository mMealRepository;
     private OrderRepository mOrderRepository;
     private List<String> mSelectedMealIDs;
+    private Map<String,Integer> mIdQuantityMap;
     private MealOnClickListener mMealOnClickListener;
+
+    private String[] ids;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -81,10 +88,20 @@ public class MealActivity extends AppCompatActivity {
                     replaceFragment(checkoutFragment);
 
                     CheckoutPresenter checkoutPresenter = new CheckoutPresenter(mOrderRepository, mMealRepository, checkoutFragment);
-                    checkoutPresenter.addSelectedMeals(mSelectedMealIDs);
+                    checkoutPresenter.addSelectedMeals(mIdQuantityMap);
                     checkoutFragment.setPresenter(checkoutPresenter);
                     return true;
                 case R.id.navigation_notifications:
+
+                    NotificationFragment notificationFragment = NotificationFragment.newInstance();
+                    replaceFragment(notificationFragment);
+
+                    NotificationLocalDataSource notificationLocalDataSource = NotificationLocalDataSource.getInstance();
+
+                    NotificationPresenter notificationPresenter = new NotificationPresenter(
+                            notificationFragment, notificationLocalDataSource);
+
+                    notificationFragment.setPresenter(notificationPresenter);
                     return true;
             }
             return false;
@@ -144,11 +161,16 @@ public class MealActivity extends AppCompatActivity {
 
         mMealOnClickListener = new MealOnClickListener() {
             @Override
-            public void onClick(String mealID) {
-                if(mSelectedMealIDs == null)
-                    mSelectedMealIDs = new ArrayList<>();
+            public void onClick(String mealId) {
+                if(mIdQuantityMap == null) mIdQuantityMap = new HashMap<String, Integer>();
 
-                mSelectedMealIDs.add(mealID);
+                if(!mIdQuantityMap.containsKey(mealId)){
+                    mIdQuantityMap.put(mealId, 1);
+                    return;
+                }
+                int quantity = mIdQuantityMap.get(mealId);
+                mIdQuantityMap.put(mealId, quantity++);
+
             }
         };
 
@@ -170,8 +192,6 @@ public class MealActivity extends AppCompatActivity {
 
         setupAutoCompleteTextView();
     }
-
-
 
     @Override
     protected void onResume() {
@@ -253,7 +273,10 @@ public class MealActivity extends AppCompatActivity {
         mMealRepository.loadData(new DataSource.LoadCallback<Meal>() {
             @Override
             public void onDataLoaded(List<Meal> data) {
-                String[] meals = ModelUtil.convertToTitleIdMap(data).values().toArray(new String[data.size()]);
+                Map<String, String> idTitleMap = ModelUtil.convertToTitleIdMap(data);
+                String[] meals = idTitleMap.values().toArray(new String[data.size()]);
+
+                ids = idTitleMap.keySet().toArray(new String[data.size()]);
 
                 AutoCompleteTextView autoCompleteTextView =
                         (AutoCompleteTextView)findViewById(R.id.auto_complete_tv);
@@ -263,7 +286,10 @@ public class MealActivity extends AppCompatActivity {
                 autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
                         Toast.makeText(MealActivity.this, "click listener", Toast.LENGTH_SHORT).show();
+
+                        mMealsPresenter.findMeal(ids[i]);
                     }
                 });
             }

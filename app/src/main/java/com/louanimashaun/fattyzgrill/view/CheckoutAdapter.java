@@ -9,10 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.louanimashaun.fattyzgrill.R;
 import com.louanimashaun.fattyzgrill.model.Meal;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -26,6 +30,9 @@ public class CheckoutAdapter extends ArrayAdapter<Meal> {
 
     private Context mContext;
     private List<Meal> mMeals;
+    private List<Integer> mQuantities;
+    private Listeners.CheckoutItemClickListener mIncrButtonListener;
+    private Listeners.CheckoutItemClickListener mDecButoonListener;
 
     public CheckoutAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<Meal> meals) {
         super(context, resource, meals);
@@ -35,7 +42,7 @@ public class CheckoutAdapter extends ArrayAdapter<Meal> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -43,12 +50,32 @@ public class CheckoutAdapter extends ArrayAdapter<Meal> {
 
         TextView titleTextView = (TextView) rowView.findViewById(R.id.title_tv);
         TextView priceTextView = (TextView) rowView.findViewById(R.id.price_tv);
+        ImageView incrButton = (ImageView) rowView.findViewById(R.id.quantity_plus_ib);
+        ImageView decButton = (ImageView) rowView.findViewById(R.id.quantity_minus_ib);
+        TextView quantityTextView = (TextView) rowView.findViewById(R.id.quantity_tv);
+
+
+        incrButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mIncrButtonListener.onClick(mMeals.get(position).getId(),true);
+            }
+        });
+
+
+        decButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDecButoonListener.onClick(mMeals.get(position).getId(), false);
+            }
+        });
 
         Meal meal = mMeals.get(position);
         String price = String.valueOf(meal.getPrice());
 
         titleTextView.setText(meal.getTitle());
         priceTextView.setText(price);
+        if(mQuantities != null && mQuantities.size() != 0) quantityTextView.setText("x "+ mQuantities.get(position));
 
 //        FloatingActionButton addBtn = (FloatingActionButton)rowView.findViewById(R.id.add_checkout);
 //        addBtn.setVisibility(View.GONE);
@@ -56,8 +83,9 @@ public class CheckoutAdapter extends ArrayAdapter<Meal> {
         return rowView;
     }
 
-    public void refreshData(List<Meal> meals){
+    public void refreshData(List<Meal> meals, List<Integer> quantities){
         setMeals(meals);
+        mQuantities = checkNotNull(quantities);
         notifyDataSetChanged();
 
     }
@@ -70,4 +98,14 @@ public class CheckoutAdapter extends ArrayAdapter<Meal> {
     public int getCount() {
        return mMeals.size();
     }
+
+
+    public void setIncrButtonListener(Listeners.CheckoutItemClickListener listener){
+       mIncrButtonListener = checkNotNull(listener);
+    }
+
+    public void setDecButtonListener(Listeners.CheckoutItemClickListener listener){
+        mDecButoonListener = checkNotNull(listener);
+    }
+
 }

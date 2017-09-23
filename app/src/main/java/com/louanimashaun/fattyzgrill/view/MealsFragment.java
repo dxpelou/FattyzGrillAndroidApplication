@@ -51,7 +51,7 @@ public class MealsFragment extends Fragment implements MealContract.View  {
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.meals_recycler_view);
 
-         mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(mMealsAdapter);
     }
@@ -89,7 +89,7 @@ public class MealsFragment extends Fragment implements MealContract.View  {
         mMealsPresenter = checkNotNull(presenter);
     }
 
-    public void setMealClickListener(@NonNull MealOnClickListener listener){
+    public void setMealClickListener(@NonNull Listeners.MealOnClickListener listener){
         checkNotNull(listener);
         mMealsAdapter.setItemClickListener(listener);
     }

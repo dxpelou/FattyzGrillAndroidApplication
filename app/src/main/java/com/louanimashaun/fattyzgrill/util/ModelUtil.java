@@ -1,6 +1,7 @@
 package com.louanimashaun.fattyzgrill.util;
 
 import com.louanimashaun.fattyzgrill.model.Meal;
+import com.louanimashaun.fattyzgrill.model.RealmInteger;
 import com.louanimashaun.fattyzgrill.model.RealmString;
 
 import java.util.ArrayList;
@@ -78,9 +79,22 @@ public class ModelUtil {
     }
 
 
+    public static Map<String,Integer> createStubMealIdQuantityList(){
+        Map<String,Integer> map = new HashMap<>();
+
+        for(int i =0; i < LIST_SIZE; i++){
+            int id = i;
+
+            map.put(Integer.toString(id), 1);
+        }
+
+        return map;
+    }
+
+
     public static RealmList<RealmString> toRealmStringList(List<String> stringList){
         int size = stringList.size();
-        RealmString[] array = new RealmString[stringList.size()];
+        RealmString[] array = new RealmString[size];
         RealmString realmString = null;
 
         for(int i =0; i < size; i++ ){
@@ -89,6 +103,20 @@ public class ModelUtil {
         }
 
         return new RealmList<RealmString>(array);
+    }
+
+
+    public static RealmList<RealmInteger> toRealmIntegerList(List<Integer> intList){
+        int size = intList.size();
+        RealmInteger[] array = new RealmInteger[size];
+        RealmInteger realmInteger = null;
+
+        for(int i =0; i< size; i++){
+            realmInteger = new RealmInteger(intList.get(i));
+            array[i] = realmInteger;
+        }
+
+        return new RealmList<RealmInteger>(array);
     }
 
 

@@ -28,7 +28,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
     private static final int CATEGORY_MEAL_ITEM = 1;
 
     private static int currentViewType;
-    private MealOnClickListener mClickListener;
+    private Listeners.MealOnClickListener mClickListener;
 
 
     public MealsAdapter(List<Meal> meals){
@@ -130,7 +130,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
         }
     }
 
-    public void setItemClickListener(MealOnClickListener listener){
+    public void setItemClickListener(Listeners.MealOnClickListener listener){
         mClickListener = checkNotNull(listener);
     }
 }

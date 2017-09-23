@@ -3,6 +3,7 @@ package com.louanimashaun.fattyzgrill.model;
 import com.google.firebase.database.Exclude;
 
 import java.util.List;
+import java.util.Map;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -22,8 +23,13 @@ public class Order extends RealmObject {
 
     private RealmList<RealmString> mMealIdsRealm;
 
+    private RealmList<RealmInteger> mQuantitiesRealm;
+
     @Ignore
     private List<String> mMealIds;
+
+    @Ignore
+    private List<Integer> mQuantities;
 
     private String mUserId;
 
@@ -33,11 +39,13 @@ public class Order extends RealmObject {
 
     private String mSenderNotifcationToken;
 
-    public Order(RealmList<RealmString> mealIdsRealm, double totalPrice, boolean isOrderPending){
+    public Order(RealmList<RealmString> mealIdsRealm, RealmList<RealmInteger> quantities, double totalPrice, boolean isOrderPending){
         mMealIdsRealm = mealIdsRealm;
+        mQuantitiesRealm = quantities;
         mTotalPrice = totalPrice;
         mIsOrderAccepted = isOrderPending;
     }
+
     public Order(){}
 
     @Exclude
@@ -96,5 +104,22 @@ public class Order extends RealmObject {
 
     public void setMealIds(List<String> mealIds) {
         mMealIds = mealIds;
+    }
+
+    @Exclude
+    public RealmList<RealmInteger> getQuantitiesRealm() {
+        return mQuantitiesRealm;
+    }
+
+    public void setQuantitiesRealm(RealmList<RealmInteger> quantities) {
+        mQuantitiesRealm = quantities;
+    }
+
+    public List<Integer> getQuantities() {
+        return mQuantities;
+    }
+
+    public void setQuantities(List<Integer> quantities) {
+        mQuantities = quantities;
     }
 }

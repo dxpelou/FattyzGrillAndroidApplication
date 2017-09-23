@@ -39,7 +39,7 @@ public class MealsPresenter implements MealContract.Presenter{
             mMealRepository.refreshData();
         }
 
-//        mMealRepository.load(new DataSource.LoadCallback() {
+//        /*mMealRepository.load(new DataSource.LoadCallback() {
 //            @Override
 //            public void onDataLoaded(List data) {
 ////                List<Meal> sortedMeal = ModelUtil.sortMealsByCategory(data);
@@ -50,7 +50,7 @@ public class MealsPresenter implements MealContract.Presenter{
 //            public void onDataNotAvailable() {
 //                mMealsView.showNoMeals();
 //            }
-//        });
+//        });*/
 
         mMealRepository.loadData(new DataSource.LoadCallback<Meal>() {
             @Override
@@ -63,5 +63,10 @@ public class MealsPresenter implements MealContract.Presenter{
                 mMealsView.showNoMeals();
             }
         });
+    }
+
+    @Override
+    public void findMeal(String ids) {
+
     }
 }

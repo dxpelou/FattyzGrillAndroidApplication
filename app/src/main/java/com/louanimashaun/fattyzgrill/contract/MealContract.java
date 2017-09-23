@@ -27,5 +27,7 @@ public interface MealContract {
 
         void loadMeals(boolean forceUpdate);
 
+        void findMeal(String ids);
+
     }
 }

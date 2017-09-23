@@ -27,7 +27,7 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
 public class CheckoutFragment extends Fragment implements CheckoutContract.View {
 
-    private BasePresenter mCheckoutPresenter;
+    private CheckoutContract.Presenter mCheckoutPresenter;
 
     private CheckoutAdapter mCheckoutAdapter;
     private TextView mTotalPrice_tv;
@@ -47,6 +47,21 @@ public class CheckoutFragment extends Fragment implements CheckoutContract.View 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         mCheckoutAdapter = new CheckoutAdapter(getContext(), R.layout.item_checkout_meal,
                 new ArrayList<Meal>());
+
+        mCheckoutAdapter.setIncrButtonListener(new Listeners.CheckoutItemClickListener() {
+            @Override
+            public void onClick(String mealdID, boolean isUp) {
+                ((CheckoutPresenter)mCheckoutPresenter).changeQuantity(mealdID, true);
+            }
+        });
+
+        mCheckoutAdapter.setDecButtonListener(new Listeners.CheckoutItemClickListener() {
+            @Override
+            public void onClick(String mealdID, boolean isUp) {
+                ((CheckoutPresenter)mCheckoutPresenter).changeQuantity(mealdID, false);
+
+            }
+        });
         super.onCreate(savedInstanceState);
     }
 
@@ -73,9 +88,10 @@ public class CheckoutFragment extends Fragment implements CheckoutContract.View 
     }
 
     @Override
-    public void showCheckout(List<Meal> meals) {
+    public void showCheckout(List<Meal> meals, List<Integer> quantities) {
         checkNotNull(meals);
-        mCheckoutAdapter.refreshData(meals);
+        checkNotNull(quantities);
+        mCheckoutAdapter.refreshData(meals, quantities);
         showTotalPrice(meals);
     }
 
@@ -95,9 +111,13 @@ public class CheckoutFragment extends Fragment implements CheckoutContract.View 
     }
 
     @Override
+    public void showQuantityChanged() {
+
+    }
+
+    @Override
     public void setPresenter(BasePresenter presenter) {
-        checkNotNull(presenter);
-        mCheckoutPresenter = presenter;
+        mCheckoutPresenter = (CheckoutContract.Presenter)checkNotNull(presenter);
     }
 
     private void showTotalPrice(List<Meal> meals){

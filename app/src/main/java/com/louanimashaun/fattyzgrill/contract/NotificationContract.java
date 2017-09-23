@@ -1,5 +1,9 @@
 package com.louanimashaun.fattyzgrill.contract;
 
+import com.louanimashaun.fattyzgrill.model.Notification;
+
+import java.util.List;
+
 /**
  * Created by louanimashaun on 10/09/2017.
  */
@@ -7,16 +11,16 @@ package com.louanimashaun.fattyzgrill.contract;
 public interface NotificationContract {
 
     interface View extends BaseView {
-        void showNotifications();
+        void showNotifications(List<Notification> notifications);
 
-        void showNewNotification();
+        void showNewNotification(Notification notification);
 
         void showNoNotifcations();
     }
 
     interface Presenter extends BasePresenter{
 
-        void loadNotifcations();
+        void loadNotifcations(boolean forceUpdate);
 
         void onNotification();
     }
