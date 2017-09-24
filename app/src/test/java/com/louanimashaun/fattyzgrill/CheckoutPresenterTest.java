@@ -62,12 +62,16 @@ public class CheckoutPresenterTest {
                 mOrderRepository, mMealRepository, mCheckoutFragment);
     }
 
+    /*
+      Test fails due to id's being returned in different order then put in, this could be an
+      issue due to the functionality of quantity list which uses order to map quantity with id
+     */
+
 
     @Test
     public void start_checkIsLoadedIntoView(){
         //set SelectedMeals
         mCheckoutPresenter.addSelectedMeals(ModelUtil.createStubMealIdQuantityList());
-
 
         //start presenter
         mCheckoutPresenter.start();
@@ -147,8 +151,8 @@ public class CheckoutPresenterTest {
         completionCallbackCaptor.getValue().onCancel();
 
         verify(mCheckoutFragment).notifyOrderError();
-
     }
+
 
     public void setMealsByIdAvailable(){
         verify(mMealRepository).loadDataByIds(eq(ModelUtil.createStubMealIDList()), mLoadCallbackCaptor.capture());

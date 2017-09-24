@@ -6,6 +6,7 @@ import com.louanimashaun.fattyzgrill.data.MealRepository;
 import com.louanimashaun.fattyzgrill.data.OrderRepository;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Order;
+import com.louanimashaun.fattyzgrill.notifications.NotificationSharedPreference;
 import com.louanimashaun.fattyzgrill.util.ModelUtil;
 import com.louanimashaun.fattyzgrill.util.PreconditonUtil;
 import com.louanimashaun.fattyzgrill.view.CheckoutFragment;
@@ -60,6 +61,8 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
                 mCheckoutFragment.showNoCheckout();
            }
        });
+
+
     }
 
     @Override
@@ -141,6 +144,8 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
 
         order.setQuantitiesRealm(ModelUtil.toRealmIntegerList(values));
         order.setQuantities(values);
+
+        order.setSenderNotifcationToken(NotificationSharedPreference.getRefreshToken());
 
         return order;
     }

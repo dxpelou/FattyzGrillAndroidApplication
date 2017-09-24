@@ -18,7 +18,7 @@ import io.realm.RealmList;
 
 public class ModelUtil {
 
-    private static int id = 0;
+    private static int baseId = 0;
     public static final int LIST_SIZE = 3;
 
     private ModelUtil(){}
@@ -69,10 +69,11 @@ public class ModelUtil {
 
     public static List<String> createStubMealIDList(){
         List<String> list = new ArrayList<>();
-        String id = "0000";
+        String id ="000";
+
 
         for(int i = 0; i < LIST_SIZE; i++){
-            list.add(id);
+            list.add(id + i);
         }
 
         return list;
@@ -81,11 +82,9 @@ public class ModelUtil {
 
     public static Map<String,Integer> createStubMealIdQuantityList(){
         Map<String,Integer> map = new HashMap<>();
-
-        for(int i =0; i < LIST_SIZE; i++){
-            int id = i;
-
-            map.put(Integer.toString(id), 1);
+        List<String> ids = createStubMealIDList();
+        for(String id : ids){
+            map.put(id, 1);
         }
 
         return map;
