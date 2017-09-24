@@ -46,6 +46,11 @@ public class UserRemoteDataSource implements DataSource<User> {
     }
 
     @Override
+    public void loadDataByIds(List<String> ids, LoadCallback<User> callback) {
+
+    }
+
+    @Override
     public void getData(String id, GetCallback getCallback) {
         String thisUserPath = USERS_PATH + "/" + id;
         DatabaseReference thisUserReference  = mFirebaseDatabase.getReference(thisUserPath);
@@ -82,14 +87,15 @@ public class UserRemoteDataSource implements DataSource<User> {
 
         DatabaseReference mThisUserReference = mUsersReference.child("/" + id);
 
-        Query query = mThisUserReference.equalTo(id, "userId");
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        mThisUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()){
                     errorCallback.onError(UserNotFoundErrorCode);
-
+                }else{
+                    User user = dataSnapshot.getValue(User.class);
+                    callback.onDataLoaded(user);
                 }
             }
 

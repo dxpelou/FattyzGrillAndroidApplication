@@ -37,6 +37,11 @@ public class OrdersRemoteDataSource implements DataSource<Order> {
     }
 
     @Override
+    public void loadDataByIds(List<String> ids, LoadCallback<Order> callback) {
+
+    }
+
+    @Override
     public void getData(String id, GetCallback getCallback) {
         //not in use
     }
@@ -48,7 +53,8 @@ public class OrdersRemoteDataSource implements DataSource<Order> {
 
     @Override
     public void saveData(Order data, final CompletionCallback callback) {
-        mOrdersReference.push().setValue(data, new DatabaseReference.CompletionListener(){
+        String id = data.getId();
+        mOrdersReference.child(id).setValue(data, new DatabaseReference.CompletionListener(){
 
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {

@@ -1,10 +1,12 @@
 package com.louanimashaun.fattyzgrill.data;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import com.louanimashaun.fattyzgrill.data.source.local.UserLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.UserRemoteDataSource;
 import com.louanimashaun.fattyzgrill.model.User;
+import com.louanimashaun.fattyzgrill.util.AdminUtil;
 
 import java.util.List;
 
@@ -45,6 +47,11 @@ public class UserRepository implements DataSource<User> {
     }
 
     @Override
+    public void loadDataByIds(List<String> ids, LoadCallback<User> callback) {
+
+    }
+
+    @Override
     public void getData(String id, final GetCallback callback) {
 
     }
@@ -56,29 +63,9 @@ public class UserRepository implements DataSource<User> {
 
     @Override
     public void saveData(User data, CompletionCallback callback) {
-         mRemoteDataSource.saveData(data, new CompletionCallback() {
-             @Override
-             public void onComplete() {
-                 Log.d(TAG, "user saved to firebase");
-             }
+         mRemoteDataSource.saveData(data, callback);
 
-             @Override
-             public void onCancel() {
-                Log.d(TAG, "user failed to save to firebase");
-             }
-         });
-
-        mLocalDataSource.saveData(data, new CompletionCallback() {
-            @Override
-            public void onComplete() {
-                Log.d(TAG, "user saved to local realm database");
-            }
-
-            @Override
-            public void onCancel() {
-                Log.d(TAG, "user failed to save to local realm database");
-            }
-        });
+        mLocalDataSource.saveData(data, callback);
     }
 
     @Override
@@ -117,6 +104,8 @@ public class UserRepository implements DataSource<User> {
             @Override
             public void onDataLoaded(User data) {
                 mLocalDataSource.saveData(data, null);
+                AdminUtil.setAdminStatus(data.isAdmin());
+
                 callback.onDataLoaded(data);
             }
 

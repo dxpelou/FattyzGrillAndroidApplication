@@ -45,6 +45,9 @@ public class MealsRemoteDataSource implements DataSource<Meal> {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     String key = snapshot.getKey();
                     Meal meal = snapshot.getValue(Meal.class);
+                    if(meal != null) {
+                        meal.setId(key);
+                    }
                     //meal.setLuid(key);
                     meals.add(meal);
                 }
@@ -60,9 +63,46 @@ public class MealsRemoteDataSource implements DataSource<Meal> {
         return;
     }
 
-    @Override
-    public void getData(String id, GetCallback getCallback) {
 
+    //TODO TEST
+    @Override
+    public void loadDataByIds(List<String> ids, final LoadCallback<Meal> callback) {
+        final List<Meal> results = new ArrayList<>();
+        for(String id : ids){
+            getData(id, new GetCallback<Meal>() {
+                @Override
+                public void onDataLoaded(Meal data) {
+                    results.add(data);
+                }
+
+                @Override
+                public void onDataNotAvailable() {
+                    callback.onDataNotAvailable();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void getData(String id, final GetCallback<Meal> callback) {
+        mMealsReference.child(id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Meal meal = dataSnapshot.getValue(Meal.class);
+                if(meal == null){
+                    callback.onDataNotAvailable();
+                    return;
+                }
+
+                callback.onDataLoaded(meal);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onDataNotAvailable();
+            }
+        });
     }
 
     @Override

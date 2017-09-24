@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.louanimashaun.fattyzgrill.R;
 import com.louanimashaun.fattyzgrill.model.Meal;
+import com.louanimashaun.fattyzgrill.util.ModelUtil;
+import com.louanimashaun.fattyzgrill.util.StringUtil;
 
 import org.w3c.dom.Text;
 
@@ -26,6 +28,7 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
     private static final int CATEGORY_MEAL_ITEM = 1;
 
     private static int currentViewType;
+    private Listeners.MealOnClickListener mClickListener;
 
 
     public MealsAdapter(List<Meal> meals){
@@ -46,13 +49,12 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
     @Override
     public void onBindViewHolder(MealViewHolder holder, int position) {
         Meal meal = mMeals.get(position);
-        holder.title_tv.setText(meal.getTitle());
+        holder.title_tv.setText(StringUtil.convertToCamelCase(meal.getTitle()));
         holder.price_tv.setText("£ " + String.valueOf(meal.getPrice()));
 
         if(currentViewType == CATEGORY_MEAL_ITEM){
-            holder.category_tv.setText(meal.getCategory());
+            holder.category_tv.setText(StringUtil.convertToCamelCase(meal.getCategory()));
         }
-
     }
 
     @Override
@@ -90,7 +92,20 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
     }
 
 
-    public class MealViewHolder extends RecyclerView.ViewHolder{
+    public int getPositionById(String id){
+        for(int i = 0; i < mMeals.size(); i++){
+           Meal meal = mMeals.get(i);
+
+            if(meal.getId().equals(id)){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+
+    public class MealViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         //TODO use butterknife
         public TextView title_tv, price_tv, category_tv;
@@ -104,6 +119,18 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
             if(viewType == CATEGORY_MEAL_ITEM ) {
                 category_tv = (TextView) itemView.findViewById(R.id.category_tv);
             }
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            int index = getAdapterPosition();
+            String mealID = mMeals.get(index).getId();
+            mClickListener.onClick(mealID);
+        }
+    }
+
+    public void setItemClickListener(Listeners.MealOnClickListener listener){
+        mClickListener = checkNotNull(listener);
     }
 }

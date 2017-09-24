@@ -1,19 +1,27 @@
 package com.louanimashaun.fattyzgrill.model;
 
+import com.google.firebase.database.Exclude;
+
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by louanimashaun on 14/06/2017.
  */
 
-public class Meal {
+public class Meal extends RealmObject {
 
+    @PrimaryKey
+    @Exclude
+    private String id;
 
     private String title;
 
     private double price;
 
-    private String categeory;
+    private String category;
 
-    private Meal(){}
+    public Meal(){}
 
     public Meal( String title, double price) {
         this.title = title;
@@ -37,11 +45,18 @@ public class Meal {
     }
 
     public String getCategory(){
-        return categeory;
+        return category;
     }
 
-    public void setCategeory(String category){
-        this.categeory = category;
+    public void setCategory(String category){
+        this.category = category;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

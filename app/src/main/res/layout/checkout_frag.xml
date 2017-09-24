@@ -1,37 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/meals_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:padding="10dp"
             android:gravity="center_horizontal"
             android:text="@string/title_checkout_frag"
-            android:textColor="@color/apricot"/>
+            android:textColor="@color/apricot"
+            android:layout_alignParentTop="true"
+            android:textStyle="bold"/>
 
         <ListView
             android:id="@+id/selected_meals_lv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_below="@id/meals_tv"/>
 
 
         <TextView
+            android:id="@+id/total_price_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="£10"
+            android:text="£0"
             android:textColor="@color/apricot"
-            android:gravity="center_horizontal"/>
+            android:gravity="center_horizontal"
+            android:layout_below="@id/selected_meals_lv"/>
 
-            <LinearLayout
+        <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="20dp">
+            android:paddingBottom="20dp"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/total_price_tv">
 
             <Button
                 android:id="@+id/cancel_button"
@@ -53,5 +60,5 @@
                 android:layout_margin="10dp"
                 style="?android:attr/buttonBarStyle"/>
             </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 

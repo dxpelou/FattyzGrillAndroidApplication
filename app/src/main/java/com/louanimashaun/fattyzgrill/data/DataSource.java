@@ -34,6 +34,8 @@ public interface DataSource <T> {
 
     void getData(String id, GetCallback<T> callback);
 
+    void loadDataByIds(List<String> ids, LoadCallback<T> callback);
+
     void deleteAll();
 
     void saveData(T data, CompletionCallback callback);

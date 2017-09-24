@@ -10,6 +10,7 @@
     <string name="title_checkout">Checkout</string>
     <string name="search_title">search</string>
     <string name="title_checkout_frag">Checkout</string>
+    <string name="order_FCM_topic">orders</string>
 
     <array name="catergories">
         <item>Sides</item>

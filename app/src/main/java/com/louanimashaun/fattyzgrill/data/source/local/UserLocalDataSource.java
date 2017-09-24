@@ -34,16 +34,8 @@ public class UserLocalDataSource implements DataSource<User> {
     }
 
     private UserLocalDataSource(Context context){
-        mContext = context;
-        Realm.init(context);
-        RealmConfiguration config = new RealmConfiguration
-                .Builder()
-                .deleteRealmIfMigrationNeeded()
-                .build();
-
-        realm = Realm.getInstance(config);
-
-        Log.d(TAG, realm.getPath());
+        realm = Realm.getDefaultInstance();
+        //Log.d(TAG, realm.getPath());
     }
 
     @Override
@@ -53,6 +45,7 @@ public class UserLocalDataSource implements DataSource<User> {
 
     @Override
     public void getData(String id, GetCallback<User> callback) {
+        //Why findAllAsync?
         RealmResults<User> result = realm.where(User.class).equalTo("userId", id).findAllAsync();
 
         if(result.size() == 0){
@@ -60,6 +53,11 @@ public class UserLocalDataSource implements DataSource<User> {
         }else{
             callback.onDataLoaded(result.first());
         }
+    }
+
+    @Override
+    public void loadDataByIds(List<String> ids, LoadCallback<User> callback) {
+
     }
 
     @Override
@@ -86,12 +84,13 @@ public class UserLocalDataSource implements DataSource<User> {
        }, new Realm.Transaction.OnSuccess(){
            @Override
            public void onSuccess() {
-                 callback.onComplete();
+               if(callback != null) callback.onComplete();
+
            }
        }, new Realm.Transaction.OnError(){
            @Override
            public void onError(Throwable error) {
-                callback.onCancel();
+               if(callback != null) callback.onCancel();
            }
        });
 
