@@ -10,6 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
 /**
@@ -29,7 +31,7 @@ public class MealRepository extends AbstractRepository<Meal> {
         return INSTANCE;
     }
 
-    private MealRepository(DataSource localDatasource, DataSource remoteDataSource){
+    public MealRepository(DataSource localDatasource, DataSource remoteDataSource){
         mLocalDataSource = checkNotNull(localDatasource);
         mRemoteDataSource = checkNotNull(remoteDataSource);
     }
