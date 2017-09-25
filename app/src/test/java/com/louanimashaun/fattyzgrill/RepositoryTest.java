@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealRepository;
-import com.louanimashaun.fattyzgrill.data.source.local.MealsLocalDataSoure;
+import com.louanimashaun.fattyzgrill.data.source.local.MealsLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.MealsRemoteDataSource;
 import com.louanimashaun.fattyzgrill.util.ModelUtil;
 
@@ -29,7 +29,7 @@ public class RepositoryTest {
     private MealRepository mMealRepository;
 
     @Mock
-    private MealsLocalDataSoure mMealsLocalDataSource;
+    private MealsLocalDataSource mMealsLocalDataSource;
 
     @Mock
     private MealsRemoteDataSource mMealsRemoteDataSource;

@@ -11,10 +11,14 @@ import com.louanimashaun.fattyzgrill.data.DataSource;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 /**
  * Created by louanimashaun on 18/06/2017.
  */
 
+@Singleton
 public class MealsRemoteDataSource implements DataSource<Meal> {
 
     private static MealsRemoteDataSource INSTANCE = null;
@@ -29,7 +33,8 @@ public class MealsRemoteDataSource implements DataSource<Meal> {
         return INSTANCE;
     }
 
-    private MealsRemoteDataSource(){
+    @Inject
+    public MealsRemoteDataSource(){
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mMealsReference = mFirebaseDatabase.getReference(MEALS_PATH);
     }

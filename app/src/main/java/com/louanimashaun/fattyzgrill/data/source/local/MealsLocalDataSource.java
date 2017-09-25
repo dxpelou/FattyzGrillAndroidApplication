@@ -2,10 +2,12 @@ package com.louanimashaun.fattyzgrill.data.source.local;
 
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.model.Meal;
-import com.louanimashaun.fattyzgrill.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -15,21 +17,22 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 /**
  * Created by louanimashaun on 19/06/2017.
  */
+@Singleton
+public class MealsLocalDataSource implements DataSource<Meal>{
 
-public class MealsLocalDataSoure implements DataSource<Meal>{
-
-    private static MealsLocalDataSoure INSTANCE = null;
+    private static MealsLocalDataSource INSTANCE = null;
     private static Realm realm;
 
 
-    public static MealsLocalDataSoure getInstance(){
+    public static MealsLocalDataSource getInstance(){
         if(INSTANCE == null){
-            INSTANCE = new MealsLocalDataSoure();
+            INSTANCE = new MealsLocalDataSource();
         }
         return INSTANCE;
     }
 
-    private MealsLocalDataSoure(){
+    @Inject
+    public MealsLocalDataSource(){
         realm = Realm.getDefaultInstance();
     }
 

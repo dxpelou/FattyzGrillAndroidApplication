@@ -5,10 +5,13 @@ import android.support.annotation.NonNull;
 import com.louanimashaun.fattyzgrill.contract.MealContract;
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealRepository;
+import com.louanimashaun.fattyzgrill.di.ActivityScoped;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.view.MealsFragment;
 
 import java.util.List;
+
+import javax.inject.Inject;
 
 import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
@@ -17,11 +20,13 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
  *Presenter layer of application
  */
 
+@ActivityScoped
 public class MealsPresenter implements MealContract.Presenter{
 
     private final MealRepository mMealRepository;
     private final MealsFragment mMealsView;
 
+    @Inject
     public MealsPresenter(@NonNull MealRepository mealRepository,  MealsFragment mealsView){
         mMealRepository = checkNotNull(mealRepository);
         mMealsView = checkNotNull(mealsView);

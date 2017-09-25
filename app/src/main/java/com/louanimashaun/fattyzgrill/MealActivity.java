@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -23,7 +22,7 @@ import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealRepository;
 import com.louanimashaun.fattyzgrill.data.OrderRepository;
 import com.louanimashaun.fattyzgrill.data.UserRepository;
-import com.louanimashaun.fattyzgrill.data.source.local.MealsLocalDataSoure;
+import com.louanimashaun.fattyzgrill.data.source.local.MealsLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.local.NotificationLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.local.OrdersLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.local.UserLocalDataSource;
@@ -47,15 +46,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MealActivity extends AppCompatActivity {
+import javax.inject.Inject;
 
-    private MealsPresenter mMealsPresenter;
+import dagger.android.support.DaggerAppCompatActivity;
+
+public class MealActivity extends DaggerAppCompatActivity {
+
     FirebaseAuth mFirebaseAuth;
     private static final int RC_SIGN_IN = 1;
     FirebaseAuth.AuthStateListener mAuthStateListener;
 
     private UserRepository mUserRepository;
-    private MealRepository mMealRepository;
+
+    @Inject
+    MealsPresenter mMealsPresenter;
+    public MealRepository mMealRepository;
     private OrderRepository mOrderRepository;
     private List<String> mSelectedMealIDs;
     private Map<String,Integer> mIdQuantityMap;
@@ -76,11 +81,11 @@ public class MealActivity extends AppCompatActivity {
 
                     mealsFragment.setMealClickListener(mMealOnClickListener);
 
-                    MealsPresenter mealsPresenter = new MealsPresenter(
+                     mMealsPresenter = new MealsPresenter(
                             mMealRepository,
                             mealsFragment);
 
-                    mealsFragment.setPresenter(mealsPresenter);
+                    mealsFragment.setPresenter(mMealsPresenter);
 
                     return true;
                 case R.id.navigation_checkout:
@@ -264,7 +269,7 @@ public class MealActivity extends AppCompatActivity {
                 OrdersRemoteDataSource.getInstance());
 
         mMealRepository = MealRepository.getInstance(
-                MealsLocalDataSoure.getInstance(),
+                MealsLocalDataSource.getInstance(),
                 MealsRemoteDataSource.getInstance());
     }
 

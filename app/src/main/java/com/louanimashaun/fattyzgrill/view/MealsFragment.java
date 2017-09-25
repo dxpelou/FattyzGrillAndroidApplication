@@ -14,10 +14,15 @@ import android.widget.TextView;
 import com.louanimashaun.fattyzgrill.contract.BasePresenter;
 import com.louanimashaun.fattyzgrill.contract.MealContract;
 import com.louanimashaun.fattyzgrill.R;
+import com.louanimashaun.fattyzgrill.di.ActivityScoped;
 import com.louanimashaun.fattyzgrill.model.Meal;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
+
+import dagger.android.support.DaggerFragment;
 
 import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
@@ -27,7 +32,8 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
  * View layer of application
  */
 
-public class MealsFragment extends Fragment implements MealContract.View  {
+@ActivityScoped
+public class MealsFragment extends DaggerFragment implements MealContract.View  {
 
     private BasePresenter mMealsPresenter;
     private MealsAdapter mMealsAdapter = new MealsAdapter(new ArrayList<Meal>());
@@ -36,6 +42,9 @@ public class MealsFragment extends Fragment implements MealContract.View  {
     public static MealsFragment newInstance(){
         return new MealsFragment();
     }
+
+    @Inject
+    public MealsFragment(){}
 
     @Nullable
     @Override
