@@ -2,10 +2,14 @@ package com.louanimashaun.fattyzgrill.data;
 
 import android.support.annotation.NonNull;
 
+import com.louanimashaun.fattyzgrill.di.Local;
+import com.louanimashaun.fattyzgrill.di.Remote;
 import com.louanimashaun.fattyzgrill.model.Order;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
@@ -24,7 +28,8 @@ public class OrderRepository extends AbstractRepository<Order> {
         return INSTANCE;
     }
 
-    private OrderRepository(DataSource localDatasource, DataSource remoteDataSource){
+    @Inject
+    public OrderRepository(@Local DataSource localDatasource, @Remote DataSource remoteDataSource){
         mLocalDataSource = checkNotNull(localDatasource);
         mRemoteDataSource = checkNotNull(remoteDataSource);
     }

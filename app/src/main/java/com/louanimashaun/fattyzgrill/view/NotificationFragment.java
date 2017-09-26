@@ -26,7 +26,7 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 public class NotificationFragment extends Fragment implements NotificationContract.View{
 
     NotificationAdapter mNotificationAdapter;
-    BasePresenter mNotificationPresenter;
+    NotificationContract.Presenter mNotificationPresenter;
 
     public static NotificationFragment newInstance() {
         NotificationFragment fragment = new NotificationFragment();
@@ -60,10 +60,7 @@ public class NotificationFragment extends Fragment implements NotificationContra
         mNotificationPresenter.start();
     }
 
-    @Override
-    public void setPresenter(BasePresenter presenter) {
-        mNotificationPresenter = checkNotNull(presenter);
-    }
+
 
     @Override
     public void showNotifications(List<Notification> notifications) {

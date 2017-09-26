@@ -60,6 +60,15 @@ public class MealActivity extends DaggerAppCompatActivity {
 
     @Inject
     MealsPresenter mMealsPresenter;
+
+    @Inject
+    MealsFragment mealsFragment;
+
+    @Inject
+    CheckoutFragment mCheckoutFragment;
+
+    @Inject
+    CheckoutPresenter mCheckoutPresenter;
     public MealRepository mMealRepository;
     private OrderRepository mOrderRepository;
     private List<String> mSelectedMealIDs;
@@ -76,25 +85,15 @@ public class MealActivity extends DaggerAppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    MealsFragment mealsFragment = MealsFragment.newInstance();
                     replaceFragment(mealsFragment);
 
                     mealsFragment.setMealClickListener(mMealOnClickListener);
 
-                     mMealsPresenter = new MealsPresenter(
-                            mMealRepository,
-                            mealsFragment);
-
-                    mealsFragment.setPresenter(mMealsPresenter);
-
                     return true;
                 case R.id.navigation_checkout:
-                    CheckoutFragment checkoutFragment = CheckoutFragment.newInstance();
-                    replaceFragment(checkoutFragment);
+                    replaceFragment(mCheckoutFragment);
 
-                    CheckoutPresenter checkoutPresenter = new CheckoutPresenter(mOrderRepository, mMealRepository, checkoutFragment);
-                    checkoutPresenter.addSelectedMeals(mIdQuantityMap);
-                    checkoutFragment.setPresenter(checkoutPresenter);
+                    mCheckoutPresenter.addSelectedMeals(mIdQuantityMap);
                     return true;
                 case R.id.navigation_notifications:
 
@@ -106,7 +105,7 @@ public class MealActivity extends DaggerAppCompatActivity {
                     NotificationPresenter notificationPresenter = new NotificationPresenter(
                             notificationFragment, notificationLocalDataSource);
 
-                    notificationFragment.setPresenter(notificationPresenter);
+//                    notificationFragment.setPresenter(notificationPresenter);
                     return true;
             }
             return false;
@@ -191,9 +190,9 @@ public class MealActivity extends DaggerAppCompatActivity {
 
         commitFragmentTransaction(R.id.content_frame, mealsFragment);
 
-        final MealsPresenter mMealsPresenter = new MealsPresenter(
-                mMealRepository,
-                mealsFragment);
+//         MealsPresenter mMealsPresenter = new MealsPresenter(
+//                mMealRepository,
+//                mealsFragment);
 
         setupAutoCompleteTextView();
     }

@@ -35,7 +35,8 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 @ActivityScoped
 public class MealsFragment extends DaggerFragment implements MealContract.View  {
 
-    private BasePresenter mMealsPresenter;
+    @Inject
+    public MealContract.Presenter mMealsPresenter;
     private MealsAdapter mMealsAdapter = new MealsAdapter(new ArrayList<Meal>());
     private RecyclerView.LayoutManager mLayoutManager;
 
@@ -69,6 +70,7 @@ public class MealsFragment extends DaggerFragment implements MealContract.View  
     @Override
     public void onResume() {
         super.onResume();
+        mMealsPresenter.takeView(this);
         mMealsPresenter.start();
     }
 
@@ -93,13 +95,11 @@ public class MealsFragment extends DaggerFragment implements MealContract.View  
         }
     }
 
-    @Override
-    public void setPresenter(@NonNull BasePresenter presenter) {
-        mMealsPresenter = checkNotNull(presenter);
-    }
 
     public void setMealClickListener(@NonNull Listeners.MealOnClickListener listener){
         checkNotNull(listener);
         mMealsAdapter.setItemClickListener(listener);
     }
+
+
 }

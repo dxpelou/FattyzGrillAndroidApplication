@@ -24,18 +24,21 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 public class MealsPresenter implements MealContract.Presenter{
 
     private final MealRepository mMealRepository;
-    private final MealsFragment mMealsView;
+    private MealContract.View mMealsView;
 
     @Inject
-    public MealsPresenter(@NonNull MealRepository mealRepository,  MealsFragment mealsView){
+    public MealsPresenter(@NonNull MealRepository mealRepository){
         mMealRepository = checkNotNull(mealRepository);
-        mMealsView = checkNotNull(mealsView);
-        mMealsView.setPresenter(this);
     }
 
     @Override
     public void start() {
         loadMeals(true);
+    }
+
+    @Override
+    public void takeView(MealContract.View view) {
+        mMealsView = checkNotNull(view);
     }
 
     @Override

@@ -19,19 +19,26 @@ import com.louanimashaun.fattyzgrill.presenter.CheckoutPresenter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import dagger.android.support.DaggerFragment;
+
 import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
 /**
  * Created by louanimashaun on 16/08/2017.
  */
 
-public class CheckoutFragment extends Fragment implements CheckoutContract.View {
+public class CheckoutFragment extends DaggerFragment implements CheckoutContract.View {
 
-    private CheckoutContract.Presenter mCheckoutPresenter;
+    @Inject
+    public CheckoutContract.Presenter mCheckoutPresenter;
 
     private CheckoutAdapter mCheckoutAdapter;
     private TextView mTotalPrice_tv;
 
+    @Inject
+    public CheckoutFragment(){}
 
     public static CheckoutFragment newInstance(){
         return new CheckoutFragment();
@@ -40,6 +47,7 @@ public class CheckoutFragment extends Fragment implements CheckoutContract.View 
     @Override
     public void onResume() {
         super.onResume();
+        mCheckoutPresenter.takeView(this);
         mCheckoutPresenter.start();
     }
 
@@ -115,10 +123,6 @@ public class CheckoutFragment extends Fragment implements CheckoutContract.View 
 
     }
 
-    @Override
-    public void setPresenter(BasePresenter presenter) {
-        mCheckoutPresenter = (CheckoutContract.Presenter)checkNotNull(presenter);
-    }
 
     private void showTotalPrice(List<Meal> meals){
         int total = 0;

@@ -35,6 +35,11 @@ public class NotificationPresenter implements NotificationContract.Presenter {
     }
 
     @Override
+    public void takeView(NotificationContract.View view) {
+
+    }
+
+    @Override
     public void loadNotifcations(boolean forceUpdate) {
 
         mLocalDataSource.loadData(new DataSource.LoadCallback<Notification>() {

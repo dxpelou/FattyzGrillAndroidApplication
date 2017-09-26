@@ -25,7 +25,7 @@ public interface CheckoutContract {
 
     }
 
-    interface Presenter extends BasePresenter{
+    interface Presenter extends BasePresenter<View>{
         void loadCheckout();
 
         void checkoutOrder();

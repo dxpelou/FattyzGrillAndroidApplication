@@ -43,6 +43,4 @@ public class FattyzGrill extends DaggerApplication{
         appComponent.inject(this);
         return appComponent;
     }
-
-
 }

@@ -1,9 +1,11 @@
 package com.louanimashaun.fattyzgrill.presenter;
 
+import com.louanimashaun.fattyzgrill.contract.BaseView;
 import com.louanimashaun.fattyzgrill.contract.CheckoutContract;
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealRepository;
 import com.louanimashaun.fattyzgrill.data.OrderRepository;
+import com.louanimashaun.fattyzgrill.di.ActivityScoped;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Order;
 import com.louanimashaun.fattyzgrill.notifications.NotificationSharedPreference;
@@ -23,22 +25,21 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 /**
  * Created by louanimashaun on 27/08/2017.
  */
-
+@ActivityScoped
 public class CheckoutPresenter implements CheckoutContract.Presenter {
 
     private OrderRepository mOrderRepository;
 
     private MealRepository mMealRepository;
-    private CheckoutFragment mCheckoutFragment;
+    private CheckoutContract.View mCheckoutFragment;
     private Map<String,Integer> mSelectedMeals;
     private List<String> mMealIds;
 
 
-    public CheckoutPresenter(OrderRepository orderRepository, MealRepository mealRepository,
-                             CheckoutFragment checkoutFragment){
+    @Inject
+    public CheckoutPresenter(OrderRepository orderRepository, MealRepository mealRepository){
 
         mOrderRepository = checkNotNull(orderRepository);
-        mCheckoutFragment = checkNotNull(checkoutFragment);
         mMealRepository = checkNotNull(mealRepository);
 
     }
@@ -71,6 +72,12 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
     public void start() {
         loadCheckout();
     }
+
+    @Override
+    public void takeView(CheckoutContract.View view) {
+        mCheckoutFragment = checkNotNull(view);
+    }
+
 
     @Override
     public void checkoutOrder() {
