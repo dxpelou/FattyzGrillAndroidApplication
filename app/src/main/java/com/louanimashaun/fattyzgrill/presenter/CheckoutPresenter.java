@@ -1,6 +1,5 @@
 package com.louanimashaun.fattyzgrill.presenter;
 
-import com.louanimashaun.fattyzgrill.contract.BaseView;
 import com.louanimashaun.fattyzgrill.contract.CheckoutContract;
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealRepository;
@@ -8,10 +7,8 @@ import com.louanimashaun.fattyzgrill.data.OrderRepository;
 import com.louanimashaun.fattyzgrill.di.ActivityScoped;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Order;
-import com.louanimashaun.fattyzgrill.notifications.NotificationSharedPreference;
+import com.louanimashaun.fattyzgrill.notifications.TokenDataSource;
 import com.louanimashaun.fattyzgrill.util.ModelUtil;
-import com.louanimashaun.fattyzgrill.util.PreconditonUtil;
-import com.louanimashaun.fattyzgrill.view.CheckoutFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +26,7 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 public class CheckoutPresenter implements CheckoutContract.Presenter {
 
     private OrderRepository mOrderRepository;
+    private TokenDataSource mNotificationSharedPreference;
 
     private MealRepository mMealRepository;
     private CheckoutContract.View mCheckoutFragment;
@@ -37,10 +35,11 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
 
 
     @Inject
-    public CheckoutPresenter(OrderRepository orderRepository, MealRepository mealRepository){
+    public CheckoutPresenter(OrderRepository orderRepository, MealRepository mealRepository, TokenDataSource notificationSharedPreference){
 
         mOrderRepository = checkNotNull(orderRepository);
         mMealRepository = checkNotNull(mealRepository);
+        mNotificationSharedPreference = checkNotNull(notificationSharedPreference);
 
     }
 
@@ -154,7 +153,7 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
         order.setQuantitiesRealm(ModelUtil.toRealmIntegerList(values));
         order.setQuantities(values);
 
-        order.setSenderNotifcationToken(NotificationSharedPreference.getRefreshToken());
+        order.setSenderNotifcationToken(mNotificationSharedPreference.getRefreshToken());
 
         return order;
     }

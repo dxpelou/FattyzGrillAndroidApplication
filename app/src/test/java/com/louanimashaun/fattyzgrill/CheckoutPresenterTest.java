@@ -6,11 +6,11 @@ import com.louanimashaun.fattyzgrill.data.OrderRepository;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Order;
 import com.louanimashaun.fattyzgrill.model.RealmString;
+import com.louanimashaun.fattyzgrill.notifications.TokenDataSource;
 import com.louanimashaun.fattyzgrill.presenter.CheckoutPresenter;
 import com.louanimashaun.fattyzgrill.util.ModelUtil;
 import com.louanimashaun.fattyzgrill.view.CheckoutFragment;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -20,13 +20,8 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
-import io.realm.RealmList;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 /**
@@ -52,6 +47,9 @@ public class CheckoutPresenterTest {
     @Mock
     private DataSource.LoadCallback mLoadCallback;
 
+    @Mock
+    private TokenDataSource mNotificationSharedPreference;
+
     @Captor
     private ArgumentCaptor<DataSource.GetCallback> mGetCallbackCaptor;
 
@@ -62,7 +60,7 @@ public class CheckoutPresenterTest {
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
-        mCheckoutPresenter = new CheckoutPresenter(mOrderRepository, mMealRepository);
+        mCheckoutPresenter = new CheckoutPresenter(mOrderRepository, mMealRepository, mNotificationSharedPreference);
         mCheckoutPresenter.takeView(mCheckoutFragment);
 
 
@@ -111,7 +109,6 @@ public class CheckoutPresenterTest {
 
         mCheckoutPresenter.checkoutOrder();
 
-       setMealsByIdAvailable();
 
         ArgumentCaptor<Order> orderArgumentCaptor = ArgumentCaptor.forClass(Order.class);
         ArgumentCaptor<DataSource.CompletionCallback> completionCallbackArgumentCaptor = ArgumentCaptor.forClass(DataSource.CompletionCallback.class);
@@ -133,8 +130,6 @@ public class CheckoutPresenterTest {
 
         mCheckoutPresenter.checkoutOrder();
 
-        setMealsByIdAvailable();
-
         ArgumentCaptor<DataSource.CompletionCallback> completionCallbackCaptor = ArgumentCaptor.forClass(DataSource.CompletionCallback.class);
         verify(mOrderRepository).saveData(any(Order.class), completionCallbackCaptor.capture() );
 
@@ -149,7 +144,6 @@ public class CheckoutPresenterTest {
 
         mCheckoutPresenter.checkoutOrder();
 
-        setMealsByIdAvailable();
 
         ArgumentCaptor<DataSource.CompletionCallback> completionCallbackCaptor = ArgumentCaptor.forClass(DataSource.CompletionCallback.class);
         verify(mOrderRepository).saveData(any(Order.class), completionCallbackCaptor.capture() );
