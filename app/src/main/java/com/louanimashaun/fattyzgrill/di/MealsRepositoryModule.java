@@ -19,10 +19,10 @@ public abstract class MealsRepositoryModule {
     @Singleton
     @Binds
     @Local
-    abstract DataSource provideTasksLocalDataSource(MealsLocalDataSource dataSource);
+    abstract DataSource provideMealsLocalDataSource(MealsLocalDataSource dataSource);
 
     @Singleton
     @Binds
     @Remote
-    abstract DataSource provideTasksRemoteDataSource(MealsRemoteDataSource dataSource);
+    abstract DataSource provideMealsRemoteDataSource(MealsRemoteDataSource dataSource);
 }

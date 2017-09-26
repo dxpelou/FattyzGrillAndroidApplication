@@ -20,11 +20,11 @@ public abstract class OrderRepositoryModule {
 
     @Singleton
     @Binds
-    @Local
-    abstract DataSource provideTasksLocalDataSource(OrdersLocalDataSource dataSource);
+    @OrdersLocal
+    abstract DataSource provideOrdersLocalDataSource(OrdersLocalDataSource dataSource);
 
     @Singleton
     @Binds
-    @Remote
-    abstract DataSource provideTasksRemoteDataSource(OrdersRemoteDataSource dataSource);
+    @OrdersRemote
+    abstract DataSource provideOrdersRemoteDataSource(OrdersRemoteDataSource dataSource);
 }

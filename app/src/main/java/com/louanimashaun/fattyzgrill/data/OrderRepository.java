@@ -3,6 +3,8 @@ package com.louanimashaun.fattyzgrill.data;
 import android.support.annotation.NonNull;
 
 import com.louanimashaun.fattyzgrill.di.Local;
+import com.louanimashaun.fattyzgrill.di.OrdersLocal;
+import com.louanimashaun.fattyzgrill.di.OrdersRemote;
 import com.louanimashaun.fattyzgrill.di.Remote;
 import com.louanimashaun.fattyzgrill.model.Order;
 
@@ -10,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
@@ -17,6 +20,7 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
  * Created by louanimashaun on 24/06/2017.
  */
 
+@Singleton
 public class OrderRepository extends AbstractRepository<Order> {
 
     private static OrderRepository INSTANCE;
@@ -29,7 +33,7 @@ public class OrderRepository extends AbstractRepository<Order> {
     }
 
     @Inject
-    public OrderRepository(@Local DataSource localDatasource, @Remote DataSource remoteDataSource){
+    public OrderRepository(@OrdersLocal DataSource localDatasource, @OrdersRemote DataSource remoteDataSource){
         mLocalDataSource = checkNotNull(localDatasource);
         mRemoteDataSource = checkNotNull(remoteDataSource);
     }

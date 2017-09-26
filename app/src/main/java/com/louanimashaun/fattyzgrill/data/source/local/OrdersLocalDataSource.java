@@ -5,12 +5,15 @@ import com.louanimashaun.fattyzgrill.model.Order;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import io.realm.Realm;
 
 /**
  * Created by louanimashaun on 25/06/2017.
  */
-
+@Singleton
 public class OrdersLocalDataSource implements DataSource<Order>{
 
     private static OrdersLocalDataSource INSTANCE = null;
@@ -24,7 +27,8 @@ public class OrdersLocalDataSource implements DataSource<Order>{
         return INSTANCE;
     }
 
-    private OrdersLocalDataSource(){
+    @Inject
+    public OrdersLocalDataSource(){
     }
 
     @Override

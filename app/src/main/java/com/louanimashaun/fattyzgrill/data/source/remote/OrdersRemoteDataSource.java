@@ -8,10 +8,13 @@ import com.louanimashaun.fattyzgrill.model.Order;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 /**
  * Created by louanimashaun on 24/06/2017.
  */
-
+@Singleton
 public class OrdersRemoteDataSource implements DataSource<Order> {
 
     private static OrdersRemoteDataSource INSTANCE = null;
@@ -26,7 +29,8 @@ public class OrdersRemoteDataSource implements DataSource<Order> {
         return INSTANCE;
     }
 
-    private OrdersRemoteDataSource(){
+    @Inject
+    public OrdersRemoteDataSource(){
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mOrdersReference = mFirebaseDatabase.getReference(ORDERS_PATH);
     }

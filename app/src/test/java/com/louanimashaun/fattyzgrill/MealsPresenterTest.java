@@ -16,6 +16,8 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import static junit.framework.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 
@@ -25,6 +27,7 @@ import static org.mockito.Mockito.verify;
 
 public class MealsPresenterTest {
 
+    @Inject
     private MealsPresenter mPresenter;
 
     @Mock
@@ -39,7 +42,6 @@ public class MealsPresenterTest {
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
-        mPresenter = new MealsPresenter(mMealRepository, mMealsFragment);
     }
 
     @Test

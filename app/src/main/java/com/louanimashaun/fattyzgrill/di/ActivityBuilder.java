@@ -11,7 +11,7 @@ import dagger.android.ContributesAndroidInjector;
 @Module
 public abstract class ActivityBuilder {
     @ActivityScoped
-    @ContributesAndroidInjector(modules = {MealsModule.class, CheckoutModule.class})
+    @ContributesAndroidInjector(modules = {MealsModule.class, CheckoutModule.class, NotficationModule.class})
     abstract MealActivity bindMealActivity();
 
 }

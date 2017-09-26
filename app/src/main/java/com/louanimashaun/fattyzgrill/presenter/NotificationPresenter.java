@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import com.louanimashaun.fattyzgrill.contract.NotificationContract;
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.source.local.NotificationLocalDataSource;
+import com.louanimashaun.fattyzgrill.di.ActivityScoped;
 import com.louanimashaun.fattyzgrill.model.Notification;
 import com.louanimashaun.fattyzgrill.util.PreconditonUtil;
 import com.louanimashaun.fattyzgrill.view.NotificationFragment;
@@ -13,19 +14,24 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
+
 /**
  * Created by louanimashaun on 10/09/2017.
  */
 
+@ActivityScoped
 public class NotificationPresenter implements NotificationContract.Presenter {
 
-    private NotificationFragment mNotificationView;
+    private NotificationContract.View mNotificationView;
 
     private NotificationLocalDataSource mLocalDataSource;
 
-    public NotificationPresenter(NotificationFragment fragment, NotificationLocalDataSource localDataSource){
-       mNotificationView =  PreconditonUtil.checkNotNull(fragment);
-       mLocalDataSource = PreconditonUtil.checkNotNull(localDataSource);
+    @Inject
+    public NotificationPresenter( NotificationLocalDataSource localDataSource){
+       mLocalDataSource = checkNotNull(localDataSource);
     }
 
     @Override
@@ -36,7 +42,7 @@ public class NotificationPresenter implements NotificationContract.Presenter {
 
     @Override
     public void takeView(NotificationContract.View view) {
-
+        mNotificationView = checkNotNull(view);
     }
 
     @Override

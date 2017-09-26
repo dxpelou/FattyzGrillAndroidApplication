@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.louanimashaun.fattyzgrill.R;
 import com.louanimashaun.fattyzgrill.contract.BasePresenter;
 import com.louanimashaun.fattyzgrill.contract.CheckoutContract;
+import com.louanimashaun.fattyzgrill.di.ActivityScoped;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.presenter.CheckoutPresenter;
 
@@ -29,6 +30,7 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
  * Created by louanimashaun on 16/08/2017.
  */
 
+@ActivityScoped
 public class CheckoutFragment extends DaggerFragment implements CheckoutContract.View {
 
     @Inject
@@ -59,14 +61,14 @@ public class CheckoutFragment extends DaggerFragment implements CheckoutContract
         mCheckoutAdapter.setIncrButtonListener(new Listeners.CheckoutItemClickListener() {
             @Override
             public void onClick(String mealdID, boolean isUp) {
-                ((CheckoutPresenter)mCheckoutPresenter).changeQuantity(mealdID, true);
+                mCheckoutPresenter.changeQuantity(mealdID, true);
             }
         });
 
         mCheckoutAdapter.setDecButtonListener(new Listeners.CheckoutItemClickListener() {
             @Override
             public void onClick(String mealdID, boolean isUp) {
-                ((CheckoutPresenter)mCheckoutPresenter).changeQuantity(mealdID, false);
+                mCheckoutPresenter.changeQuantity(mealdID, false);
 
             }
         });

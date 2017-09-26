@@ -69,6 +69,13 @@ public class MealActivity extends DaggerAppCompatActivity {
 
     @Inject
     CheckoutPresenter mCheckoutPresenter;
+
+    @Inject
+    NotificationFragment mNotificationFragment;
+
+    @Inject
+    NotificationPresenter mNotificationPresenter;
+
     public MealRepository mMealRepository;
     private OrderRepository mOrderRepository;
     private List<String> mSelectedMealIDs;
@@ -97,13 +104,10 @@ public class MealActivity extends DaggerAppCompatActivity {
                     return true;
                 case R.id.navigation_notifications:
 
-                    NotificationFragment notificationFragment = NotificationFragment.newInstance();
-                    replaceFragment(notificationFragment);
+                    replaceFragment(mNotificationFragment);
 
                     NotificationLocalDataSource notificationLocalDataSource = NotificationLocalDataSource.getInstance();
 
-                    NotificationPresenter notificationPresenter = new NotificationPresenter(
-                            notificationFragment, notificationLocalDataSource);
 
 //                    notificationFragment.setPresenter(notificationPresenter);
                     return true;

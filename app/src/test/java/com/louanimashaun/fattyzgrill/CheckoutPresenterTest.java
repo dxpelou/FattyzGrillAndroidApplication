@@ -20,6 +20,8 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import io.realm.RealmList;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -33,7 +35,8 @@ import static org.mockito.Mockito.verify;
 
 public class CheckoutPresenterTest {
 
-    private CheckoutPresenter mCheckoutPresenter;
+    @Inject
+    public CheckoutPresenter mCheckoutPresenter;
 
     @Mock
     private OrderRepository mOrderRepository;
@@ -57,9 +60,6 @@ public class CheckoutPresenterTest {
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
-
-        mCheckoutPresenter = new CheckoutPresenter(
-                mOrderRepository, mMealRepository, mCheckoutFragment);
     }
 
     /*

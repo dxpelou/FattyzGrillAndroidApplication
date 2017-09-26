@@ -17,7 +17,8 @@ import dagger.android.support.AndroidSupportInjectionModule;
  */
 
 @Singleton
-@Component(modules = {MealsRepositoryModule.class,
+@Component(modules = {OrderRepositoryModule.class,
+        MealsRepositoryModule.class,
         AppModule.class,
         ActivityBuilder.class,
         AndroidSupportInjectionModule.class})
