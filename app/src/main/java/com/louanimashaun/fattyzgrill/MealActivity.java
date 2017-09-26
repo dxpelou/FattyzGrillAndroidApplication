@@ -43,6 +43,7 @@ import com.louanimashaun.fattyzgrill.view.NotificationFragment;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -170,7 +171,8 @@ public class MealActivity extends DaggerAppCompatActivity {
         mMealOnClickListener = new MealOnClickListener() {
             @Override
             public void onClick(String mealId) {
-                if(mIdQuantityMap == null) mIdQuantityMap = new HashMap<String, Integer>();
+                //must be a LinkedHashMap to preserve order and for CheckoutPresenterUnitTest
+                if(mIdQuantityMap == null) mIdQuantityMap = new LinkedHashMap<String, Integer>();
 
                 if(!mIdQuantityMap.containsKey(mealId)){
                     mIdQuantityMap.put(mealId, 1);

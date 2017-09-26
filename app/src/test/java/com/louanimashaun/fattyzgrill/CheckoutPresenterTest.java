@@ -35,7 +35,9 @@ import static org.mockito.Mockito.verify;
 
 public class CheckoutPresenterTest {
 
-    @Inject
+
+    //TODO check how to do di in unit tests
+
     public CheckoutPresenter mCheckoutPresenter;
 
     @Mock
@@ -60,6 +62,10 @@ public class CheckoutPresenterTest {
     @Before
     public void setUp(){
         MockitoAnnotations.initMocks(this);
+        mCheckoutPresenter = new CheckoutPresenter(mOrderRepository, mMealRepository);
+        mCheckoutPresenter.takeView(mCheckoutFragment);
+
+
     }
 
     /*

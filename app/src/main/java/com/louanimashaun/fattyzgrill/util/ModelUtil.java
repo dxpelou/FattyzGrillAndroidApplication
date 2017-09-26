@@ -7,6 +7,7 @@ import com.louanimashaun.fattyzgrill.model.RealmString;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,7 +54,7 @@ public class ModelUtil {
     }
 
     public static List<Meal> sortMealsByCategory(List<Meal> meals){
-        HashMap mealsByCategory = new HashMap<String, List<Meal>>();
+        LinkedHashMap mealsByCategory = new LinkedHashMap<String, List<Meal>>();
 
         for (Meal meal : meals){
             String category = meal.getCategory();
@@ -81,7 +82,7 @@ public class ModelUtil {
 
 
     public static Map<String,Integer> createStubMealIdQuantityList(){
-        Map<String,Integer> map = new HashMap<>();
+        Map<String,Integer> map = new LinkedHashMap<>();
         List<String> ids = createStubMealIDList();
         for(String id : ids){
             map.put(id, 1);
