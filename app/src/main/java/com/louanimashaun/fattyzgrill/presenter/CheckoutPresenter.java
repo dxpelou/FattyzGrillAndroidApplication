@@ -9,6 +9,7 @@ import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Order;
 import com.louanimashaun.fattyzgrill.notifications.TokenDataSource;
 import com.louanimashaun.fattyzgrill.util.ModelUtil;
+import com.louanimashaun.fattyzgrill.view.Listeners;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
     private CheckoutContract.View mCheckoutFragment;
     private Map<String,Integer> mSelectedMeals;
     private List<String> mMealIds;
+    private Listeners.CheckoutChangedListener mCheckoutChangedListener;
 
 
     @Inject
@@ -46,12 +48,14 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
     @Override
     public void loadCheckout() {
 
-        if(mSelectedMeals == null){
+        if(mSelectedMeals == null || mSelectedMeals.size() == 0){
             mCheckoutFragment.showNoCheckout();
             return;
         }
 
-       mMealRepository.loadDataByIds(mMealIds, new DataSource.LoadCallback<Meal>() {
+        List<String> mealIds = new ArrayList<>(mSelectedMeals.keySet());
+
+       mMealRepository.loadDataByIds(mealIds, new DataSource.LoadCallback<Meal>() {
            @Override
            public void onDataLoaded(List<Meal> data) {
                List<Integer> quanitiesList = new ArrayList<Integer>(mSelectedMeals.values());
@@ -100,8 +104,6 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
     @Override
     public void addSelectedMeals( Map<String,Integer> meals) {
         mSelectedMeals = meals;
-        if(mSelectedMeals != null)
-        mMealIds = new ArrayList<String>(mSelectedMeals.keySet());
     }
 
     @Override
@@ -121,7 +123,14 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
             mSelectedMeals.put(id, quantity);
         }
 
+        mCheckoutChangedListener.onCheckoutChanged(mSelectedMeals);
+
         loadCheckout();
+    }
+
+    @Override
+    public void addCheckoutChangeListener(Listeners.CheckoutChangedListener listener) {
+        mCheckoutChangedListener = checkNotNull(listener);
     }
 
     private void getMealsById(List<String> meals, DataSource.GetCallback<Meal> callback){

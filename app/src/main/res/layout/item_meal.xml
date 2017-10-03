@@ -9,7 +9,7 @@
 
         <TextView
             android:id="@+id/title_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
             android:layout_gravity="center_vertical"
@@ -17,14 +17,14 @@
 
         <TextView
             android:id="@+id/price_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:textColor="@color/apricot"/>
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_gravity="center_horizontal"

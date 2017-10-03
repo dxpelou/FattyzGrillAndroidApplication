@@ -7,11 +7,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -37,11 +39,13 @@ import com.louanimashaun.fattyzgrill.presenter.NotificationPresenter;
 import com.louanimashaun.fattyzgrill.util.AdminUtil;
 import com.louanimashaun.fattyzgrill.util.ModelUtil;
 import com.louanimashaun.fattyzgrill.view.CheckoutFragment;
+import com.louanimashaun.fattyzgrill.view.Listeners;
 import com.louanimashaun.fattyzgrill.view.Listeners.MealOnClickListener;
 import com.louanimashaun.fattyzgrill.view.MealsFragment;
 import com.louanimashaun.fattyzgrill.view.NotificationFragment;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -57,7 +61,6 @@ public class MealActivity extends DaggerAppCompatActivity {
     private static final int RC_SIGN_IN = 1;
     FirebaseAuth.AuthStateListener mAuthStateListener;
 
-    private UserRepository mUserRepository;
 
     @Inject
     MealsPresenter mMealsPresenter;
@@ -77,13 +80,21 @@ public class MealActivity extends DaggerAppCompatActivity {
     @Inject
     NotificationPresenter mNotificationPresenter;
 
-    public MealRepository mMealRepository;
-    private OrderRepository mOrderRepository;
+    @Inject
+    MealRepository mMealRepository;
+
+    @Inject
+    OrderRepository mOrderRepository;
+
+    @Inject
+    public UserRepository mUserRepository;
+
     private List<String> mSelectedMealIDs;
     private Map<String,Integer> mIdQuantityMap;
     private MealOnClickListener mMealOnClickListener;
 
     private String[] ids;
+    TextView tv;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -102,15 +113,20 @@ public class MealActivity extends DaggerAppCompatActivity {
                     replaceFragment(mCheckoutFragment);
 
                     mCheckoutPresenter.addSelectedMeals(mIdQuantityMap);
+                    mCheckoutPresenter.addCheckoutChangeListener(new Listeners.CheckoutChangedListener() {
+                        @Override
+                        public void onCheckoutChanged(Map<String, Integer> quanityMap) {
+                            mIdQuantityMap = quanityMap;
+                            updateBasketCount();
+                        }
+                    });
                     return true;
                 case R.id.navigation_notifications:
 
                     replaceFragment(mNotificationFragment);
 
-                    NotificationLocalDataSource notificationLocalDataSource = NotificationLocalDataSource.getInstance();
-
-
-//                    notificationFragment.setPresenter(notificationPresenter);
+                    //NotificationLocalDataSource notificationLocalDataSource = NotificationLocalDataSource.getInstance();
+                    //notificationFragment.setPresenter(notificationPresenter);
                     return true;
             }
             return false;
@@ -162,8 +178,6 @@ public class MealActivity extends DaggerAppCompatActivity {
             }
         };
 
-        setUpRepositories();
-
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -176,15 +190,18 @@ public class MealActivity extends DaggerAppCompatActivity {
 
                 if(!mIdQuantityMap.containsKey(mealId)){
                     mIdQuantityMap.put(mealId, 1);
+                    updateBasketCount();
                     return;
                 }
                 int quantity = mIdQuantityMap.get(mealId);
-                mIdQuantityMap.put(mealId, quantity++);
+                mIdQuantityMap.put(mealId, quantity + 1);
 
+                updateBasketCount();
             }
         };
 
         //TODO app crashes when using instant run
+        //TODO
         MealsFragment mealsFragment = (MealsFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.content_frame);
 
@@ -193,12 +210,7 @@ public class MealActivity extends DaggerAppCompatActivity {
         }
 
         mealsFragment.setMealClickListener(mMealOnClickListener);
-
         commitFragmentTransaction(R.id.content_frame, mealsFragment);
-
-//         MealsPresenter mMealsPresenter = new MealsPresenter(
-//                mMealRepository,
-//                mealsFragment);
 
         setupAutoCompleteTextView();
     }
@@ -264,21 +276,6 @@ public class MealActivity extends DaggerAppCompatActivity {
         transaction.commit();
     }
 
-
-    private void setUpRepositories(){
-        mUserRepository = UserRepository.getInstance(UserLocalDataSource.getInstance(this),
-                UserRemoteDataSource.getInstance());
-
-        mOrderRepository = OrderRepository.getInstance(
-                OrdersLocalDataSource.getInstance(),
-                OrdersRemoteDataSource.getInstance());
-
-        mMealRepository = MealRepository.getInstance(
-                MealsLocalDataSource.getInstance(),
-                MealsRemoteDataSource.getInstance());
-    }
-
-
     private void setupAutoCompleteTextView(){
         mMealRepository.loadData(new DataSource.LoadCallback<Meal>() {
             @Override
@@ -290,6 +287,14 @@ public class MealActivity extends DaggerAppCompatActivity {
 
                 AutoCompleteTextView autoCompleteTextView =
                         (AutoCompleteTextView)findViewById(R.id.auto_complete_tv);
+
+                autoCompleteTextView.setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                        Toast.makeText(MealActivity.this,"pressed",Toast.LENGTH_LONG).show();
+                        return false;
+                    }
+                });
                 autoCompleteTextView.setAdapter(
                         new ArrayAdapter<>(MealActivity.this, android.R.layout.simple_list_item_1, meals));
 
@@ -309,6 +314,18 @@ public class MealActivity extends DaggerAppCompatActivity {
 
             }
         });
+    }
+
+    private void updateBasketCount(){
+        TextView basket_tv = (TextView) findViewById(R.id.basket_quantity);
+        Collection<Integer> quantities = mIdQuantityMap.values();
+        int total = 0;
+
+        for(Integer quant : quantities){
+            total += quant;
+        }
+
+        basket_tv.setText(Integer.toString(total));
     }
 
 }
