@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:id="@+id/basket_count"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             android:background="@color/apricot"
-             android:padding="5dp">
+             android:background="@drawable/bg_round_apricot"
+             android:padding="3dp">
 
     <TextView
         android:id="@+id/basket_quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="1"
+        android:text="0"
         android:textSize="15sp"
+        android:gravity="center_vertical"
         android:layout_centerVertical="true"/>
 
     <View
@@ -29,6 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/basket_icon"
-        android:layout_toRightOf="@id/basket_seperator"/>
+        android:layout_toRightOf="@id/basket_seperator"
+        android:layout_centerVertical="true"/>
 
 </RelativeLayout>

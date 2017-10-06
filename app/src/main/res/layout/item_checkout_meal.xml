@@ -15,7 +15,6 @@
         android:layout_gravity="center_vertical"
         android:maxLines="1"/>
 
-
     <TextView
         android:id="@+id/quantity_tv"
         android:layout_width="0dp"

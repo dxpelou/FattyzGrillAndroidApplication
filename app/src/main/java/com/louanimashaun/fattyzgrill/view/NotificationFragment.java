@@ -16,6 +16,7 @@ import com.louanimashaun.fattyzgrill.contract.NotificationContract;
 import com.louanimashaun.fattyzgrill.di.ActivityScoped;
 import com.louanimashaun.fattyzgrill.model.Notification;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,7 +32,7 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 @ActivityScoped
 public class NotificationFragment extends DaggerFragment implements NotificationContract.View{
 
-    NotificationAdapter mNotificationAdapter;
+    NotificationAdapter mNotificationAdapter = new NotificationAdapter(new ArrayList<Notification>());
 
     @Inject
     NotificationContract.Presenter mNotificationPresenter;

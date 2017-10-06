@@ -42,7 +42,7 @@ public class NotificationLocalDataSource implements DataSource<Notification> {
         RealmResults<Notification> result = realm.where(Notification.class).findAllAsync();
 
         if(result.size() == 0 ){
-            callback.onDataLoaded(realm.copyFromRealm(result.sort("updatedAt")));
+            callback.onDataLoaded(realm.copyFromRealm(result.sort("createdAt")));
         }else{
             callback.onDataNotAvailable();
         }

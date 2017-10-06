@@ -1,5 +1,7 @@
 package com.louanimashaun.fattyzgrill.data.source.remote;
 
+import android.support.test.espresso.idling.CountingIdlingResource;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -124,6 +126,4 @@ public class MealsRemoteDataSource implements DataSource<Meal> {
     public void saveData(List<Meal> data, CompletionCallback callback) {
         //not in use§
     }
-
-
 }

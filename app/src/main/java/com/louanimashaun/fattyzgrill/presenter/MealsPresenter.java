@@ -1,6 +1,7 @@
 package com.louanimashaun.fattyzgrill.presenter;
 
 import android.support.annotation.NonNull;
+import android.support.test.espresso.idling.CountingIdlingResource;
 
 import com.louanimashaun.fattyzgrill.contract.MealContract;
 import com.louanimashaun.fattyzgrill.data.DataSource;
@@ -25,6 +26,8 @@ public class MealsPresenter implements MealContract.Presenter{
 
     private final MealRepository mMealRepository;
     private MealContract.View mMealsView;
+    public static CountingIdlingResource idlingResource = new CountingIdlingResource("Meals resource");
+
 
     @Inject
     public MealsPresenter(@NonNull MealRepository mealRepository){
@@ -60,9 +63,11 @@ public class MealsPresenter implements MealContract.Presenter{
 //            }
 //        });*/
 
+        idlingResource.increment();
         mMealRepository.loadData(new DataSource.LoadCallback<Meal>() {
             @Override
             public void onDataLoaded(List<Meal> data) {
+                idlingResource.decrement();
                 mMealsView.showMeals(data);
             }
 
