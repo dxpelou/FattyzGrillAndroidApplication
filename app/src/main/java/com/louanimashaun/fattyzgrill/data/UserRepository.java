@@ -1,8 +1,5 @@
 package com.louanimashaun.fattyzgrill.data;
 
-import android.util.Log;
-import android.widget.Toast;
-
 import com.louanimashaun.fattyzgrill.data.source.local.UserLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.remote.UserRemoteDataSource;
 import com.louanimashaun.fattyzgrill.model.User;
@@ -10,12 +7,15 @@ import com.louanimashaun.fattyzgrill.util.AdminUtil;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
 /**
  * Created by louanimashaun on 30/06/2017.
  */
-
+@Singleton
 public class UserRepository implements DataSource<User> {
 
 
@@ -36,7 +36,8 @@ public class UserRepository implements DataSource<User> {
         return INSTANCE;
     }
 
-    private UserRepository(UserLocalDataSource localDataSource, UserRemoteDataSource remoteDataSource){
+    @Inject
+    public UserRepository(UserLocalDataSource localDataSource, UserRemoteDataSource remoteDataSource){
         mLocalDataSource = checkNotNull(localDataSource);
         mRemoteDataSource = checkNotNull(remoteDataSource);
     }

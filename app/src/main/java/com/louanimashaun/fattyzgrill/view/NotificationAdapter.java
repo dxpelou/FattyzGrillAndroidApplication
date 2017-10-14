@@ -38,7 +38,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public void onBindViewHolder(NotificationViewHolder holder, int position) {
         Notification notification =  mNotifications.get(position);
-        holder.title_tv.setText(StringUtil.convertToCamelCase(notification.getTopic()));
+        holder.title_tv.setText(StringUtil.convertToCamelCase(notification.getTitle()));
         holder.message_tv.setText(notification.getMessage());
     }
 

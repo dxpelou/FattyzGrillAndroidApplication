@@ -7,15 +7,15 @@ exports.orderCreated = functions.database.ref('/orders/{orderID}')
     .onWrite(event => {
        const val =  event.data.val();
        const id = event.params;
-        console.log(val);
-        console.log(id);
+        console.log('val: ',val);
+        console.log('id: ',id);
 
         const topic = 'orders';
 
         var payload = {
-            data: {
-                orderID : id.toString()
-                //send meals in object
+                "notification": {
+                    "title": "New Order Recieved",
+                    "body": id.orderID
             }
         }
 

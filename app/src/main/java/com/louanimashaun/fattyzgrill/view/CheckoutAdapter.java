@@ -75,6 +75,8 @@ public class CheckoutAdapter extends ArrayAdapter<Meal> {
 
         titleTextView.setText(meal.getTitle());
         priceTextView.setText(price);
+
+        //TODO index out of bounds
         if(mQuantities != null && mQuantities.size() != 0) quantityTextView.setText("x "+ mQuantities.get(position));
 
 //        FloatingActionButton addBtn = (FloatingActionButton)rowView.findViewById(R.id.add_checkout);

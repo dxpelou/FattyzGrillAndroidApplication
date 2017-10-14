@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/meal_item"
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
@@ -9,24 +10,24 @@
 
         <TextView
             android:id="@+id/title_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="3"
-            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
             android:maxLines="1"/>
 
         <TextView
             android:id="@+id/price_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
             android:layout_weight="1"
             android:textColor="@color/apricot"/>
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:layout_gravity="center_horizontal"
+            android:gravity="center_vertical"
             app:srcCompat="@drawable/meal_item_plus"/>
 </LinearLayout>

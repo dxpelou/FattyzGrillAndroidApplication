@@ -13,9 +13,15 @@ import android.view.ViewGroup;
 import com.louanimashaun.fattyzgrill.R;
 import com.louanimashaun.fattyzgrill.contract.BasePresenter;
 import com.louanimashaun.fattyzgrill.contract.NotificationContract;
+import com.louanimashaun.fattyzgrill.di.ActivityScoped;
 import com.louanimashaun.fattyzgrill.model.Notification;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
+
+import dagger.android.support.DaggerFragment;
 
 import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
@@ -23,10 +29,13 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
  * Created by louanimashaun on 10/09/2017.
  */
 
-public class NotificationFragment extends Fragment implements NotificationContract.View{
+@ActivityScoped
+public class NotificationFragment extends DaggerFragment implements NotificationContract.View{
 
-    NotificationAdapter mNotificationAdapter;
-    BasePresenter mNotificationPresenter;
+    NotificationAdapter mNotificationAdapter = new NotificationAdapter(new ArrayList<Notification>());
+
+    @Inject
+    NotificationContract.Presenter mNotificationPresenter;
 
     public static NotificationFragment newInstance() {
         NotificationFragment fragment = new NotificationFragment();
@@ -35,6 +44,9 @@ public class NotificationFragment extends Fragment implements NotificationContra
 
         return fragment;
     }
+
+    @Inject
+    public NotificationFragment(){}
 
     @Nullable
     @Override
@@ -57,13 +69,11 @@ public class NotificationFragment extends Fragment implements NotificationContra
     @Override
     public void onResume() {
         super.onResume();
+        mNotificationPresenter.takeView(this);
         mNotificationPresenter.start();
     }
 
-    @Override
-    public void setPresenter(BasePresenter presenter) {
-        mNotificationPresenter = checkNotNull(presenter);
-    }
+
 
     @Override
     public void showNotifications(List<Notification> notifications) {

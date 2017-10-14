@@ -5,5 +5,4 @@ package com.louanimashaun.fattyzgrill.contract;
  */
 
 public interface BaseView {
-    void setPresenter(BasePresenter presenter);
 }

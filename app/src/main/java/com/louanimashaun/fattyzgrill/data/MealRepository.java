@@ -2,6 +2,8 @@ package com.louanimashaun.fattyzgrill.data;
 
 import android.support.annotation.NonNull;
 
+import com.louanimashaun.fattyzgrill.di.Local;
+import com.louanimashaun.fattyzgrill.di.Remote;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.util.ModelUtil;
 
@@ -10,6 +12,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
 /**
@@ -17,7 +22,7 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
  *
  * class is used to access the meals data
  */
-
+@Singleton
 public class MealRepository extends AbstractRepository<Meal> {
 
     private static MealRepository INSTANCE;
@@ -29,7 +34,8 @@ public class MealRepository extends AbstractRepository<Meal> {
         return INSTANCE;
     }
 
-    private MealRepository(DataSource localDatasource, DataSource remoteDataSource){
+    @Inject
+    public MealRepository(@Local DataSource localDatasource,@Remote DataSource remoteDataSource){
         mLocalDataSource = checkNotNull(localDatasource);
         mRemoteDataSource = checkNotNull(remoteDataSource);
     }

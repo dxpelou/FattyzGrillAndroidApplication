@@ -23,7 +23,7 @@ public interface MealContract {
 
     }
 
-    interface Presenter extends BasePresenter{
+    interface Presenter extends BasePresenter<View>{
 
         void loadMeals(boolean forceUpdate);
 

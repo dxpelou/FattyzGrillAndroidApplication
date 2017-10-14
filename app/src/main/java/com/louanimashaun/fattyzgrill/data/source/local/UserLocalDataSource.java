@@ -9,6 +9,9 @@ import com.louanimashaun.fattyzgrill.model.User;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
@@ -18,6 +21,7 @@ import io.realm.RealmResults;
  * Created by louanimashaun on 06/08/2017.
  */
 
+@Singleton
 public class UserLocalDataSource implements DataSource<User> {
 
     private static UserLocalDataSource INSTANCE = null;
@@ -26,14 +30,15 @@ public class UserLocalDataSource implements DataSource<User> {
 
     private static final String TAG = "UserLocalDataSource";
 
-    public static UserLocalDataSource getInstance(Context context){
+    public static UserLocalDataSource getInstance(){
         if (INSTANCE == null){
-            INSTANCE = new UserLocalDataSource(context);
+            INSTANCE = new UserLocalDataSource();
         }
         return INSTANCE;
     }
 
-    private UserLocalDataSource(Context context){
+    @Inject
+    public UserLocalDataSource(){
         realm = Realm.getDefaultInstance();
         //Log.d(TAG, realm.getPath());
     }

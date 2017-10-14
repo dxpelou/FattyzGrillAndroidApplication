@@ -11,10 +11,14 @@ import com.louanimashaun.fattyzgrill.model.User;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 /**
  * Created by louanimashaun on 30/06/2017.
  */
 
+@Singleton
 public class UserRemoteDataSource implements DataSource<User> {
 
     private static UserRemoteDataSource INSTANCE = null;
@@ -35,7 +39,8 @@ public class UserRemoteDataSource implements DataSource<User> {
         return INSTANCE;
     }
 
-    private UserRemoteDataSource(){
+    @Inject
+    public UserRemoteDataSource(){
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mUsersReference = mFirebaseDatabase.getReference(USERS_PATH);
     }

@@ -1,7 +1,9 @@
 package com.louanimashaun.fattyzgrill.view;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +15,16 @@ import android.widget.TextView;
 import com.louanimashaun.fattyzgrill.R;
 import com.louanimashaun.fattyzgrill.contract.BasePresenter;
 import com.louanimashaun.fattyzgrill.contract.CheckoutContract;
+import com.louanimashaun.fattyzgrill.di.ActivityScoped;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.presenter.CheckoutPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
+
+import dagger.android.support.DaggerFragment;
 
 import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
@@ -25,13 +32,17 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
  * Created by louanimashaun on 16/08/2017.
  */
 
-public class CheckoutFragment extends Fragment implements CheckoutContract.View {
+@ActivityScoped
+public class CheckoutFragment extends DaggerFragment implements CheckoutContract.View {
 
-    private CheckoutContract.Presenter mCheckoutPresenter;
+    @Inject
+    public CheckoutContract.Presenter mCheckoutPresenter;
 
     private CheckoutAdapter mCheckoutAdapter;
     private TextView mTotalPrice_tv;
 
+    @Inject
+    public CheckoutFragment(){}
 
     public static CheckoutFragment newInstance(){
         return new CheckoutFragment();
@@ -40,6 +51,7 @@ public class CheckoutFragment extends Fragment implements CheckoutContract.View 
     @Override
     public void onResume() {
         super.onResume();
+        mCheckoutPresenter.takeView(this);
         mCheckoutPresenter.start();
     }
 
@@ -51,14 +63,14 @@ public class CheckoutFragment extends Fragment implements CheckoutContract.View 
         mCheckoutAdapter.setIncrButtonListener(new Listeners.CheckoutItemClickListener() {
             @Override
             public void onClick(String mealdID, boolean isUp) {
-                ((CheckoutPresenter)mCheckoutPresenter).changeQuantity(mealdID, true);
+                mCheckoutPresenter.changeQuantity(mealdID, true);
             }
         });
 
         mCheckoutAdapter.setDecButtonListener(new Listeners.CheckoutItemClickListener() {
             @Override
             public void onClick(String mealdID, boolean isUp) {
-                ((CheckoutPresenter)mCheckoutPresenter).changeQuantity(mealdID, false);
+                mCheckoutPresenter.changeQuantity(mealdID, false);
 
             }
         });
@@ -102,12 +114,12 @@ public class CheckoutFragment extends Fragment implements CheckoutContract.View 
 
     @Override
     public void notifyOrderSent() {
-        //TODO
+        showAlertDialog("Order Sent");
     }
 
     @Override
     public void notifyOrderError() {
-        //TODO
+        showAlertDialog("Order Failed");
     }
 
     @Override
@@ -115,10 +127,6 @@ public class CheckoutFragment extends Fragment implements CheckoutContract.View 
 
     }
 
-    @Override
-    public void setPresenter(BasePresenter presenter) {
-        mCheckoutPresenter = (CheckoutContract.Presenter)checkNotNull(presenter);
-    }
 
     private void showTotalPrice(List<Meal> meals){
         int total = 0;
@@ -131,5 +139,13 @@ public class CheckoutFragment extends Fragment implements CheckoutContract.View 
 
     private void sendOrder(){
         ((CheckoutPresenter)mCheckoutPresenter).checkoutOrder();
+    }
+
+
+    private void showAlertDialog(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(message);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

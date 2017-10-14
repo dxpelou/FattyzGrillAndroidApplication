@@ -5,6 +5,9 @@ import com.louanimashaun.fattyzgrill.model.Notification;
 
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmModel;
@@ -15,6 +18,7 @@ import rx.Observable;
  * Created by louanimashaun on 12/09/2017.
  */
 
+@Singleton
 public class NotificationLocalDataSource implements DataSource<Notification> {
 
     private static NotificationLocalDataSource INSTANCE = null;
@@ -28,7 +32,8 @@ public class NotificationLocalDataSource implements DataSource<Notification> {
         return INSTANCE;
     }
 
-    private NotificationLocalDataSource(){
+    @Inject
+    public NotificationLocalDataSource(){
         realm = Realm.getDefaultInstance();
     }
 
@@ -37,7 +42,7 @@ public class NotificationLocalDataSource implements DataSource<Notification> {
         RealmResults<Notification> result = realm.where(Notification.class).findAllAsync();
 
         if(result.size() == 0 ){
-            callback.onDataLoaded(realm.copyFromRealm(result.sort("updatedAt")));
+            callback.onDataLoaded(realm.copyFromRealm(result.sort("createdAt")));
         }else{
             callback.onDataNotAvailable();
         }

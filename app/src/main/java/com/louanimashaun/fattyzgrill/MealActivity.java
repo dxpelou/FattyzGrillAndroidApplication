@@ -3,16 +3,18 @@ package com.louanimashaun.fattyzgrill;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -23,7 +25,7 @@ import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealRepository;
 import com.louanimashaun.fattyzgrill.data.OrderRepository;
 import com.louanimashaun.fattyzgrill.data.UserRepository;
-import com.louanimashaun.fattyzgrill.data.source.local.MealsLocalDataSoure;
+import com.louanimashaun.fattyzgrill.data.source.local.MealsLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.local.NotificationLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.local.OrdersLocalDataSource;
 import com.louanimashaun.fattyzgrill.data.source.local.UserLocalDataSource;
@@ -38,30 +40,62 @@ import com.louanimashaun.fattyzgrill.presenter.NotificationPresenter;
 import com.louanimashaun.fattyzgrill.util.AdminUtil;
 import com.louanimashaun.fattyzgrill.util.ModelUtil;
 import com.louanimashaun.fattyzgrill.view.CheckoutFragment;
+import com.louanimashaun.fattyzgrill.view.Listeners;
 import com.louanimashaun.fattyzgrill.view.Listeners.MealOnClickListener;
 import com.louanimashaun.fattyzgrill.view.MealsFragment;
 import com.louanimashaun.fattyzgrill.view.NotificationFragment;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MealActivity extends AppCompatActivity {
+import javax.inject.Inject;
 
-    private MealsPresenter mMealsPresenter;
+import dagger.android.support.DaggerAppCompatActivity;
+
+public class MealActivity extends DaggerAppCompatActivity {
+
     FirebaseAuth mFirebaseAuth;
     private static final int RC_SIGN_IN = 1;
     FirebaseAuth.AuthStateListener mAuthStateListener;
 
-    private UserRepository mUserRepository;
-    private MealRepository mMealRepository;
-    private OrderRepository mOrderRepository;
+
+    @Inject
+    MealsPresenter mMealsPresenter;
+
+    @Inject
+    MealsFragment mealsFragment;
+
+    @Inject
+    CheckoutFragment mCheckoutFragment;
+
+    @Inject
+    CheckoutPresenter mCheckoutPresenter;
+
+    @Inject
+    NotificationFragment mNotificationFragment;
+
+    @Inject
+    NotificationPresenter mNotificationPresenter;
+
+    @Inject
+    MealRepository mMealRepository;
+
+    @Inject
+    OrderRepository mOrderRepository;
+
+    @Inject
+    public UserRepository mUserRepository;
+
     private List<String> mSelectedMealIDs;
     private Map<String,Integer> mIdQuantityMap;
     private MealOnClickListener mMealOnClickListener;
 
     private String[] ids;
+    TextView tv;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -71,37 +105,29 @@ public class MealActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    MealsFragment mealsFragment = MealsFragment.newInstance();
                     replaceFragment(mealsFragment);
 
                     mealsFragment.setMealClickListener(mMealOnClickListener);
 
-                    MealsPresenter mealsPresenter = new MealsPresenter(
-                            mMealRepository,
-                            mealsFragment);
-
-                    mealsFragment.setPresenter(mealsPresenter);
-
                     return true;
                 case R.id.navigation_checkout:
-                    CheckoutFragment checkoutFragment = CheckoutFragment.newInstance();
-                    replaceFragment(checkoutFragment);
+                    replaceFragment(mCheckoutFragment);
 
-                    CheckoutPresenter checkoutPresenter = new CheckoutPresenter(mOrderRepository, mMealRepository, checkoutFragment);
-                    checkoutPresenter.addSelectedMeals(mIdQuantityMap);
-                    checkoutFragment.setPresenter(checkoutPresenter);
+                    mCheckoutPresenter.addSelectedMeals(mIdQuantityMap);
+                    mCheckoutPresenter.addCheckoutChangeListener(new Listeners.CheckoutChangedListener() {
+                        @Override
+                        public void onCheckoutChanged(Map<String, Integer> quanityMap) {
+                            mIdQuantityMap = quanityMap;
+                            updateBasketCount();
+                        }
+                    });
                     return true;
                 case R.id.navigation_notifications:
 
-                    NotificationFragment notificationFragment = NotificationFragment.newInstance();
-                    replaceFragment(notificationFragment);
+                    replaceFragment(mNotificationFragment);
 
-                    NotificationLocalDataSource notificationLocalDataSource = NotificationLocalDataSource.getInstance();
-
-                    NotificationPresenter notificationPresenter = new NotificationPresenter(
-                            notificationFragment, notificationLocalDataSource);
-
-                    notificationFragment.setPresenter(notificationPresenter);
+                    //NotificationLocalDataSource notificationLocalDataSource = NotificationLocalDataSource.getInstance();
+                    //notificationFragment.setPresenter(notificationPresenter);
                     return true;
             }
             return false;
@@ -114,10 +140,6 @@ public class MealActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mFirebaseAuth = FirebaseAuth.getInstance();
         //FirebaseMessaging.getInstance().unsubscribeFromTopic(getString(R.string.order_FCM_topic));
-
-        if(AdminUtil.isAdmin()) {
-            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.order_FCM_topic));
-        }
 
         setContentView(R.layout.meals_act2);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -153,7 +175,9 @@ public class MealActivity extends AppCompatActivity {
             }
         };
 
-        setUpRepositories();
+        if(AdminUtil.isAdmin()) {
+            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.order_FCM_topic));
+        }
 
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -162,19 +186,23 @@ public class MealActivity extends AppCompatActivity {
         mMealOnClickListener = new MealOnClickListener() {
             @Override
             public void onClick(String mealId) {
-                if(mIdQuantityMap == null) mIdQuantityMap = new HashMap<String, Integer>();
+                //must be a LinkedHashMap to preserve order and for CheckoutPresenterUnitTest
+                if(mIdQuantityMap == null) mIdQuantityMap = new LinkedHashMap<String, Integer>();
 
                 if(!mIdQuantityMap.containsKey(mealId)){
                     mIdQuantityMap.put(mealId, 1);
+                    updateBasketCount();
                     return;
                 }
                 int quantity = mIdQuantityMap.get(mealId);
-                mIdQuantityMap.put(mealId, quantity++);
+                mIdQuantityMap.put(mealId, quantity + 1);
 
+                updateBasketCount();
             }
         };
 
         //TODO app crashes when using instant run
+        //TODO
         MealsFragment mealsFragment = (MealsFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.content_frame);
 
@@ -183,12 +211,7 @@ public class MealActivity extends AppCompatActivity {
         }
 
         mealsFragment.setMealClickListener(mMealOnClickListener);
-
         commitFragmentTransaction(R.id.content_frame, mealsFragment);
-
-        final MealsPresenter mMealsPresenter = new MealsPresenter(
-                mMealRepository,
-                mealsFragment);
 
         setupAutoCompleteTextView();
     }
@@ -254,21 +277,6 @@ public class MealActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-
-    private void setUpRepositories(){
-        mUserRepository = UserRepository.getInstance(UserLocalDataSource.getInstance(this),
-                UserRemoteDataSource.getInstance());
-
-        mOrderRepository = OrderRepository.getInstance(
-                OrdersLocalDataSource.getInstance(),
-                OrdersRemoteDataSource.getInstance());
-
-        mMealRepository = MealRepository.getInstance(
-                MealsLocalDataSoure.getInstance(),
-                MealsRemoteDataSource.getInstance());
-    }
-
-
     private void setupAutoCompleteTextView(){
         mMealRepository.loadData(new DataSource.LoadCallback<Meal>() {
             @Override
@@ -280,6 +288,14 @@ public class MealActivity extends AppCompatActivity {
 
                 AutoCompleteTextView autoCompleteTextView =
                         (AutoCompleteTextView)findViewById(R.id.auto_complete_tv);
+
+                autoCompleteTextView.setOnKeyListener(new View.OnKeyListener() {
+                    @Override
+                    public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                        Toast.makeText(MealActivity.this,"pressed",Toast.LENGTH_LONG).show();
+                        return false;
+                    }
+                });
                 autoCompleteTextView.setAdapter(
                         new ArrayAdapter<>(MealActivity.this, android.R.layout.simple_list_item_1, meals));
 
@@ -299,6 +315,18 @@ public class MealActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void updateBasketCount(){
+        TextView basket_tv = (TextView) findViewById(R.id.basket_quantity);
+        Collection<Integer> quantities = mIdQuantityMap.values();
+        int total = 0;
+
+        for(Integer quant : quantities){
+            total += quant;
+        }
+
+        basket_tv.setText(Integer.toString(total));
     }
 
 }

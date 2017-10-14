@@ -5,31 +5,26 @@ import android.content.SharedPreferences;
 
 import com.louanimashaun.fattyzgrill.util.Util;
 
+import javax.inject.Inject;
+
 /**
  * Created by louanimashaun on 24/08/2017.
  */
 
-public class NotificationSharedPreference  {
+public class NotificationSharedPreference implements TokenDataSource {
 
     private static NotificationSharedPreference INSTANCE = null;
     private static Context mContext;
     private static final String NOTIFICATION_TAG = "notification_refresh_token";
     private static final String REFRESH_TOKEN_NOT_SET = "null";
 
-     private NotificationSharedPreference(Context context){
-         mContext = context;
-     }
-
-     public static NotificationSharedPreference getInstance(){
-
-         if(INSTANCE == null ) {
-             INSTANCE = new NotificationSharedPreference(Util.getApp());
-         }
-
-         return INSTANCE;
+    @Inject
+     public NotificationSharedPreference(){
+         mContext = Util.getApp();
      }
 
 
+     @Override
      public void saveRefreshToken(String token ){
         SharedPreferences sharedPreferences =  mContext.getSharedPreferences(NOTIFICATION_TAG,Context.MODE_PRIVATE);
          SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -38,7 +33,8 @@ public class NotificationSharedPreference  {
          editor.commit();
      }
 
-     public static String getRefreshToken(){
+     @Override
+     public  String getRefreshToken(){
          SharedPreferences sharedPreferences =  mContext.getSharedPreferences(NOTIFICATION_TAG,Context.MODE_PRIVATE);
           String t = sharedPreferences.getString(NOTIFICATION_TAG, REFRESH_TOKEN_NOT_SET);
          return t;

@@ -4,52 +4,58 @@ import com.louanimashaun.fattyzgrill.contract.CheckoutContract;
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealRepository;
 import com.louanimashaun.fattyzgrill.data.OrderRepository;
+import com.louanimashaun.fattyzgrill.di.ActivityScoped;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Order;
-import com.louanimashaun.fattyzgrill.notifications.NotificationSharedPreference;
+import com.louanimashaun.fattyzgrill.notifications.TokenDataSource;
 import com.louanimashaun.fattyzgrill.util.ModelUtil;
-import com.louanimashaun.fattyzgrill.util.PreconditonUtil;
-import com.louanimashaun.fattyzgrill.view.CheckoutFragment;
+import com.louanimashaun.fattyzgrill.view.Listeners;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.inject.Inject;
+
 import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
 /**
  * Created by louanimashaun on 27/08/2017.
  */
-
+@ActivityScoped
 public class CheckoutPresenter implements CheckoutContract.Presenter {
 
     private OrderRepository mOrderRepository;
+    private TokenDataSource mNotificationSharedPreference;
 
     private MealRepository mMealRepository;
-    private CheckoutFragment mCheckoutFragment;
+    private CheckoutContract.View mCheckoutFragment;
     private Map<String,Integer> mSelectedMeals;
     private List<String> mMealIds;
+    private Listeners.CheckoutChangedListener mCheckoutChangedListener;
 
 
-    public CheckoutPresenter(OrderRepository orderRepository, MealRepository mealRepository,
-                             CheckoutFragment checkoutFragment){
+    @Inject
+    public CheckoutPresenter(OrderRepository orderRepository, MealRepository mealRepository, TokenDataSource notificationSharedPreference){
 
         mOrderRepository = checkNotNull(orderRepository);
-        mCheckoutFragment = checkNotNull(checkoutFragment);
         mMealRepository = checkNotNull(mealRepository);
+        mNotificationSharedPreference = checkNotNull(notificationSharedPreference);
 
     }
 
     @Override
     public void loadCheckout() {
 
-        if(mSelectedMeals == null){
+        if(mSelectedMeals == null || mSelectedMeals.size() == 0){
             mCheckoutFragment.showNoCheckout();
             return;
         }
 
-       mMealRepository.loadDataByIds(mMealIds, new DataSource.LoadCallback<Meal>() {
+        List<String> mealIds = new ArrayList<>(mSelectedMeals.keySet());
+
+       mMealRepository.loadDataByIds(mealIds, new DataSource.LoadCallback<Meal>() {
            @Override
            public void onDataLoaded(List<Meal> data) {
                List<Integer> quanitiesList = new ArrayList<Integer>(mSelectedMeals.values());
@@ -69,6 +75,12 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
     public void start() {
         loadCheckout();
     }
+
+    @Override
+    public void takeView(CheckoutContract.View view) {
+        mCheckoutFragment = checkNotNull(view);
+    }
+
 
     @Override
     public void checkoutOrder() {
@@ -92,8 +104,6 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
     @Override
     public void addSelectedMeals( Map<String,Integer> meals) {
         mSelectedMeals = meals;
-        if(mSelectedMeals != null)
-        mMealIds = new ArrayList<String>(mSelectedMeals.keySet());
     }
 
     @Override
@@ -113,7 +123,14 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
             mSelectedMeals.put(id, quantity);
         }
 
+        mCheckoutChangedListener.onCheckoutChanged(mSelectedMeals);
+
         loadCheckout();
+    }
+
+    @Override
+    public void addCheckoutChangeListener(Listeners.CheckoutChangedListener listener) {
+        mCheckoutChangedListener = checkNotNull(listener);
     }
 
     private void getMealsById(List<String> meals, DataSource.GetCallback<Meal> callback){
@@ -145,7 +162,7 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
         order.setQuantitiesRealm(ModelUtil.toRealmIntegerList(values));
         order.setQuantities(values);
 
-        order.setSenderNotifcationToken(NotificationSharedPreference.getRefreshToken());
+        order.setSenderNotifcationToken(mNotificationSharedPreference.getRefreshToken());
 
         return order;
     }

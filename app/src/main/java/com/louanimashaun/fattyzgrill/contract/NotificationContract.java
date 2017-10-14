@@ -10,18 +10,23 @@ import java.util.List;
 
 public interface NotificationContract {
 
-    interface View extends BaseView {
+    interface View extends BaseView{
         void showNotifications(List<Notification> notifications);
 
         void showNewNotification(Notification notification);
 
+        void showOrderList();
+
         void showNoNotifcations();
     }
 
-    interface Presenter extends BasePresenter{
+    interface Presenter extends BasePresenter<View>{
 
         void loadNotifcations(boolean forceUpdate);
 
+        void loadOrderList();
+
         void onNotification();
     }
+
 }

@@ -2,6 +2,7 @@ package com.louanimashaun.fattyzgrill.contract;
 
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Order;
+import com.louanimashaun.fattyzgrill.view.Listeners;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,7 @@ public interface CheckoutContract {
 
     }
 
-    interface Presenter extends BasePresenter{
+    interface Presenter extends BasePresenter<View>{
         void loadCheckout();
 
         void checkoutOrder();
@@ -33,6 +34,8 @@ public interface CheckoutContract {
         void addSelectedMeals(Map<String, Integer> selectedMeals);
 
         void changeQuantity(String id, boolean isUp);
+
+        void addCheckoutChangeListener(Listeners.CheckoutChangedListener listener);
 
     }
 

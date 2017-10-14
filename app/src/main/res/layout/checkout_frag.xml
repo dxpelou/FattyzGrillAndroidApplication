@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/checkout_frag"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -23,21 +24,24 @@
             android:layout_below="@id/meals_tv"/>
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
         <TextView
             android:id="@+id/total_price_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="£0"
             android:textColor="@color/apricot"
-            android:gravity="center_horizontal"
-            android:layout_below="@id/selected_meals_lv"/>
+            android:gravity="center_horizontal"/>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="20dp"
-            android:layout_alignParentBottom="true"
             android:layout_below="@id/total_price_tv">
 
             <Button
@@ -60,5 +64,6 @@
                 android:layout_margin="10dp"
                 style="?android:attr/buttonBarStyle"/>
             </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
 
