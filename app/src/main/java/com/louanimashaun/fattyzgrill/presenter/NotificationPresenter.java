@@ -51,23 +51,6 @@ public class NotificationPresenter implements NotificationContract.Presenter {
         mLocalDataSource.loadData(new DataSource.LoadCallback<Notification>() {
             @Override
             public void onDataLoaded(List<Notification> data) {
-
-
-
-               /* data.sort(new Comparator<Notification>() {
-                    @Override
-                    public int compare(Notification t1, Notification t2) {
-                        Date date1  = t1.getCreatedAt();
-                        Date date2 = t2.getCreatedAt();
-
-                        if(date1.before(date2)) return 1;
-
-                        if(date1.equals(date2)) return 0;
-
-                        return -1;
-                    }
-                });*/
-
                 mNotificationView.showNotifications(data);
             }
 
@@ -76,6 +59,11 @@ public class NotificationPresenter implements NotificationContract.Presenter {
                 mNotificationView.showNoNotifcations();
             }
         });
+    }
+
+    @Override
+    public void loadOrderList() {
+
     }
 
     @Override

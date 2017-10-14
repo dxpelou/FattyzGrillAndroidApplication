@@ -1,7 +1,9 @@
 package com.louanimashaun.fattyzgrill.view;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -112,12 +114,12 @@ public class CheckoutFragment extends DaggerFragment implements CheckoutContract
 
     @Override
     public void notifyOrderSent() {
-        //TODO
+        showAlertDialog("Order Sent");
     }
 
     @Override
     public void notifyOrderError() {
-        //TODO
+        showAlertDialog("Order Failed");
     }
 
     @Override
@@ -137,5 +139,13 @@ public class CheckoutFragment extends DaggerFragment implements CheckoutContract
 
     private void sendOrder(){
         ((CheckoutPresenter)mCheckoutPresenter).checkoutOrder();
+    }
+
+
+    private void showAlertDialog(String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(message);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

@@ -31,7 +31,7 @@
             android:id="@+id/quantity_minus_ib"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@color/apricot"
+            android:background="@drawable/bg_round_apricot"
             android:layout_marginRight="1dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/checkout_quantity_minus"/>
@@ -42,15 +42,13 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
-            android:background="@color/apricot"
-            android:textColor="@color/white"
             android:padding="1dp"/>
 
         <ImageView
             android:id="@+id/quantity_plus_ib"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/apricot"
+            android:background="@drawable/bg_round_apricot"
             android:layout_marginLeft="1dp"
             android:layout_weight="1"
             app:srcCompat="@drawable/checkout_quantity_plus"/>

@@ -15,6 +15,8 @@ public interface NotificationContract {
 
         void showNewNotification(Notification notification);
 
+        void showOrderList();
+
         void showNoNotifcations();
     }
 
@@ -22,6 +24,9 @@ public interface NotificationContract {
 
         void loadNotifcations(boolean forceUpdate);
 
+        void loadOrderList();
+
         void onNotification();
     }
+
 }

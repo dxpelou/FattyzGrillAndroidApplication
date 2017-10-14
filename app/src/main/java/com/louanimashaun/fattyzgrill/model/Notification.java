@@ -3,6 +3,7 @@ package com.louanimashaun.fattyzgrill.model;
 import java.util.Date;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by louanimashaun on 10/09/2017.
@@ -10,22 +11,25 @@ import io.realm.RealmObject;
 
 public class Notification extends RealmObject {
 
+    @PrimaryKey
     private String id;
 
-    private String topic;
+    private String title;
 
     private String message;
 
-    private String category;
+    private String type;
 
     private Date createdAt;
 
-    public String getTopic() {
-        return topic;
+    private String extras;
+
+    public String getTitle() {
+        return title;
     }
 
-    public void setTopic(String topic) {
-        this.topic = topic;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getMessage() {
@@ -36,12 +40,12 @@ public class Notification extends RealmObject {
         this.message = message;
     }
 
-    public String getCategory() {
-        return category;
+    public String getType() {
+        return type;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Date getCreatedAt() {
@@ -58,5 +62,13 @@ public class Notification extends RealmObject {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getExtras() {
+        return extras;
+    }
+
+    public void setExtras(String extras) {
+        this.extras = extras;
     }
 }

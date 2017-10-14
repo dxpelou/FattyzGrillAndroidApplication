@@ -64,21 +64,36 @@ public class AppNavigationTest {
         onView(withId(R.id.notification_frag)).check(matches(isDisplayed()));
     }
 
+    @Test
     public void basketCount(){
         //may need to user recyler view espresso framework to select item by value or use any
 
         Random rnd = new Random();
         int clickNumb = rnd.nextInt(10);
-        int count = 0;
+        int count = 1;
 
         onView(withId(R.id.basket_count)).check(matches(isDisplayed()));
 
-        for(int i = 0; i < clickNumb; i++ ) {
-            onView(withId(R.id.meal_item)).perform(click());
+        onView(withId(R.id.basket_quantity)).check(matches(withText("0")));
 
+        for(int i = 0; i < clickNumb; i++ ) {
             onView(ViewMatchers.withId(R.id.meals_recycler_view))
                     .perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
+
+            onView(withId(R.id.basket_quantity)).check(matches(withText(""+count)));
+            count++;
         }
     }
+
+    public void clickMeal_MealShowsUpInCheckout(){
+        onView(ViewMatchers.withId(R.id.meals_recycler_view))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0,click()));
+
+        navigateToCheckout();
+
+        //onView()
+    }
+
+
 
 }

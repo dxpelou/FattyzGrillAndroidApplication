@@ -141,10 +141,6 @@ public class MealActivity extends DaggerAppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         //FirebaseMessaging.getInstance().unsubscribeFromTopic(getString(R.string.order_FCM_topic));
 
-        if(AdminUtil.isAdmin()) {
-            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.order_FCM_topic));
-        }
-
         setContentView(R.layout.meals_act2);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -178,6 +174,10 @@ public class MealActivity extends DaggerAppCompatActivity {
                 }
             }
         };
+
+        if(AdminUtil.isAdmin()) {
+            FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.order_FCM_topic));
+        }
 
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
