@@ -1,5 +1,6 @@
 package com.louanimashaun.fattyzgrill.contract;
 
+import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Notification;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface NotificationContract {
 
         void showNewNotification(Notification notification);
 
-        void showOrderList();
+        void showOrderList(List<Meal> meals, List<Integer> quantities);
 
         void showNoNotifcations();
     }
@@ -27,6 +28,8 @@ public interface NotificationContract {
         void loadOrderList();
 
         void onNotification();
+
+        void acceptOrder(String id);
     }
 
 }

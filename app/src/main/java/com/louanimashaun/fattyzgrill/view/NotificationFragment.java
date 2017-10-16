@@ -14,6 +14,7 @@ import com.louanimashaun.fattyzgrill.R;
 import com.louanimashaun.fattyzgrill.contract.BasePresenter;
 import com.louanimashaun.fattyzgrill.contract.NotificationContract;
 import com.louanimashaun.fattyzgrill.di.ActivityScoped;
+import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Notification;
 
 import java.util.ArrayList;
@@ -85,6 +86,11 @@ public class NotificationFragment extends DaggerFragment implements Notification
     public void showNewNotification(Notification notification) {
         checkNotNull(notification);
         mNotificationAdapter.addData(notification);
+    }
+
+    @Override
+    public void showOrderList(List<Meal> meals, List<Integer> quantities) {
+
     }
 
     @Override

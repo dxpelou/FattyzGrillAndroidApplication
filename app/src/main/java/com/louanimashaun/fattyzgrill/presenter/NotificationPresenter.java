@@ -4,10 +4,15 @@ import android.support.annotation.NonNull;
 
 import com.louanimashaun.fattyzgrill.contract.NotificationContract;
 import com.louanimashaun.fattyzgrill.data.DataSource;
+import com.louanimashaun.fattyzgrill.data.MealRepository;
+import com.louanimashaun.fattyzgrill.data.OrderRepository;
 import com.louanimashaun.fattyzgrill.data.source.local.NotificationLocalDataSource;
 import com.louanimashaun.fattyzgrill.di.ActivityScoped;
+import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Notification;
+import com.louanimashaun.fattyzgrill.model.Order;
 import com.louanimashaun.fattyzgrill.util.PreconditonUtil;
+import com.louanimashaun.fattyzgrill.util.Util;
 import com.louanimashaun.fattyzgrill.view.NotificationFragment;
 
 import java.util.Comparator;
@@ -29,9 +34,15 @@ public class NotificationPresenter implements NotificationContract.Presenter {
 
     private NotificationLocalDataSource mLocalDataSource;
 
+    private OrderRepository mOrderRepository;
+
+    private MealRepository mMealRepository;
+
     @Inject
-    public NotificationPresenter( NotificationLocalDataSource localDataSource){
+    public NotificationPresenter( NotificationLocalDataSource localDataSource, OrderRepository orderRepository, MealRepository mealRepository){
        mLocalDataSource = checkNotNull(localDataSource);
+        mOrderRepository = checkNotNull(orderRepository);
+        mMealRepository = checkNotNull(mealRepository);
     }
 
     @Override
@@ -63,6 +74,34 @@ public class NotificationPresenter implements NotificationContract.Presenter {
 
     @Override
     public void loadOrderList() {
+
+    }
+
+    @Override
+    public void acceptOrder(String id){
+
+        mOrderRepository.getData(id, new DataSource.GetCallback<Order>() {
+            @Override
+            public void onDataLoaded(final Order orderData) {
+
+                mMealRepository.loadDataByIds(orderData.getMealIds(), new DataSource.LoadCallback<Meal>() {
+                    @Override
+                    public void onDataLoaded(List<Meal> mealData) {
+                        mNotificationView.showOrderList(mealData, orderData.getQuantities());
+                    }
+
+                    @Override
+                    public void onDataNotAvailable() {
+                        return;
+                    }
+                });
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+                return;
+            }
+        });
 
     }
 

@@ -24,6 +24,8 @@ public class Notification extends RealmObject {
 
     private String extras;
 
+    public Notification(){}
+
     public String getTitle() {
         return title;
     }

@@ -1,5 +1,7 @@
 package com.louanimashaun.fattyzgrill.data.source.local;
 
+import android.util.Log;
+
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.model.Notification;
 
@@ -35,17 +37,27 @@ public class NotificationLocalDataSource implements DataSource<Notification> {
     @Inject
     public NotificationLocalDataSource(){
         realm = Realm.getDefaultInstance();
+        Log.d("realm path: ",realm.getPath());
     }
 
     @Override
-    public void loadData(LoadCallback<Notification> callback) {
-        RealmResults<Notification> result = realm.where(Notification.class).findAllAsync();
+    public void loadData(final LoadCallback<Notification> callback) {
+        Realm realm2 = Realm.getDefaultInstance();
 
-        if(result.size() == 0 ){
-            callback.onDataLoaded(realm.copyFromRealm(result.sort("createdAt")));
-        }else{
+        try {
+            RealmResults<Notification> result = realm2.where(Notification.class).findAll();
+            if (result.size() != 0) {
+                callback.onDataLoaded(realm2.copyFromRealm(result.sort("createdAt")));
+            } else {
+                callback.onDataNotAvailable();
+            }
+
+        }catch(Exception e){
             callback.onDataNotAvailable();
+        }finally {
+            realm2.close();
         }
+
     }
 
     @Override
@@ -70,8 +82,8 @@ public class NotificationLocalDataSource implements DataSource<Notification> {
 
     }
 
-    @Override
-    public void saveData(final Notification data, final CompletionCallback callback) {
+
+    public void saveData(final Notification data, final CompletionCallback callback, Integer i) {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -89,6 +101,24 @@ public class NotificationLocalDataSource implements DataSource<Notification> {
                 if(callback!= null) callback.onCancel();
             }
         });
+    }
+
+    @Override
+    public void saveData(final Notification data, final CompletionCallback callback){
+        Realm realm2 = Realm.getDefaultInstance();
+
+        try {
+            realm2.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    Notification d = realm.copyToRealm(data);
+                }
+            });
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally {
+            realm2.close();
+        }
     }
 
     @Override

@@ -9,11 +9,14 @@ import com.louanimashaun.fattyzgrill.util.Util;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.inject.Inject;
+
 /**
  * Created by louanimashaun on 21/08/2017.
  */
 
 public class OrderFirebaseMessagingService extends FirebaseMessagingService {
+
     private static final String TAG = "OrderMessagingService";
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -24,7 +27,7 @@ public class OrderFirebaseMessagingService extends FirebaseMessagingService {
         //TODO implement
         notification.setId(UUID.randomUUID().toString());
         notification.setMessage(remoteMessage.getNotification().getTitle());
-        //notification.setCreatedAt(new Date());
+        notification.setCreatedAt(new Date());
         notification.setType("new_order");
         notification.setTitle(remoteMessage.getNotification().getTitle());
         notification.setExtras(remoteMessage.getNotification().getBody());
@@ -32,6 +35,5 @@ public class OrderFirebaseMessagingService extends FirebaseMessagingService {
         localDataSource.saveData(notification, null);
 
         OrderNotification.getInstance(Util.getApp()).createNotification();
-
     }
 }

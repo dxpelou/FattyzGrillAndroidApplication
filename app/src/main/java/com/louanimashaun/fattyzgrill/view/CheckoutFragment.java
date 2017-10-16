@@ -124,7 +124,6 @@ public class CheckoutFragment extends DaggerFragment implements CheckoutContract
 
     @Override
     public void showQuantityChanged() {
-
     }
 
 
