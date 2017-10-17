@@ -23,5 +23,9 @@ public interface Listeners{
         void onCheckoutChanged(Map<String, Integer> quanityMap);
     }
 
+    interface NotificationOnClickListener{
+        void onClick(String notificationId);
+    }
+
 }
 

@@ -24,6 +24,8 @@ public class Notification extends RealmObject {
 
     private String extras;
 
+    private boolean hasBeenOpened;
+
     public Notification(){}
 
     public String getTitle() {
@@ -72,5 +74,13 @@ public class Notification extends RealmObject {
 
     public void setExtras(String extras) {
         this.extras = extras;
+    }
+
+    public boolean isHasBeenOpened() {
+        return hasBeenOpened;
+    }
+
+    public void setHasBeenOpened(boolean hasBeenOpened) {
+        this.hasBeenOpened = hasBeenOpened;
     }
 }

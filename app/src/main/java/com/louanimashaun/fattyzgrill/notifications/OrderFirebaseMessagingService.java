@@ -31,6 +31,7 @@ public class OrderFirebaseMessagingService extends FirebaseMessagingService {
         notification.setType("new_order");
         notification.setTitle(remoteMessage.getNotification().getTitle());
         notification.setExtras(remoteMessage.getNotification().getBody());
+        notification.setHasBeenOpened(false);
 
         localDataSource.saveData(notification, null);
 

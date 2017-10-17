@@ -1,8 +1,10 @@
 package com.louanimashaun.fattyzgrill.data.source.remote;
 
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.model.Order;
 
@@ -46,8 +48,24 @@ public class OrdersRemoteDataSource implements DataSource<Order> {
     }
 
     @Override
-    public void getData(String id, GetCallback getCallback) {
-        //not in use
+    public void getData(String id, final GetCallback getCallback) {
+        mOrdersReference.child(id).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Order order = dataSnapshot.getValue(Order.class);
+                if(order == null){
+                    getCallback.onDataNotAvailable();
+                    return;
+                }
+
+                getCallback.onDataLoaded(order);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                getCallback.onDataNotAvailable();
+            }
+        });
     }
 
     @Override

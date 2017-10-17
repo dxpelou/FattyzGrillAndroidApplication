@@ -25,11 +25,13 @@ public interface NotificationContract {
 
         void loadNotifcations(boolean forceUpdate);
 
-        void loadOrderList();
+        void loadOrderList(String notificationId);
 
         void onNotification();
 
-        void acceptOrder(String id);
+        void acceptOrder(String orderId);
+
+        void openNotification(String notificationID);
     }
 
 }

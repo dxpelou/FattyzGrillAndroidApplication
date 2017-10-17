@@ -1,6 +1,7 @@
 package com.louanimashaun.fattyzgrill.data.source.local;
 
 import com.louanimashaun.fattyzgrill.data.DataSource;
+import com.louanimashaun.fattyzgrill.model.Notification;
 import com.louanimashaun.fattyzgrill.model.Order;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 /**
  * Created by louanimashaun on 25/06/2017.
@@ -42,7 +44,22 @@ public class OrdersLocalDataSource implements DataSource<Order>{
     }
 
     @Override
-    public void getData(String id, GetCallback getCallback) {
+    public void getData(final String id, final GetCallback getCallback) {
+        Realm realm = Realm.getDefaultInstance();
+        try {
+                    RealmResults result = realm.where(Order.class).equalTo("id", id).findAll();
+
+                    if (result.size() == 0) {
+                        getCallback.onDataNotAvailable();
+                    } else {
+                        getCallback.onDataLoaded(result.first());
+                    }
+
+        }finally {
+            realm.close();
+        }
+
+
 
     }
 

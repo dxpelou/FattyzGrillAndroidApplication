@@ -32,7 +32,7 @@ public class NotificationPresenter implements NotificationContract.Presenter {
 
     private NotificationContract.View mNotificationView;
 
-    private NotificationLocalDataSource mLocalDataSource;
+    private NotificationLocalDataSource mNotificationLocalDataSource;
 
     private OrderRepository mOrderRepository;
 
@@ -40,7 +40,7 @@ public class NotificationPresenter implements NotificationContract.Presenter {
 
     @Inject
     public NotificationPresenter( NotificationLocalDataSource localDataSource, OrderRepository orderRepository, MealRepository mealRepository){
-       mLocalDataSource = checkNotNull(localDataSource);
+       mNotificationLocalDataSource = checkNotNull(localDataSource);
         mOrderRepository = checkNotNull(orderRepository);
         mMealRepository = checkNotNull(mealRepository);
     }
@@ -48,7 +48,6 @@ public class NotificationPresenter implements NotificationContract.Presenter {
     @Override
     public void start() {
         loadNotifcations(true);
-
     }
 
     @Override
@@ -59,7 +58,7 @@ public class NotificationPresenter implements NotificationContract.Presenter {
     @Override
     public void loadNotifcations(boolean forceUpdate) {
 
-        mLocalDataSource.loadData(new DataSource.LoadCallback<Notification>() {
+        mNotificationLocalDataSource.loadData(new DataSource.LoadCallback<Notification>() {
             @Override
             public void onDataLoaded(List<Notification> data) {
                 mNotificationView.showNotifications(data);
@@ -73,7 +72,45 @@ public class NotificationPresenter implements NotificationContract.Presenter {
     }
 
     @Override
-    public void loadOrderList() {
+    public void loadOrderList(String notificationId) {
+
+
+
+        mNotificationLocalDataSource.getData(notificationId, new DataSource.GetCallback<Notification>() {
+            @Override
+            public void onDataLoaded(Notification notificationData) {
+                String orderId = notificationData.getExtras();
+
+                mOrderRepository.getData(orderId, new DataSource.GetCallback<Order>() {
+                    @Override
+                    public void onDataLoaded(final Order orderData) {
+                        mMealRepository.loadDataByIds(orderData.getMealIds(), new DataSource.LoadCallback<Meal>() {
+                            @Override
+                            public void onDataLoaded(List<Meal> data) {
+                                mNotificationView.showOrderList(data, orderData.getQuantities());
+                            }
+
+                            @Override
+                            public void onDataNotAvailable() {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onDataNotAvailable() {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+
+            }
+        });
+
+        openNotification(notificationId);
 
     }
 
@@ -103,6 +140,31 @@ public class NotificationPresenter implements NotificationContract.Presenter {
             }
         });
 
+    }
+
+    @Override
+    public void openNotification(String notificationID) {
+        mNotificationLocalDataSource.getData(notificationID, new DataSource.GetCallback<Notification>() {
+            @Override
+            public void onDataLoaded(Notification data) {
+                if(data.isHasBeenOpened()) return;
+
+                Notification newNotification = new Notification();
+
+                newNotification.setId(data.getId());
+                newNotification.setTitle(data.getTitle());
+                newNotification.setMessage(data.getMessage());
+                newNotification.setType(data.getType());
+                newNotification.setExtras(data.getExtras());
+                newNotification.setCreatedAt(data.getCreatedAt());
+                newNotification.setHasBeenOpened(true);
+                mNotificationLocalDataSource.saveData(newNotification, null);
+            }
+
+            @Override
+            public void onDataNotAvailable() {
+            }
+        });
     }
 
     @Override

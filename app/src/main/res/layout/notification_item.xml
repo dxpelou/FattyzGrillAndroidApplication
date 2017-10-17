@@ -1,17 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/notification_item"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="wrap_content"
+              android:background="@drawable/bg_notification_item_unopened"
+              android:padding="5dp">
 
     <TextView
         android:id="@+id/notification_title_tv"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"/>
+        android:layout_height="0dp"
+        android:textColor="@color/apricot"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:maxLines="1"
+        android:padding="2dp"/>
 
     <TextView
         android:id="@+id/notifcation_message_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:padding="2dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="2"
+        android:maxLines="2"/>
+
+    <TextView
+        android:id="@+id/order_status_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="2dp"
+        android:text="pending"
+        android:layout_marginLeft="2dp"/>
+
+    <TextView
+        android:id="@+id/time_difference_tv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="0dp"
+        android:text="12 mins ago"
+        android:textColor="@color/grey"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:maxLines="1"
+        android:padding="2dp"
+        android:layout_marginLeft="2dp"/>
 
 </LinearLayout>

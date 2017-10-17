@@ -102,4 +102,9 @@ public class MealsFragment extends DaggerFragment implements MealContract.View  
     }
 
 
+    public void onNotificationclicked(){
+
+    }
+
+
 }

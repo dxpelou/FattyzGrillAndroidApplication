@@ -35,6 +35,8 @@ public class NotificationFragment extends DaggerFragment implements Notification
 
     NotificationAdapter mNotificationAdapter = new NotificationAdapter(new ArrayList<Notification>());
 
+
+
     @Inject
     NotificationContract.Presenter mNotificationPresenter;
 
@@ -72,6 +74,14 @@ public class NotificationFragment extends DaggerFragment implements Notification
         super.onResume();
         mNotificationPresenter.takeView(this);
         mNotificationPresenter.start();
+
+        mNotificationAdapter.setNotificationClickListener(new Listeners.NotificationOnClickListener() {
+            @Override
+            public void onClick(String notificationId) {
+                mNotificationPresenter.loadNotifcations(false);
+                mNotificationPresenter.loadOrderList(notificationId);
+            }
+        });
     }
 
 
@@ -90,11 +100,17 @@ public class NotificationFragment extends DaggerFragment implements Notification
 
     @Override
     public void showOrderList(List<Meal> meals, List<Integer> quantities) {
-
+        OrdersDialogFragment ordersDialogFragment = OrdersDialogFragment.getNewInstance(meals, quantities);
+        ordersDialogFragment.show(getFragmentManager(), "order");
     }
 
     @Override
     public void showNoNotifcations() {
 
+    }
+
+    public void setNotificatioClickListener(Listeners.NotificationOnClickListener listener){
+        checkNotNull(listener);
+        mNotificationAdapter.setNotificationClickListener(listener);
     }
 }
