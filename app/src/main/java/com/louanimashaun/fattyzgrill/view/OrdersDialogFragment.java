@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.widget.ArrayAdapter;
 
 import com.louanimashaun.fattyzgrill.model.Meal;
+import com.louanimashaun.fattyzgrill.model.Order;
 
 import java.util.List;
 
@@ -21,14 +22,15 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 public class OrdersDialogFragment extends DialogFragment {
 
     private static List<Meal> mMeals;
-    private static List<Integer> mQuantities;
+    private static Order mOrder;
     private ArrayAdapter mArrayAdapter;
+    private Listeners.AcceptOrderClickListener mAcceptClickListener;
+    private DialogInterface.OnClickListener mCancelClickListener;
 
 
-    public static OrdersDialogFragment getNewInstance(List<Meal> meals, List<Integer> quantities){
+    public static OrdersDialogFragment getNewInstance(List<Meal> meals, Order order){
         mMeals = checkNotNull(meals);
-        mQuantities = checkNotNull(quantities);
-
+        mOrder = checkNotNull(order);
 
         return new OrdersDialogFragment();
     }
@@ -41,12 +43,17 @@ public class OrdersDialogFragment extends DialogFragment {
                 .setItems(createArray(), null)
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // FIRE ZE MISSILES!
+                        if(mAcceptClickListener != null ){
+
+                            mAcceptClickListener.onClick(mOrder.getId());
+                        }
                     }
                 })
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
+                        if(mCancelClickListener != null){
+                            mCancelClickListener.onClick(dialog, id);
+                        }
                     }
                 });
 
@@ -56,10 +63,15 @@ public class OrdersDialogFragment extends DialogFragment {
     private String[] createArray(){
         String[] array = new String[mMeals.size()];
         for(int i =0; i < mMeals.size(); i ++){
-            String item = mMeals.get(i).getTitle() + "   x" + mQuantities.get(i).toString();
+            String item = mMeals.get(i).getTitle() + "   x" + mOrder.getQuantities().get(i).toString();
             array[i] = item;
         }
 
         return array;
     }
+
+    public void setAcceptClickListener(Listeners.AcceptOrderClickListener acceptClickListener) {
+        mAcceptClickListener = checkNotNull(acceptClickListener);
+    }
+
 }

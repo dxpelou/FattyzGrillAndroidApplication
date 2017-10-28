@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v4.app.NotificationCompat;
 
 import com.louanimashaun.fattyzgrill.R;
+import com.louanimashaun.fattyzgrill.model.Notification;
 import com.louanimashaun.fattyzgrill.util.Util;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -32,11 +33,11 @@ public class OrderNotification {
 
 
 
-    public void createNotification(){
+    public void createNotification(Notification notification){
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(Util.getApp())
                 .setSmallIcon(R.drawable.logof)
-                .setContentTitle("New Order")
-                .setContentText("hello ");
+                .setContentTitle(notification.getTitle())
+                .setContentText(notification.getMessage());
 
         //TODO find the difference betwteen notificationManager and notificationManagerCompat
         NotificationManager notificationManager = (NotificationManager) mConext

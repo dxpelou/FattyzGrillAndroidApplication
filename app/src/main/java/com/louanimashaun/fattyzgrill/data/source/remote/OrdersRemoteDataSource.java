@@ -6,8 +6,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.louanimashaun.fattyzgrill.data.DataSource;
+import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Order;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -43,12 +45,33 @@ public class OrdersRemoteDataSource implements DataSource<Order> {
     }
 
     @Override
-    public void loadDataByIds(List<String> ids, LoadCallback<Order> callback) {
+    public void loadDataByIds(final List<String> ids, final LoadCallback<Order> callback) {
+        final List<Order> results = new ArrayList<>();
+        for(String id : ids){
+            getData(id, new GetCallback<Order>() {
+                @Override
+                public void onDataLoaded(Order data) {
+                    results.add(data);
 
+                    if(results.size() == ids.size()){
+                        callback.onDataLoaded(results);
+                    }
+                }
+
+                @Override
+                public void onDataNotAvailable() {
+                    callback.onDataNotAvailable();
+                }
+            });
+        }
+        if(results.size() == 0){
+            callback.onDataNotAvailable();
+            return;
+        }
     }
 
     @Override
-    public void getData(String id, final GetCallback getCallback) {
+    public void getData(final String id, final GetCallback getCallback) {
         mOrdersReference.child(id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -57,7 +80,7 @@ public class OrdersRemoteDataSource implements DataSource<Order> {
                     getCallback.onDataNotAvailable();
                     return;
                 }
-
+                order.setId(id);
                 getCallback.onDataLoaded(order);
             }
 

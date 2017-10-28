@@ -82,7 +82,7 @@ public class Order extends RealmObject {
     }
 
     @Exclude
-    public List<RealmString> getMealIdsRealm() {
+    public RealmList<RealmString> getMealIdsRealm() {
         return mMealIdsRealm;
     }
 

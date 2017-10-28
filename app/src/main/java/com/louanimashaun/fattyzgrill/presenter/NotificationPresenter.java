@@ -11,10 +11,12 @@ import com.louanimashaun.fattyzgrill.di.ActivityScoped;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Notification;
 import com.louanimashaun.fattyzgrill.model.Order;
+import com.louanimashaun.fattyzgrill.util.AdminUtil;
 import com.louanimashaun.fattyzgrill.util.PreconditonUtil;
 import com.louanimashaun.fattyzgrill.util.Util;
 import com.louanimashaun.fattyzgrill.view.NotificationFragment;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -60,8 +62,29 @@ public class NotificationPresenter implements NotificationContract.Presenter {
 
         mNotificationLocalDataSource.loadData(new DataSource.LoadCallback<Notification>() {
             @Override
-            public void onDataLoaded(List<Notification> data) {
-                mNotificationView.showNotifications(data);
+            public void onDataLoaded(final List<Notification> notifications) {
+                List<String> orderIds = new ArrayList<>();
+
+                for(Notification notification : notifications){
+                    //TODO change Extras member variable to orderId
+                    orderIds.add(notification.getExtras());
+                }
+
+                mOrderRepository.refreshData();
+
+                mOrderRepository.loadDataByIds(orderIds, new DataSource.LoadCallback<Order>() {
+                    @Override
+                    public void onDataLoaded(List<Order> orders) {
+                        mNotificationView.showNotifications(notifications, orders);
+                    }
+
+                    @Override
+                    public void onDataNotAvailable() {
+                        mNotificationView.showNoNotifcations();
+                    }
+                });
+
+
             }
 
             @Override
@@ -70,6 +93,7 @@ public class NotificationPresenter implements NotificationContract.Presenter {
             }
         });
     }
+
 
     @Override
     public void loadOrderList(String notificationId) {
@@ -87,26 +111,26 @@ public class NotificationPresenter implements NotificationContract.Presenter {
                         mMealRepository.loadDataByIds(orderData.getMealIds(), new DataSource.LoadCallback<Meal>() {
                             @Override
                             public void onDataLoaded(List<Meal> data) {
-                                mNotificationView.showOrderList(data, orderData.getQuantities());
+                                mNotificationView.showOrderList(data, orderData);
                             }
 
                             @Override
                             public void onDataNotAvailable() {
-
+                                return;
                             }
                         });
                     }
 
                     @Override
                     public void onDataNotAvailable() {
-
+                        return;
                     }
                 });
             }
 
             @Override
             public void onDataNotAvailable() {
-
+                return;
             }
         });
 
@@ -117,21 +141,37 @@ public class NotificationPresenter implements NotificationContract.Presenter {
     @Override
     public void acceptOrder(String id){
 
+        if(!AdminUtil.isAdmin()) {
+            return;
+        }
         mOrderRepository.getData(id, new DataSource.GetCallback<Order>() {
             @Override
             public void onDataLoaded(final Order orderData) {
+                // you have to create a new object, unless you have to work with a realm managed object
+                Order acceptedOrder = new Order();
 
-                mMealRepository.loadDataByIds(orderData.getMealIds(), new DataSource.LoadCallback<Meal>() {
+                acceptedOrder.setId(orderData.getId());
+                acceptedOrder.setMealIds(orderData.getMealIds());
+                acceptedOrder.setMealIdsRealm(orderData.getMealIdsRealm());
+                acceptedOrder.setQuantities(orderData.getQuantities());
+                acceptedOrder.setQuantitiesRealm(orderData.getQuantitiesRealm());
+                acceptedOrder.setTotalPrice(orderData.getTotalPrice());
+                acceptedOrder.setSenderNotifcationToken(orderData.getSenderNotifcationToken());
+                acceptedOrder.setUserId(orderData.getUserId());
+                acceptedOrder.setOrderAccepted(true);
+
+                mOrderRepository.saveData(orderData, new DataSource.CompletionCallback() {
                     @Override
-                    public void onDataLoaded(List<Meal> mealData) {
-                        mNotificationView.showOrderList(mealData, orderData.getQuantities());
+                    public void onComplete() {
+                        // show toast
                     }
 
                     @Override
-                    public void onDataNotAvailable() {
-                        return;
+                    public void onCancel() {
+                        // show toast
                     }
                 });
+
             }
 
             @Override

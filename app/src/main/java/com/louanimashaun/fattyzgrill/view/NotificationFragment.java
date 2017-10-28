@@ -2,7 +2,6 @@ package com.louanimashaun.fattyzgrill.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutManager;
@@ -11,11 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.louanimashaun.fattyzgrill.R;
-import com.louanimashaun.fattyzgrill.contract.BasePresenter;
 import com.louanimashaun.fattyzgrill.contract.NotificationContract;
 import com.louanimashaun.fattyzgrill.di.ActivityScoped;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Notification;
+import com.louanimashaun.fattyzgrill.model.Order;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,9 +86,11 @@ public class NotificationFragment extends DaggerFragment implements Notification
 
 
     @Override
-    public void showNotifications(List<Notification> notifications) {
+    public void showNotifications(List<Notification> notifications, List<Order> orders) {
         checkNotNull(notifications);
-        mNotificationAdapter.replaceData(notifications);
+        checkNotNull(orders);
+        mNotificationAdapter.replaceNotificationData(notifications);
+        mNotificationAdapter.replaceOrdersData(orders);
     }
 
     @Override
@@ -99,9 +100,17 @@ public class NotificationFragment extends DaggerFragment implements Notification
     }
 
     @Override
-    public void showOrderList(List<Meal> meals, List<Integer> quantities) {
-        OrdersDialogFragment ordersDialogFragment = OrdersDialogFragment.getNewInstance(meals, quantities);
+    public void showOrderList(List<Meal> meals, Order order) {
+        final OrdersDialogFragment ordersDialogFragment = OrdersDialogFragment.getNewInstance(meals, order);
+        ordersDialogFragment.setAcceptClickListener(new Listeners.AcceptOrderClickListener() {
+            @Override
+            public void onClick(String orderId) {
+                mNotificationPresenter.acceptOrder(orderId);
+                ordersDialogFragment.dismiss();
+            }
+        });
         ordersDialogFragment.show(getFragmentManager(), "order");
+
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.louanimashaun.fattyzgrill.presenter;
 
+import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.louanimashaun.fattyzgrill.contract.CheckoutContract;
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealRepository;
@@ -88,6 +89,10 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
         final List<Meal> meals = new ArrayList<>();
         Order order = createNewOrder(meals,mSelectedMeals);
 
+        if(order.getSenderNotifcationToken() == null){
+            return;
+        }
+
         mOrderRepository.saveData(order, new DataSource.CompletionCallback() {
             @Override
             public void onComplete() {
@@ -162,7 +167,10 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
         order.setQuantitiesRealm(ModelUtil.toRealmIntegerList(values));
         order.setQuantities(values);
 
-        order.setSenderNotifcationToken(mNotificationSharedPreference.getRefreshToken());
+        String token = mNotificationSharedPreference.getRefreshToken();
+
+        order.setSenderNotifcationToken(token);
+
 
         return order;
     }

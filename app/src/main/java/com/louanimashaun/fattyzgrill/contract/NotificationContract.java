@@ -2,6 +2,7 @@ package com.louanimashaun.fattyzgrill.contract;
 
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Notification;
+import com.louanimashaun.fattyzgrill.model.Order;
 
 import java.util.List;
 
@@ -12,11 +13,11 @@ import java.util.List;
 public interface NotificationContract {
 
     interface View extends BaseView{
-        void showNotifications(List<Notification> notifications);
+        void showNotifications(List<Notification> notifications, List<Order> orders);
 
         void showNewNotification(Notification notification);
 
-        void showOrderList(List<Meal> meals, List<Integer> quantities);
+        void showOrderList(List<Meal> meals, Order order);
 
         void showNoNotifcations();
     }

@@ -1,9 +1,11 @@
 package com.louanimashaun.fattyzgrill.data.source.local;
 
 import com.louanimashaun.fattyzgrill.data.DataSource;
+import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Notification;
 import com.louanimashaun.fattyzgrill.model.Order;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -11,6 +13,8 @@ import javax.inject.Singleton;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+
+import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
 /**
  * Created by louanimashaun on 25/06/2017.
@@ -40,7 +44,17 @@ public class OrdersLocalDataSource implements DataSource<Order>{
 
     @Override
     public void loadDataByIds(List<String> ids, LoadCallback<Order> callback) {
+        checkNotNull(callback);
 
+        List<Order>  results = new ArrayList<>();
+
+        for(String id : ids){
+            Order order = realm.where(Order.class).equalTo("id", id).findFirst();
+            if(order == null) callback.onDataNotAvailable();
+            results.add(order);
+        }
+
+        callback.onDataLoaded(results);
     }
 
     @Override

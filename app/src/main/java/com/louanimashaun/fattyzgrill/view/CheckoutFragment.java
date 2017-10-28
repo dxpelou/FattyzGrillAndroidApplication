@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.louanimashaun.fattyzgrill.R;
 import com.louanimashaun.fattyzgrill.contract.BasePresenter;
@@ -18,6 +19,7 @@ import com.louanimashaun.fattyzgrill.contract.CheckoutContract;
 import com.louanimashaun.fattyzgrill.di.ActivityScoped;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.presenter.CheckoutPresenter;
+import com.louanimashaun.fattyzgrill.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,12 +116,13 @@ public class CheckoutFragment extends DaggerFragment implements CheckoutContract
 
     @Override
     public void notifyOrderSent() {
-        showAlertDialog("Order Sent");
+        Toast.makeText(Util.getApp(), "Order Complete", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void notifyOrderError() {
-        showAlertDialog("Order Failed");
+        Toast.makeText(Util.getApp(), "Order Failed", Toast.LENGTH_LONG).show();
+
     }
 
     @Override
@@ -140,11 +143,4 @@ public class CheckoutFragment extends DaggerFragment implements CheckoutContract
         ((CheckoutPresenter)mCheckoutPresenter).checkoutOrder();
     }
 
-
-    private void showAlertDialog(String message){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(message);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
 }

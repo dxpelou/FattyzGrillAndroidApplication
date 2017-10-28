@@ -88,6 +88,13 @@ public class MealsRemoteDataSource implements DataSource<Meal> {
                 }
             });
         }
+
+        if(results.size() == 0){
+            callback.onDataNotAvailable();
+            return;
+        }
+
+        callback.onDataLoaded(results);
     }
 
     @Override

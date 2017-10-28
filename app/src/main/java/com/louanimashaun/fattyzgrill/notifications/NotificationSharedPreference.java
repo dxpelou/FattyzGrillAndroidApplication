@@ -15,8 +15,17 @@ public class NotificationSharedPreference implements TokenDataSource {
 
     private static NotificationSharedPreference INSTANCE = null;
     private static Context mContext;
-    private static final String NOTIFICATION_TAG = "notification_refresh_token";
+    private static final String NOTIFICATION_TAG = "com.louanimashaun.fattyzgrill.notification_refresh_token";
     private static final String REFRESH_TOKEN_NOT_SET = "null";
+
+
+    public static NotificationSharedPreference getInstance(){
+        if(INSTANCE == null){
+            INSTANCE = new NotificationSharedPreference();
+        }
+
+        return INSTANCE;
+    }
 
     @Inject
      public NotificationSharedPreference(){
@@ -25,18 +34,18 @@ public class NotificationSharedPreference implements TokenDataSource {
 
 
      @Override
-     public void saveRefreshToken(String token ){
+     public void saveRefreshToken(String token){
         SharedPreferences sharedPreferences =  mContext.getSharedPreferences(NOTIFICATION_TAG,Context.MODE_PRIVATE);
          SharedPreferences.Editor editor = sharedPreferences.edit();
 
          editor.putString(NOTIFICATION_TAG, token);
-         editor.commit();
+         editor.apply();
      }
 
      @Override
      public  String getRefreshToken(){
          SharedPreferences sharedPreferences =  mContext.getSharedPreferences(NOTIFICATION_TAG,Context.MODE_PRIVATE);
-          String t = sharedPreferences.getString(NOTIFICATION_TAG, REFRESH_TOKEN_NOT_SET);
+          String t = sharedPreferences.getString(NOTIFICATION_TAG, null);
          return t;
 
      }
