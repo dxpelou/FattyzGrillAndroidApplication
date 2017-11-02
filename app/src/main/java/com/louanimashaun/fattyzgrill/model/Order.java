@@ -3,7 +3,6 @@ package com.louanimashaun.fattyzgrill.model;
 import com.google.firebase.database.Exclude;
 
 import java.util.List;
-import java.util.Map;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -21,29 +20,29 @@ public class Order extends RealmObject {
     @Exclude
     private String id;
 
-    private RealmList<RealmString> mMealIdsRealm;
+    private RealmList<RealmString> mealIdsRealm;
 
-    private RealmList<RealmInteger> mQuantitiesRealm;
-
-    @Ignore
-    private List<String> mMealIds;
+    private RealmList<RealmInteger> quantitiesRealm;
 
     @Ignore
-    private List<Integer> mQuantities;
+    private List<String> mealIds;
 
-    private String mUserId;
+    @Ignore
+    private List<Integer> quantities;
 
-    private double mTotalPrice;
+    private String userId;
 
-    private boolean mIsOrderAccepted;
+    private double totalPrice;
 
-    private String mSenderNotifcationToken;
+    private boolean isOrderAccepted;
+
+    private String senderNotifcationToken;
 
     public Order(RealmList<RealmString> mealIdsRealm, RealmList<RealmInteger> quantities, double totalPrice, boolean isOrderPending){
-        mMealIdsRealm = mealIdsRealm;
-        mQuantitiesRealm = quantities;
-        mTotalPrice = totalPrice;
-        mIsOrderAccepted = isOrderPending;
+        this.mealIdsRealm = mealIdsRealm;
+        quantitiesRealm = quantities;
+        this.totalPrice = totalPrice;
+        isOrderAccepted = isOrderPending;
     }
 
     public Order(){}
@@ -58,68 +57,68 @@ public class Order extends RealmObject {
     }
 
     public double getTotalPrice() {
-        return mTotalPrice;
+        return totalPrice;
     }
 
     public void setTotalPrice(double totalPrice) {
-        this.mTotalPrice = totalPrice;
+        this.totalPrice = totalPrice;
     }
 
     public boolean isOrderAccepted() {
-        return mIsOrderAccepted;
+        return isOrderAccepted;
     }
 
     public void setOrderAccepted(boolean orderAccepted) {
-        mIsOrderAccepted = orderAccepted;
+        isOrderAccepted = orderAccepted;
     }
 
     public String getSenderNotifcationToken(){
-        return mSenderNotifcationToken;
+        return senderNotifcationToken;
     }
 
     public void setSenderNotifcationToken(String token){
-        mSenderNotifcationToken = token;
+        senderNotifcationToken = token;
     }
 
     @Exclude
-    public List<RealmString> getMealIdsRealm() {
-        return mMealIdsRealm;
+    public RealmList<RealmString> getMealIdsRealm() {
+        return mealIdsRealm;
     }
 
     public void setMealIdsRealm(RealmList<RealmString> mealIdsRealm) {
-        mMealIdsRealm = mealIdsRealm;
+        this.mealIdsRealm = mealIdsRealm;
     }
 
     public String getUserId() {
-        return mUserId;
+        return userId;
     }
 
     public void setUserId(String userId) {
-        mUserId = userId;
+        this.userId = userId;
     }
 
     public List<String> getMealIds() {
-        return mMealIds;
+        return mealIds;
     }
 
     public void setMealIds(List<String> mealIds) {
-        mMealIds = mealIds;
+        this.mealIds = mealIds;
     }
 
     @Exclude
     public RealmList<RealmInteger> getQuantitiesRealm() {
-        return mQuantitiesRealm;
+        return quantitiesRealm;
     }
 
     public void setQuantitiesRealm(RealmList<RealmInteger> quantities) {
-        mQuantitiesRealm = quantities;
+        quantitiesRealm = quantities;
     }
 
     public List<Integer> getQuantities() {
-        return mQuantities;
+        return quantities;
     }
 
     public void setQuantities(List<Integer> quantities) {
-        mQuantities = quantities;
+        this.quantities = quantities;
     }
 }

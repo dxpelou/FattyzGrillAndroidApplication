@@ -2,19 +2,21 @@ package com.louanimashaun.fattyzgrill.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.louanimashaun.fattyzgrill.R;
-import com.louanimashaun.fattyzgrill.contract.BasePresenter;
 import com.louanimashaun.fattyzgrill.contract.NotificationContract;
 import com.louanimashaun.fattyzgrill.di.ActivityScoped;
+import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Notification;
+import com.louanimashaun.fattyzgrill.model.Order;
+import com.louanimashaun.fattyzgrill.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,8 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 public class NotificationFragment extends DaggerFragment implements NotificationContract.View{
 
     NotificationAdapter mNotificationAdapter = new NotificationAdapter(new ArrayList<Notification>());
+
+
 
     @Inject
     NotificationContract.Presenter mNotificationPresenter;
@@ -71,14 +75,25 @@ public class NotificationFragment extends DaggerFragment implements Notification
         super.onResume();
         mNotificationPresenter.takeView(this);
         mNotificationPresenter.start();
+
+        mNotificationAdapter.setNotificationClickListener(new Listeners.NotificationOnClickListener() {
+            @Override
+            public void onClick(String notificationId) {
+
+                mNotificationPresenter.loadNotifcations(false); //reloads view
+                mNotificationPresenter.loadOrderList(notificationId);
+            }
+        });
     }
 
 
 
     @Override
-    public void showNotifications(List<Notification> notifications) {
+    public void showNotifications(List<Notification> notifications, List<Order> orders) {
         checkNotNull(notifications);
-        mNotificationAdapter.replaceData(notifications);
+        checkNotNull(orders);
+        mNotificationAdapter.replaceNotificationData(notifications);
+        mNotificationAdapter.replaceOrdersData(orders);
     }
 
     @Override
@@ -88,7 +103,26 @@ public class NotificationFragment extends DaggerFragment implements Notification
     }
 
     @Override
+    public void showOrderList(List<Meal> meals, Order order) {
+        OrdersDialogFragment ordersDialogFragment = OrdersDialogFragment.getNewInstance(meals, order);
+        ordersDialogFragment.setAcceptClickListener(new Listeners.AcceptOrderClickListener() {
+            @Override
+            public void onClick(String orderId) {
+                mNotificationPresenter.acceptOrder(orderId);
+                //Toast.makeText(Util.getApp(), "worked", Toast.LENGTH_LONG);
+            }
+        });
+        ordersDialogFragment.show(getFragmentManager(), "order");
+
+    }
+
+    @Override
     public void showNoNotifcations() {
 
+    }
+
+    public void setNotificatioClickListener(Listeners.NotificationOnClickListener listener){
+        checkNotNull(listener);
+        mNotificationAdapter.setNotificationClickListener(listener);
     }
 }

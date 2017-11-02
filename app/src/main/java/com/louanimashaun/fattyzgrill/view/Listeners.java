@@ -1,5 +1,7 @@
 package com.louanimashaun.fattyzgrill.view;
 
+import com.louanimashaun.fattyzgrill.model.Order;
+
 import java.util.Map;
 
 /**
@@ -21,6 +23,14 @@ public interface Listeners{
 
     interface CheckoutChangedListener{
         void onCheckoutChanged(Map<String, Integer> quanityMap);
+    }
+
+    interface NotificationOnClickListener{
+        void onClick(String notificationId);
+    }
+
+    interface AcceptOrderClickListener{
+        void onClick(String orderId);
     }
 
 }

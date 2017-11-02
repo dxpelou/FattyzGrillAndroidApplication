@@ -16,17 +16,17 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     private static final String TAG ="MyFirebaseIDSerivce";
 
     @Inject
-    Lazy<NotificationSharedPreference> notificationSharedPreference;
+    NotificationSharedPreference notificationSharedPreference;
 
     @Override
     public void onTokenRefresh() {
+        notificationSharedPreference = NotificationSharedPreference.getInstance();
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Refreshed token: " + refreshedToken);
 
 
         //TODO find way to pass in context into firebase instance id clas
 
-        notificationSharedPreference.get().saveRefreshToken(refreshedToken);
-
+        notificationSharedPreference.saveRefreshToken(refreshedToken);
     }
 }

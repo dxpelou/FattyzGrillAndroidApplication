@@ -4,18 +4,18 @@ const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
 exports.orderCreated = functions.database.ref('/orders/{orderID}')
-    .onWrite(event => {
+    .onCreate(event => {
        const val =  event.data.val();
-       const id = event.params;
+       const order = event.params;
         console.log('val: ',val);
-        console.log('id: ',id);
+        console.log('order: ',order);
 
         const topic = 'orders';
 
         var payload = {
-                "notification": {
-                    "title": "New Order Recieved",
-                    "body": id.orderID
+                "data": {
+                    "type": "new_order",
+                    "orderID": order.orderID
             }
         }
 
@@ -33,11 +33,14 @@ exports.acceptOrder = functions.database.ref('/orders/{orderID}')
     .onUpdate((event) => {
     const wasOrderAccepted = event.data.previous.child('isOrderAccepted');
     const isOrderAccepted = event.data.current.child('isOrderAccepted');
+    const order = event.params;
+
 
     if(!wasOrderAccepted && isOrderAccepted){
         var payload = {
             data: {
-                orderStatus: 'OK'
+                "type": "order_accepted",
+                "orderID" : order.orderId
             }
         }
 

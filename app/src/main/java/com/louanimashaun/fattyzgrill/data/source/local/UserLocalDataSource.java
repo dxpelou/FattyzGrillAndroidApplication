@@ -80,24 +80,25 @@ public class UserLocalDataSource implements DataSource<User> {
 
     @Override
     public void saveData(final User data, final CompletionCallback callback) {
-       realm.executeTransactionAsync(new Realm.Transaction(){
+            realm.executeTransactionAsync(new Realm.Transaction() {
 
-           @Override
-           public void execute(Realm realm) {
-                realm.copyToRealm(data);
-           }
-       }, new Realm.Transaction.OnSuccess(){
-           @Override
-           public void onSuccess() {
-               if(callback != null) callback.onComplete();
+                @Override
+                public void execute(Realm realm) {
+                    realm.copyToRealm(data);
+                }
+            }, new Realm.Transaction.OnSuccess() {
+                @Override
+                public void onSuccess() {
+                    if (callback != null) callback.onComplete();
 
-           }
-       }, new Realm.Transaction.OnError(){
-           @Override
-           public void onError(Throwable error) {
-               if(callback != null) callback.onCancel();
-           }
-       });
+                }
+            }, new Realm.Transaction.OnError() {
+                @Override
+                public void onError(Throwable error) {
+                    if (callback != null) callback.onCancel();
+                }
+            });
+
 
     }
 
