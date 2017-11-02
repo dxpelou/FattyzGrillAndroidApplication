@@ -39,20 +39,21 @@ public class OrdersDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("HEllo")
+        builder.setTitle("Order")
                 .setItems(createArray(), null)
                 .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if(mAcceptClickListener != null ){
-
                             mAcceptClickListener.onClick(mOrder.getId());
+                            //getDialog().cancel();
                         }
                     }
                 })
                 .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if(mCancelClickListener != null){
-                            mCancelClickListener.onClick(dialog, id);
+                            //getDialog().dismiss();
+                            //mCancelClickListener.onClick(dialog, id);
                         }
                     }
                 });

@@ -78,10 +78,13 @@ public class OrdersRemoteDataSource implements DataSource<Order> {
                 Order order = dataSnapshot.getValue(Order.class);
                 if(order == null){
                     getCallback.onDataNotAvailable();
+                    mOrdersReference.child(id).removeEventListener(this);
                     return;
                 }
                 order.setId(id);
                 getCallback.onDataLoaded(order);
+                mOrdersReference.child(id).removeEventListener(this);
+
             }
 
             @Override
@@ -104,11 +107,14 @@ public class OrdersRemoteDataSource implements DataSource<Order> {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if(databaseError == null){
-                    callback.onComplete();
-                    return;
-                }
+                    if(callback !=  null) {
+                        callback.onComplete();
+                    }
 
-                callback.onCancel();
+                }else{
+                    if(callback != null)
+                    callback.onCancel();
+                }
             }
         });
     }

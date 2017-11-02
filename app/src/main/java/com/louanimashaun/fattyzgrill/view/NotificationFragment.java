@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.louanimashaun.fattyzgrill.R;
 import com.louanimashaun.fattyzgrill.contract.NotificationContract;
@@ -15,6 +16,7 @@ import com.louanimashaun.fattyzgrill.di.ActivityScoped;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Notification;
 import com.louanimashaun.fattyzgrill.model.Order;
+import com.louanimashaun.fattyzgrill.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +79,8 @@ public class NotificationFragment extends DaggerFragment implements Notification
         mNotificationAdapter.setNotificationClickListener(new Listeners.NotificationOnClickListener() {
             @Override
             public void onClick(String notificationId) {
-                mNotificationPresenter.loadNotifcations(false);
+
+                mNotificationPresenter.loadNotifcations(false); //reloads view
                 mNotificationPresenter.loadOrderList(notificationId);
             }
         });
@@ -101,12 +104,12 @@ public class NotificationFragment extends DaggerFragment implements Notification
 
     @Override
     public void showOrderList(List<Meal> meals, Order order) {
-        final OrdersDialogFragment ordersDialogFragment = OrdersDialogFragment.getNewInstance(meals, order);
+        OrdersDialogFragment ordersDialogFragment = OrdersDialogFragment.getNewInstance(meals, order);
         ordersDialogFragment.setAcceptClickListener(new Listeners.AcceptOrderClickListener() {
             @Override
             public void onClick(String orderId) {
                 mNotificationPresenter.acceptOrder(orderId);
-                ordersDialogFragment.dismiss();
+                //Toast.makeText(Util.getApp(), "worked", Toast.LENGTH_LONG);
             }
         });
         ordersDialogFragment.show(getFragmentManager(), "order");

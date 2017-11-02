@@ -1,0 +1,26 @@
+# Architecture
+
+Application uses a Model-View-Presenter (MVP) architecture without using any architectural frameworks.
+
+The app consists of three UI screens:
+ - Meals - Where a list of meals is displayed
+ - Checkout - shows a list of checked out meals
+ - Notification - displays any notifications
+
+
+In this version of the app, each screen is implemented using the following classes and interfaces:
+- A [contract](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/main/java/com/louanimashaun/fattyzgrill/contract) class which defines communication between the view and the presenter.
+- A [Fragment](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/main/java/com/louanimashaun/fattyzgrill/view) which implements the view interface.
+- A [presenter](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/main/java/com/louanimashaun/fattyzgrill/presenter) which implements the presenter interface in the corresponding contract.
+
+A presenter typically hosts business logic associated with a particular feature, and the corresponding view handles the Android UI work. The view contains almost no logic; it converts the presenter's commands to UI actions, and listens for user actions, which are then passed to the presenter.
+
+A single Activity is used to create all fragments and corresponding presenters. The use of both activities and fragments allows for a better separation of concerns which complements this implementation of MVP.
+
+Dagger Android is used so dagger can handle dependency injection for Activities and Fragments which is normally handled by the OS. Code can be found [here](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/main/java/com/louanimashaun/fattyzgrill/di)
+
+# Testing
+
+Unit tests for presenters, repositories are found [here](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/test/java/com/louanimashaun/fattyzgrill)
+
+Espresso UI tests are found [here](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/androidTest/java/com/louanimashaun/fattyzgrill)

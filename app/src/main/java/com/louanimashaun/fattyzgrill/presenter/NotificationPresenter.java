@@ -23,6 +23,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.realm.Realm;
+
 import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
 /**
@@ -160,17 +162,7 @@ public class NotificationPresenter implements NotificationContract.Presenter {
                 acceptedOrder.setUserId(orderData.getUserId());
                 acceptedOrder.setOrderAccepted(true);
 
-                mOrderRepository.saveData(orderData, new DataSource.CompletionCallback() {
-                    @Override
-                    public void onComplete() {
-                        // show toast
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        // show toast
-                    }
-                });
+                mOrderRepository.saveData(acceptedOrder, null);
 
             }
 
