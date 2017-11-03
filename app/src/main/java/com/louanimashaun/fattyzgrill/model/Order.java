@@ -2,6 +2,7 @@ package com.louanimashaun.fattyzgrill.model;
 
 import com.google.firebase.database.Exclude;
 
+import java.util.Date;
 import java.util.List;
 
 import io.realm.RealmList;
@@ -36,7 +37,9 @@ public class Order extends RealmObject {
 
     private boolean isOrderAccepted;
 
-    private String senderNotifcationToken;
+    private String senderNotificationToken;
+
+    private Date createdAt;
 
     public Order(RealmList<RealmString> mealIdsRealm, RealmList<RealmInteger> quantities, double totalPrice, boolean isOrderPending){
         this.mealIdsRealm = mealIdsRealm;
@@ -72,12 +75,12 @@ public class Order extends RealmObject {
         isOrderAccepted = orderAccepted;
     }
 
-    public String getSenderNotifcationToken(){
-        return senderNotifcationToken;
+    public String getSenderNotificationToken(){
+        return senderNotificationToken;
     }
 
-    public void setSenderNotifcationToken(String token){
-        senderNotifcationToken = token;
+    public void setSenderNotificationToken(String token){
+        senderNotificationToken = token;
     }
 
     @Exclude
@@ -120,5 +123,13 @@ public class Order extends RealmObject {
 
     public void setQuantities(List<Integer> quantities) {
         this.quantities = quantities;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }
