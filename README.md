@@ -17,10 +17,21 @@ A presenter typically hosts business logic associated with a particular feature,
 
 A single Activity is used to create all fragments and corresponding presenters. The use of both activities and fragments allows for a better separation of concerns which complements this implementation of MVP.
 
-Dagger Android is used so dagger can handle dependency injection for Activities and Fragments which is normally handled by the OS. Code can be found [here](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/main/java/com/louanimashaun/fattyzgrill/di)
+A Repository pattern is used to encapsulate local and remote data access. You simply specify the data you want and the repository will fetch it for you. An abstract repository is defined which contains the logic needed for all repositories. It also inherently makes offline use simple. Code can be found [here](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/main/java/com/louanimashaun/fattyzgrill/data).
+
+Dagger Android is used so dagger can handle dependency injection for Activities and Fragments which is normally handled by the OS. Code can be found [here](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/main/java/com/louanimashaun/fattyzgrill/di).
 
 # Testing
 
-Unit tests for presenters, repositories are found [here](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/test/java/com/louanimashaun/fattyzgrill)
+Unit tests for presenters, repositories are found [here](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/test/java/com/louanimashaun/fattyzgrill).
 
-Espresso UI tests are found [here](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/androidTest/java/com/louanimashaun/fattyzgrill)
+Espresso UI tests are found [here](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/androidTest/java/com/louanimashaun/fattyzgrill).
+
+#Local Data Storage
+Realm is used to handle local data storage. Code can be found [here](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/main/java/com/louanimashaun/fattyzgrill/data/source/local).
+
+#Backend
+The back is handled through Firebase data which stores and syncs data across all devices in real time. The code that handles firebase database access is found [here](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/main/java/com/louanimashaun/fattyzgrill/data/source/remote).
+
+#Push Notifications
+Push notifications are used to send orders to admins and notify users that there order has been accepted. Firebase Cloud Messaging handles downstream notifications. Code can be found [here](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/main/java/com/louanimashaun/fattyzgrill/data/source/local).

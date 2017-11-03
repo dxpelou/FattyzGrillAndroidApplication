@@ -2,6 +2,8 @@ package com.louanimashaun.fattyzgrill.model;
 
 import com.google.firebase.database.Exclude;
 
+import java.util.Date;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -21,6 +23,8 @@ public class User extends RealmObject {
     private String email;
 
     private boolean isAdmin;
+
+    private Date createdAt;
 
 
     public User(){}
@@ -62,5 +66,13 @@ public class User extends RealmObject {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }

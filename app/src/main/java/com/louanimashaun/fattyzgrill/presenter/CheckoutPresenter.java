@@ -1,6 +1,5 @@
 package com.louanimashaun.fattyzgrill.presenter;
 
-import com.google.firebase.iid.FirebaseInstanceIdService;
 import com.louanimashaun.fattyzgrill.contract.CheckoutContract;
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealRepository;
@@ -87,9 +86,13 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
     public void checkoutOrder() {
 
         final List<Meal> meals = new ArrayList<>();
+
+        if (mSelectedMeals ==  null){
+            return;
+        }
         Order order = createNewOrder(meals,mSelectedMeals);
 
-        if(order.getSenderNotifcationToken() == null){
+        if(order.getSenderNotificationToken() == null){
             return;
         }
 
@@ -148,6 +151,8 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
     }
 
     public Order createNewOrder(List<Meal> meals , Map<String,Integer> mealIds){
+
+
         List<String> keys = new ArrayList<String>(mealIds.keySet());
         List<Integer> values = new ArrayList<Integer>(mealIds.values());
 
@@ -169,7 +174,7 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
 
         String token = mNotificationSharedPreference.getRefreshToken();
 
-        order.setSenderNotifcationToken(token);
+        order.setSenderNotificationToken(token);
 
 
         return order;

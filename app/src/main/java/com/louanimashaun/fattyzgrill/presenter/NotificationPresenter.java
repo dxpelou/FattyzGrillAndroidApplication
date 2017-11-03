@@ -1,7 +1,5 @@
 package com.louanimashaun.fattyzgrill.presenter;
 
-import android.support.annotation.NonNull;
-
 import com.louanimashaun.fattyzgrill.contract.NotificationContract;
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealRepository;
@@ -12,18 +10,11 @@ import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Notification;
 import com.louanimashaun.fattyzgrill.model.Order;
 import com.louanimashaun.fattyzgrill.util.AdminUtil;
-import com.louanimashaun.fattyzgrill.util.PreconditonUtil;
-import com.louanimashaun.fattyzgrill.util.Util;
-import com.louanimashaun.fattyzgrill.view.NotificationFragment;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import io.realm.Realm;
 
 import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
 
@@ -158,7 +149,7 @@ public class NotificationPresenter implements NotificationContract.Presenter {
                 acceptedOrder.setQuantities(orderData.getQuantities());
                 acceptedOrder.setQuantitiesRealm(orderData.getQuantitiesRealm());
                 acceptedOrder.setTotalPrice(orderData.getTotalPrice());
-                acceptedOrder.setSenderNotifcationToken(orderData.getSenderNotifcationToken());
+                acceptedOrder.setSenderNotificationToken(orderData.getSenderNotificationToken());
                 acceptedOrder.setUserId(orderData.getUserId());
                 acceptedOrder.setOrderAccepted(true);
 
