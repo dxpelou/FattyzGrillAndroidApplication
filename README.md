@@ -27,11 +27,11 @@ Unit tests for presenters, repositories are found [here](https://github.com/dxpe
 
 Espresso UI tests are found [here](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/androidTest/java/com/louanimashaun/fattyzgrill).
 
-#Local Data Storage
+# Local Data Storage
 Realm is used to handle local data storage. Code can be found [here](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/main/java/com/louanimashaun/fattyzgrill/data/source/local).
 
-#Backend
+# Backend
 The back is handled through Firebase data which stores and syncs data across all devices in real time. The code that handles firebase database access is found [here](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/main/java/com/louanimashaun/fattyzgrill/data/source/remote).
 
-#Push Notifications
+# Push Notifications
 Push notifications are used to send orders to admins and notify users that there order has been accepted. Firebase Cloud Messaging handles downstream notifications. Code can be found [here](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/main/java/com/louanimashaun/fattyzgrill/data/source/local).
