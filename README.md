@@ -35,3 +35,9 @@ The back is handled through Firebase data which stores and syncs data across all
 
 # Push Notifications
 Push notifications are used to send orders to admins and notify users that there order has been accepted. Firebase Cloud Messaging handles downstream notifications. Code can be found [here](https://github.com/dxpelou/FattyzGrillAndroidApplication/tree/master/app/src/main/java/com/louanimashaun/fattyzgrill/data/source/local).
+
+
+# Screen Shots
+[menu] ()
+[checkout]()
+[notifications]()
