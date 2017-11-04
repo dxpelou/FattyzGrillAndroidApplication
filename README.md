@@ -38,6 +38,6 @@ Push notifications are used to send orders to admins and notify users that there
 
 
 # Screen Shots
-[menu] (https://github.com/dxpelou/FattyzGrillAndroidApplication/blob/travis-ci/screenshots/menu.png)
-[checkout](https://github.com/dxpelou/FattyzGrillAndroidApplication/blob/travis-ci/screenshots/orders.png)
-[notifications](https://github.com/dxpelou/FattyzGrillAndroidApplication/blob/travis-ci/screenshots/notifications.png)
+![menu](https://github.com/dxpelou/FattyzGrillAndroidApplication/blob/travis-ci/screenshots/menu.png)
+![checkout](https://github.com/dxpelou/FattyzGrillAndroidApplication/blob/travis-ci/screenshots/orders.png)
+![notifications](https://github.com/dxpelou/FattyzGrillAndroidApplication/blob/travis-ci/screenshots/notifications.png)
