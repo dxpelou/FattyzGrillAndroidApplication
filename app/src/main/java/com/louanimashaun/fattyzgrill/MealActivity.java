@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,12 +40,14 @@ import com.louanimashaun.fattyzgrill.presenter.CheckoutPresenter;
 import com.louanimashaun.fattyzgrill.presenter.NotificationPresenter;
 import com.louanimashaun.fattyzgrill.util.AdminUtil;
 import com.louanimashaun.fattyzgrill.util.ModelUtil;
+import com.louanimashaun.fattyzgrill.util.Util;
 import com.louanimashaun.fattyzgrill.view.CheckoutFragment;
 import com.louanimashaun.fattyzgrill.view.Listeners;
 import com.louanimashaun.fattyzgrill.view.Listeners.MealOnClickListener;
 import com.louanimashaun.fattyzgrill.view.MealsFragment;
 import com.louanimashaun.fattyzgrill.view.NotificationFragment;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -93,9 +96,6 @@ public class MealActivity extends DaggerAppCompatActivity {
     private List<String> mSelectedMealIDs;
     private Map<String,Integer> mIdQuantityMap;
     private MealOnClickListener mMealOnClickListener;
-
-    private String[] ids;
-    TextView tv;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -281,10 +281,14 @@ public class MealActivity extends DaggerAppCompatActivity {
         mMealRepository.loadData(new DataSource.LoadCallback<Meal>() {
             @Override
             public void onDataLoaded(List<Meal> data) {
-                Map<String, String> idTitleMap = ModelUtil.convertToTitleIdMap(data);
+
+                final Map<String, String> idTitleMap = ModelUtil.convertToTitleIdMap(data);
                 String[] meals = idTitleMap.values().toArray(new String[data.size()]);
 
-                ids = idTitleMap.keySet().toArray(new String[data.size()]);
+                final List<String> mealTitles = new ArrayList<String>(idTitleMap.values());
+                final List<String> ids = new ArrayList<String>(idTitleMap.keySet());
+
+                //ids = idTitleMap.keySet().toArray(new String[data.size()]);
 
                 AutoCompleteTextView autoCompleteTextView =
                         (AutoCompleteTextView)findViewById(R.id.auto_complete_tv);
@@ -297,15 +301,17 @@ public class MealActivity extends DaggerAppCompatActivity {
                     }
                 });
                 autoCompleteTextView.setAdapter(
-                        new ArrayAdapter<>(MealActivity.this, android.R.layout.simple_list_item_1, meals));
+                        new ArrayAdapter<>(MealActivity.this, android.R.layout.simple_list_item_1, mealTitles));
+
+                //autoCompleteTextView.setAdapter(new SimpleAdapter(Util.getApp(), idTitleMap, android.R.layout.simple_list_item_1, meals, ));
 
                 autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
                         Toast.makeText(MealActivity.this, "click listener", Toast.LENGTH_SHORT).show();
-
-                        mMealsPresenter.findMeal(ids[i]);
+                        String chosenMeal = (String) adapterView.getAdapter().getItem(i);
+                        int index = mealTitles.indexOf(chosenMeal);
+                        mMealsPresenter.findMeal(ids.get(index));
                     }
                 });
             }
@@ -327,6 +333,12 @@ public class MealActivity extends DaggerAppCompatActivity {
         }
 
         basket_tv.setText(Integer.toString(total));
+    }
+
+
+    public class MealHolder{
+        String id;
+        String title;
     }
 
 }

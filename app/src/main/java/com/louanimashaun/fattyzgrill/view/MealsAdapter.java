@@ -30,7 +30,6 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
     private static int currentViewType;
     private Listeners.MealOnClickListener mClickListener;
 
-
     public MealsAdapter(List<Meal> meals){
         setList(meals);
     }

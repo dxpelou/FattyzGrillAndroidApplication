@@ -71,7 +71,16 @@ public class CheckoutAdapter extends ArrayAdapter<Meal> {
         });
 
         Meal meal = mMeals.get(position);
-        String price = String.valueOf(meal.getPrice());
+        String price = "£ ";
+
+        String price2 = String.valueOf(meal.getPrice());
+
+        String[] split = price2.split("\\.");
+        if(split[1].length() == 1) {
+            price2 += "0";
+        }
+
+        price += price2;
 
         titleTextView.setText(meal.getTitle());
         priceTextView.setText(price);

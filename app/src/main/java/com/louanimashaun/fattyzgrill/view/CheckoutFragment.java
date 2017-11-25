@@ -122,7 +122,6 @@ public class CheckoutFragment extends DaggerFragment implements CheckoutContract
     @Override
     public void notifyOrderError() {
         Toast.makeText(Util.getApp(), "Order Failed", Toast.LENGTH_LONG).show();
-
     }
 
     @Override

@@ -80,6 +80,6 @@ public class MealsPresenter implements MealContract.Presenter{
 
     @Override
     public void findMeal(String ids) {
-
+        mMealsView.scrollToMealWithId(ids);
     }
 }
