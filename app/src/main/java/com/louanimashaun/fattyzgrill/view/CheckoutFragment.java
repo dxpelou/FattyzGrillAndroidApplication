@@ -19,6 +19,7 @@ import com.louanimashaun.fattyzgrill.contract.CheckoutContract;
 import com.louanimashaun.fattyzgrill.di.ActivityScoped;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.presenter.CheckoutPresenter;
+import com.louanimashaun.fattyzgrill.util.StringUtil;
 import com.louanimashaun.fattyzgrill.util.Util;
 
 import java.util.ArrayList;
@@ -106,12 +107,12 @@ public class CheckoutFragment extends DaggerFragment implements CheckoutContract
         checkNotNull(meals);
         checkNotNull(quantities);
         mCheckoutAdapter.refreshData(meals, quantities);
-        showTotalPrice(meals);
+        showTotalPrice(meals, quantities);
     }
 
     @Override
     public void showNoCheckout() {
-        showTotalPrice(new ArrayList<Meal>());
+        showTotalPrice(new ArrayList<Meal>(), new ArrayList<Integer>());
     }
 
     @Override
@@ -129,13 +130,17 @@ public class CheckoutFragment extends DaggerFragment implements CheckoutContract
     }
 
 
-    private void showTotalPrice(List<Meal> meals){
-        int total = 0;
-        for(Meal meal : meals){
-            total += meal.getPrice();
+    private void showTotalPrice(List<Meal> meals, List<Integer> quantities){
+        float total = 0;
+
+        for(int i = 0; i < meals.size(); i++){
+            float price = meals.get(i).getPrice();
+            int quantity = quantities.get(i);
+
+            total += (price * quantity);
         }
 
-        mTotalPrice_tv.setText("£ " + total);
+        mTotalPrice_tv.setText(StringUtil.formatPrice(total));
     }
 
     private void sendOrder(){

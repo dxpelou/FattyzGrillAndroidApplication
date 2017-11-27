@@ -40,7 +40,7 @@ public class ModelUtil {
     }
 
     public static Meal createStubMeal(){
-        return new Meal( "2 piece chicken and chips", 3.0);
+        return new Meal( "2 piece chicken and chips", 3.0f);
     }
 
     public static Meal[] toArray(List<Meal> meals){
