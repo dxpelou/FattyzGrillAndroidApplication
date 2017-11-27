@@ -17,13 +17,13 @@ public class Meal extends RealmObject {
 
     private String title;
 
-    private double price;
+    private float price;
 
     private String category;
 
     public Meal(){}
 
-    public Meal( String title, double price) {
+    public Meal( String title, float price) {
         this.title = title;
         this.price = price;
     }
@@ -36,7 +36,7 @@ public class Meal extends RealmObject {
         this.title = title;
     }
 
-    public double getPrice() {
+    public float getPrice() {
         return price;
     }
 

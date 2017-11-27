@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.louanimashaun.fattyzgrill.R;
 import com.louanimashaun.fattyzgrill.model.Meal;
+import com.louanimashaun.fattyzgrill.util.StringUtil;
 
 import org.w3c.dom.Text;
 
@@ -71,7 +72,23 @@ public class CheckoutAdapter extends ArrayAdapter<Meal> {
         });
 
         Meal meal = mMeals.get(position);
-        String price = String.valueOf(meal.getPrice());
+        /*String price = "£ ";
+
+        String price2 = String.valueOf(meal.getPrice());
+
+        String[] split = price2.split("\\.");
+        if(split[1].length() == 1) {
+            price2 += "0";
+        }
+
+        price += price2;
+        */
+
+        int quantity = mQuantities.get(position);
+
+
+        String price = StringUtil.formatPrice(meal.getPrice() * quantity);
+
 
         titleTextView.setText(meal.getTitle());
         priceTextView.setText(price);
