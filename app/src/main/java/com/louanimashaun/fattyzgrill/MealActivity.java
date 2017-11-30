@@ -1,9 +1,13 @@
 package com.louanimashaun.fattyzgrill;
 
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.test.espresso.idling.CountingIdlingResource;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +23,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -59,11 +68,13 @@ import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
 
-public class MealActivity extends DaggerAppCompatActivity {
+public class MealActivity extends DaggerAppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     FirebaseAuth mFirebaseAuth;
     private static final int RC_SIGN_IN = 1;
     FirebaseAuth.AuthStateListener mAuthStateListener;
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
 
 
     @Inject
@@ -94,7 +105,7 @@ public class MealActivity extends DaggerAppCompatActivity {
     public UserRepository mUserRepository;
 
     private List<String> mSelectedMealIDs;
-    private Map<String,Integer> mIdQuantityMap;
+    private Map<String, Integer> mIdQuantityMap;
     private MealOnClickListener mMealOnClickListener;
 
 
@@ -151,11 +162,11 @@ public class MealActivity extends DaggerAppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
-                if(user != null){
+                if (user != null) {
 
                     getUser(user);
 
-                }else{
+                } else {
                     startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
@@ -175,7 +186,7 @@ public class MealActivity extends DaggerAppCompatActivity {
             }
         };
 
-        if(AdminUtil.isAdmin()) {
+        if (AdminUtil.isAdmin()) {
             FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.order_FCM_topic));
         }
 
@@ -187,9 +198,9 @@ public class MealActivity extends DaggerAppCompatActivity {
             @Override
             public void onClick(String mealId) {
                 //must be a LinkedHashMap to preserve order and for CheckoutPresenterUnitTest
-                if(mIdQuantityMap == null) mIdQuantityMap = new LinkedHashMap<String, Integer>();
+                if (mIdQuantityMap == null) mIdQuantityMap = new LinkedHashMap<String, Integer>();
 
-                if(!mIdQuantityMap.containsKey(mealId)){
+                if (!mIdQuantityMap.containsKey(mealId)) {
                     mIdQuantityMap.put(mealId, 1);
                     updateBasketCount();
                     return;
@@ -206,7 +217,7 @@ public class MealActivity extends DaggerAppCompatActivity {
         MealsFragment mealsFragment = (MealsFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.content_frame);
 
-        if (mealsFragment == null){
+        if (mealsFragment == null) {
             mealsFragment = MealsFragment.newInstance();
         }
 
@@ -214,11 +225,22 @@ public class MealActivity extends DaggerAppCompatActivity {
         commitFragmentTransaction(R.id.content_frame, mealsFragment);
 
         setupAutoCompleteTextView();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API).build();
+
+
+
+
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mGoogleApiClient.connect();
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
     }
 
@@ -228,8 +250,13 @@ public class MealActivity extends DaggerAppCompatActivity {
         mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mGoogleApiClient.disconnect();
+    }
 
-    public void getUser(final FirebaseUser firebaseUser){
+    public void getUser(final FirebaseUser firebaseUser) {
         //mUser Repository should be implemented through
         // presenter to increase testability
 
@@ -248,21 +275,62 @@ public class MealActivity extends DaggerAppCompatActivity {
             @Override
             public void onError(int errorCode) {
                 if (errorCode == UserRemoteDataSource.UserNotFoundErrorCode) {
-                    User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getEmail() ,false);
+                    User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getEmail(), false);
                     mUserRepository.saveData(user, new DataSource.CompletionCallback() {
                         @Override
                         public void onComplete() {
-                            Log.d("hi","hi");
+                            Log.d("hi", "hi");
                         }
 
                         @Override
                         public void onCancel() {
-                            Log.d("hi","hi");
+                            Log.d("hi", "hi");
                         }
                     });
                 }
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 0: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    if ( ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+
+                    mLocationRequest = LocationRequest.create();
+                    mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                    mLocationRequest.setInterval(1000);
+
+                    LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     private void commitFragmentTransaction(int fragmentId, Fragment fragment){
@@ -333,6 +401,59 @@ public class MealActivity extends DaggerAppCompatActivity {
         }
 
         basket_tv.setText(Integer.toString(total));
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION)) {
+
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                // No explanation needed, we can request the permission.
+
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION},
+                        0);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        }
+        mLocationRequest = LocationRequest.create();
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
+        mLocationRequest.setInterval(10000);
+        mLocationRequest.setFastestInterval(5000);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Toast.makeText(this, "Connection Suspended" , Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.makeText(this, "Connection Failed", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Toast.makeText(this, "location updated" + location.getLongitude(), Toast.LENGTH_LONG );
     }
 
 

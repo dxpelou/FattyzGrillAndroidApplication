@@ -63,6 +63,7 @@ dependencies {
     compile 'com.firebaseui:firebase-ui-auth:1.2.0'
     compile 'com.android.support:support-vector-drawable:25.3.1'
     compile 'com.google.firebase:firebase-messaging:10.2.0'
+    compile 'com.google.android.gms:play-services-location:10.2.0'
 
     compile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
 

@@ -1,8 +1,5 @@
 package com.louanimashaun.fattyzgrill.util;
 
-import android.widget.TextView;
-
-import com.louanimashaun.fattyzgrill.R;
 
 import java.text.NumberFormat;
 import java.util.Locale;
