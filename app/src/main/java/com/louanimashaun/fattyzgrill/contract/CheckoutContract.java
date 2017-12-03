@@ -23,7 +23,6 @@ public interface CheckoutContract {
         void notifyOrderError();
 
         void showQuantityChanged();
-
     }
 
     interface Presenter extends BasePresenter<View>{
@@ -37,6 +36,7 @@ public interface CheckoutContract {
 
         void addCheckoutChangeListener(Listeners.CheckoutChangedListener listener);
 
+        void navigateToAddressPage(String orderId);
     }
 
 }

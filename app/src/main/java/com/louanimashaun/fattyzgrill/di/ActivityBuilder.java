@@ -1,5 +1,6 @@
 package com.louanimashaun.fattyzgrill.di;
 
+import com.louanimashaun.fattyzgrill.AddressActivity;
 import com.louanimashaun.fattyzgrill.MealActivity;
 
 import dagger.Module;
@@ -16,5 +17,9 @@ public abstract class ActivityBuilder {
             NotficationModule.class,
             TokenModule.class})
     abstract MealActivity bindMealActivity();
+
+    @ActivityScoped
+    @ContributesAndroidInjector
+    abstract AddressActivity bindAdressActivity();
 
 }

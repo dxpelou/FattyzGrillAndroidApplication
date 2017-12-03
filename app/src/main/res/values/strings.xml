@@ -18,4 +18,5 @@
         <item>Grill</item>
         <item>Burgers</item>
     </array>
+    <string name="title_activity_address">AddressActivity</string>
 </resources>

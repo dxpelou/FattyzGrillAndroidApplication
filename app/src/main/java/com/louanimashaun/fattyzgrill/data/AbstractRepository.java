@@ -177,6 +177,16 @@ import static com.louanimashaun.fattyzgrill.util.PreconditonUtil.checkNotNull;
         mLocalDataSource.saveData(data, null);
     }
 
+    public void saveDate(T data, boolean isLocal, boolean isRemote, CompletionCallback callback){
+        if(isRemote){
+            mRemoteDataSource.saveData(data, callback);
+        }
+
+        if(isLocal){
+            mLocalDataSource.saveData(data, callback);
+        }
+    }
+
     public void refreshData(){
         mIsCacheDirty = true;
     }

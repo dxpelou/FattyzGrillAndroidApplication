@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.louanimashaun.fattyzgrill.AddressActivity"
+    tools:showIn="@layout/activity_address">
+
+    <TextView
+        android:id="@+id/title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textStyle="bold"
+        android:textColor="@color/apricot"
+        android:textSize="20sp"
+        android:layout_marginTop="40dp"
+        android:text="Enter Your Address"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:padding="10dp">
+        <EditText
+            android:id="@+id/address_first_line_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="First Line"
+            android:layout_marginTop="20dp"/>
+
+        <EditText
+            android:id="@+id/address_second_line_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="Second Line"/>
+
+        <EditText
+            android:id="@+id/city_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="City"/>
+
+        <EditText
+            android:id="@+id/postcode_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:hint="Postcode"/>
+        </LinearLayout>
+
+
+
+
+</FrameLayout>

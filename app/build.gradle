@@ -37,7 +37,7 @@ dependencies {
         annotationProcessor 'com.google.dagger:dagger-android-processor:2.11'
     })
 
-    androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.2.2'){
+    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.2') {
         exclude module: 'support-annotations'
         exclude module: 'support-v4'
         exclude module: 'recyclerview-v7'
@@ -49,23 +49,23 @@ dependencies {
 
 
 
+
+
+
+
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:cardview-v7:25.3.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:customtabs:25.3.1'
-
     compile 'com.facebook.android:facebook-android-sdk:4.22.1'
-
     compile 'com.google.firebase:firebase-database:10.2.0'
     compile 'com.google.firebase:firebase-auth:10.2.0'
     compile 'com.firebaseui:firebase-ui-auth:1.2.0'
     compile 'com.android.support:support-vector-drawable:25.3.1'
     compile 'com.google.firebase:firebase-messaging:10.2.0'
-
     compile 'com.android.support.test.espresso:espresso-idling-resource:2.2.2'
-
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.9.0'
 }

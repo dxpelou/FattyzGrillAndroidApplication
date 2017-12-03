@@ -1,5 +1,9 @@
 package com.louanimashaun.fattyzgrill.presenter;
 
+import android.content.Context;
+import android.content.Intent;
+
+import com.louanimashaun.fattyzgrill.AddressActivity;
 import com.louanimashaun.fattyzgrill.contract.CheckoutContract;
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealRepository;
@@ -9,6 +13,7 @@ import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Order;
 import com.louanimashaun.fattyzgrill.notifications.TokenDataSource;
 import com.louanimashaun.fattyzgrill.util.ModelUtil;
+import com.louanimashaun.fattyzgrill.util.Util;
 import com.louanimashaun.fattyzgrill.view.Listeners;
 
 import java.util.ArrayList;
@@ -96,7 +101,9 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
             return;
         }
 
-        mOrderRepository.saveData(order, new DataSource.CompletionCallback() {
+        navigateToAddressPage(order.getId());
+
+        /*mOrderRepository.saveData(order, new DataSource.CompletionCallback() {
             @Override
             public void onComplete() {
                 mCheckoutFragment.notifyOrderSent();
@@ -106,7 +113,7 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
             public void onCancel() {
                         mCheckoutFragment.notifyOrderError();
                     }
-        });
+        });*/
     }
 
     @Override
@@ -139,6 +146,15 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
     @Override
     public void addCheckoutChangeListener(Listeners.CheckoutChangedListener listener) {
         mCheckoutChangedListener = checkNotNull(listener);
+    }
+
+    @Override
+    public void navigateToAddressPage(String orderId) {
+        Context context = Util.getApp();
+        Intent intent = new Intent(context, AddressActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("order", orderId );
+        context.startActivity(intent);
     }
 
     private void getMealsById(List<String> meals, DataSource.GetCallback<Meal> callback){
