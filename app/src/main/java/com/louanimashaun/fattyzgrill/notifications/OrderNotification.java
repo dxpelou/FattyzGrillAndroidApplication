@@ -17,7 +17,8 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 public class OrderNotification {
 
     private static Context mConext;
-    private static OrderNotification INSTANCE ;
+    private static OrderNotification INSTANCE;
+    private static final int PRIORITY_MAX = 2;
 
 
     public static OrderNotification getInstance(Context context){
@@ -37,13 +38,14 @@ public class OrderNotification {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(Util.getApp())
                 .setSmallIcon(R.drawable.logof)
                 .setContentTitle(notification.getTitle())
-                .setContentText(notification.getMessage());
+                .setContentText(notification.getMessage())
+                .setPriority(PRIORITY_MAX);
 
         //TODO find the difference betwteen notificationManager and notificationManagerCompat
         NotificationManager notificationManager = (NotificationManager) mConext
                 .getSystemService(NOTIFICATION_SERVICE);
 
         int notificationID = 0;
-        notificationManager.notify(0, mBuilder.build());
+        notificationManager.notify(notificationID, mBuilder.build());
     }
 }

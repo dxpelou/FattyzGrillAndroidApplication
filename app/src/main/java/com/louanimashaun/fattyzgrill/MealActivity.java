@@ -64,6 +64,7 @@ public class MealActivity extends DaggerAppCompatActivity {
     FirebaseAuth mFirebaseAuth;
     private static final int RC_SIGN_IN = 1;
     FirebaseAuth.AuthStateListener mAuthStateListener;
+    static final String TAG = "MealActivity";
 
 
     @Inject
@@ -152,7 +153,8 @@ public class MealActivity extends DaggerAppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null){
-
+                    Toast.makeText(Util.getApp(), "user is not nuull", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "user is not null" );
                     getUser(user);
 
                 }else{
@@ -164,6 +166,9 @@ public class MealActivity extends DaggerAppCompatActivity {
 //                                    //,new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()))
                                     .build(),
                             RC_SIGN_IN);
+                    Toast.makeText(Util.getApp(), "user came back as null", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "user came back as null");
+
 
                     //needed
 //                                    .setAvailableProviders(
@@ -234,14 +239,20 @@ public class MealActivity extends DaggerAppCompatActivity {
         // presenter to increase testability
 
         mUserRepository.refreshData();
+
         mUserRepository.getUser(firebaseUser.getUid(), new DataSource.GetCallback<User>() {
             @Override
             public void onDataLoaded(User data) {
-
+            //only call get user to make sure, the user data is saved to remote date source
+                Toast.makeText(Util.getApp(), "get user:  returned a user", Toast.LENGTH_SHORT).show();
+                Log.w(TAG, "get user:  returned a user");
+                return;
             }
 
             @Override
             public void onDataNotAvailable() {
+                Toast.makeText(Util.getApp(), "get user: data was not available ", Toast.LENGTH_SHORT ).show();
+                Log.w(TAG, "get user: data was not available ");
 
             }
         }, new DataSource.ErrorCallback() {
@@ -252,12 +263,14 @@ public class MealActivity extends DaggerAppCompatActivity {
                     mUserRepository.saveData(user, new DataSource.CompletionCallback() {
                         @Override
                         public void onComplete() {
-                            Log.d("hi","hi");
+                            Toast.makeText(Util.getApp(),"ERROR CALLBACK: user saved", Toast.LENGTH_SHORT ).show();
+                            Log.d(TAG,"ER CB: user saved");
                         }
 
                         @Override
                         public void onCancel() {
-                            Log.d("hi","hi");
+                            Toast.makeText(Util.getApp(), "ERROR CALLBACK: Failed to save user", Toast.LENGTH_SHORT).show();
+                            Log.d(TAG,"ER CB: Failed to save user");
                         }
                     });
                 }
