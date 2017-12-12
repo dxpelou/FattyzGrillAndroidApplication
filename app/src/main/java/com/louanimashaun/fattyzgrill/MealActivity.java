@@ -285,6 +285,7 @@ public class MealActivity extends DaggerAppCompatActivity {
     }
 
     private void replaceFragment(Fragment fragment){
+        if(fragment.isAdded()) return;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.content_frame, fragment);
         transaction.commit();
