@@ -39,7 +39,9 @@ public class OrderNotification {
                 .setSmallIcon(R.drawable.logof)
                 .setContentTitle(notification.getTitle())
                 .setContentText(notification.getMessage())
-                .setPriority(PRIORITY_MAX);
+                .setPriority(PRIORITY_MAX)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setDefaults(NotificationCompat.DEFAULT_ALL);
 
         //TODO find the difference betwteen notificationManager and notificationManagerCompat
         NotificationManager notificationManager = (NotificationManager) mConext
