@@ -14,6 +14,8 @@ import com.louanimashaun.fattyzgrill.model.Order;
 import com.louanimashaun.fattyzgrill.util.StringUtil;
 import com.louanimashaun.fattyzgrill.util.Util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -47,20 +49,30 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(NotificationViewHolder holder, int position) {
         Notification notification =  mNotifications.get(position);
         Order order = mOrders.get(position);
+        DateFormat df = new SimpleDateFormat("dd-mm-yyyy HH:mm");
+        DateFormat dfTime = new SimpleDateFormat("HH:mm");
 
         holder.title_tv.setText(StringUtil.convertToCamelCase(notification.getMessage()));
         Date date = notification.getCreatedAt();
         // only need to handle null mock data
         if(date == null) date = new Date();
 
-        holder.date_tv.setText(date.toString());
+        holder.date_tv.setText(df.format(date));
 
-        String orderStatus = (order.isOrderAccepted()? "Order Accepted": "Order Pending");
+        String orderStatus = (order.isOrderAccepted()? "Order Status: Order Accepted": "Order Status: Order Pending");
         holder.order_status_tv.setText(orderStatus);
 
         int backgroundRID = (notification.isHasBeenOpened() ?  R.drawable.bg_item_meal : R.drawable.bg_notification_item_unopened);
         Drawable background = Util.getApp().getResources().getDrawable(backgroundRID);
         holder.background_ll.setBackground(background);
+
+
+        if(notification.getType().equals("order_accepted")){
+            String text = "Your order will be ready for Collection at " + dfTime.format(order.getCollectionAt());
+            holder.collection_time_tv.setText(text);
+        }else if(notification.getType().equals("new_order")){
+            holder.collection_time_tv.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -96,7 +108,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     public class NotificationViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        public TextView title_tv, date_tv, order_status_tv;
+        public TextView title_tv, date_tv, order_status_tv, collection_time_tv;
         public LinearLayout background_ll;
 
 
@@ -107,6 +119,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             date_tv = (TextView) itemView.findViewById(R.id.time_difference_tv);
             background_ll = (LinearLayout) itemView.findViewById(R.id.notification_item);
             order_status_tv = (TextView) itemView.findViewById(R.id.order_status_tv);
+            collection_time_tv = (TextView) itemView.findViewById(R.id.collection_time_tv);
 
             itemView.setOnClickListener(this);
         }

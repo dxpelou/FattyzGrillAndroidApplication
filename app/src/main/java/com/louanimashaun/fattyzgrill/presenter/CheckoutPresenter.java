@@ -12,6 +12,9 @@ import com.louanimashaun.fattyzgrill.util.ModelUtil;
 import com.louanimashaun.fattyzgrill.view.Listeners;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -49,8 +52,8 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
     public void loadCheckout() {
 
         if(mSelectedMeals == null || mSelectedMeals.size() == 0){
-            mCheckoutFragment.showNoCheckout();
-            return;
+//            mCheckoutFragment.showNoCheckout();
+//            return;
         }
 
         List<String> mealIds = new ArrayList<>(mSelectedMeals.keySet());
@@ -90,23 +93,39 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
         if (mSelectedMeals ==  null){
             return;
         }
-        Order order = createNewOrder(meals,mSelectedMeals);
 
-        if(order.getSenderNotificationToken() == null){
-            return;
-        }
-
-        mOrderRepository.saveData(order, new DataSource.CompletionCallback() {
+        mMealRepository.loadDataByIds(new ArrayList(mSelectedMeals.keySet()), new DataSource.LoadCallback<Meal>() {
             @Override
-            public void onComplete() {
-                mCheckoutFragment.notifyOrderSent();
+            public void onDataLoaded(List<Meal> data) {
+                Order order = createNewOrder(data,mSelectedMeals);
+
+                if(order.getSenderNotificationToken() == null){
+                    return;
+                }
+
+                mOrderRepository.saveData(order, new DataSource.CompletionCallback() {
+                    @Override
+                    public void onComplete() {
+                        mCheckoutFragment.notifyOrderSent();
+                        mSelectedMeals = new HashMap<String, Integer>();
+                        loadCheckout();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        mCheckoutFragment.notifyOrderError();
+                    }
+                });
             }
 
             @Override
-            public void onCancel() {
-                        mCheckoutFragment.notifyOrderError();
-                    }
+            public void onDataNotAvailable() {
+
+            }
         });
+
+
+
     }
 
     @Override
@@ -175,6 +194,7 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
         String token = mNotificationSharedPreference.getRefreshToken();
 
         order.setSenderNotificationToken(token);
+        order.setCreatedAt(new Date());
 
 
         return order;

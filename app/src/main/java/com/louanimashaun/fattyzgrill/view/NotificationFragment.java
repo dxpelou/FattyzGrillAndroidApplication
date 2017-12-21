@@ -2,6 +2,7 @@ package com.louanimashaun.fattyzgrill.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutManager;
@@ -19,6 +20,7 @@ import com.louanimashaun.fattyzgrill.model.Order;
 import com.louanimashaun.fattyzgrill.util.Util;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -104,15 +106,22 @@ public class NotificationFragment extends DaggerFragment implements Notification
 
     @Override
     public void showOrderList(List<Meal> meals, Order order) {
-        OrdersDialogFragment ordersDialogFragment = OrdersDialogFragment.getNewInstance(meals, order);
+        final OrdersDialogFragment ordersDialogFragment = OrdersDialogFragment.getNewInstance(meals, order);
         ordersDialogFragment.setAcceptClickListener(new Listeners.AcceptOrderClickListener() {
             @Override
-            public void onClick(String orderId) {
-                mNotificationPresenter.acceptOrder(orderId);
-                //Toast.makeText(Util.getApp(), "worked", Toast.LENGTH_LONG);
+            public void onClick(final String orderId) {
+                final ETADialog etaDialog = new ETADialog();
+                etaDialog.setCompletionCallback(new ETADialog.ETACompletionCallback() {
+                    @Override
+                    public void onComplete(Calendar calendar) {
+                        mNotificationPresenter.acceptOrder(orderId, calendar);
+                        Toast.makeText(Util.getApp(), "Confirmation sent to Customer", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                etaDialog.show(getFragmentManager(), "ETA");
             }
         });
-        ordersDialogFragment.show(getFragmentManager(), "order");
+        ordersDialogFragment.show(getFragmentManager(), "Order");
 
     }
 

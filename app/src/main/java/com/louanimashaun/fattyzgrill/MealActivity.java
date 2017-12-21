@@ -153,8 +153,6 @@ public class MealActivity extends DaggerAppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null){
-                    Toast.makeText(Util.getApp(), "user is not nuull", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "user is not null" );
                     getUser(user);
 
                 }else{
@@ -166,8 +164,6 @@ public class MealActivity extends DaggerAppCompatActivity {
 //                                    //,new AuthUI.IdpConfig.Builder(AuthUI.FACEBOOK_PROVIDER).build()))
                                     .build(),
                             RC_SIGN_IN);
-                    Toast.makeText(Util.getApp(), "user came back as null", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "user came back as null");
 
 
                     //needed
@@ -203,6 +199,8 @@ public class MealActivity extends DaggerAppCompatActivity {
                 mIdQuantityMap.put(mealId, quantity + 1);
 
                 updateBasketCount();
+
+                Toast.makeText(Util.getApp(), "Item added", Toast.LENGTH_SHORT).show();
             }
         };
 
@@ -244,15 +242,13 @@ public class MealActivity extends DaggerAppCompatActivity {
             @Override
             public void onDataLoaded(User data) {
             //only call get user to make sure, the user data is saved to remote date source
-                Toast.makeText(Util.getApp(), "get user:  returned a user", Toast.LENGTH_SHORT).show();
-                Log.w(TAG, "get user:  returned a user");
+                Toast.makeText(Util.getApp(), "Login Successful", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             @Override
             public void onDataNotAvailable() {
-                Toast.makeText(Util.getApp(), "get user: data was not available ", Toast.LENGTH_SHORT ).show();
-                Log.w(TAG, "get user: data was not available ");
+
 
             }
         }, new DataSource.ErrorCallback() {
@@ -263,14 +259,12 @@ public class MealActivity extends DaggerAppCompatActivity {
                     mUserRepository.saveData(user, new DataSource.CompletionCallback() {
                         @Override
                         public void onComplete() {
-                            Toast.makeText(Util.getApp(),"ERROR CALLBACK: user saved", Toast.LENGTH_SHORT ).show();
-                            Log.d(TAG,"ER CB: user saved");
+                            Toast.makeText(Util.getApp(), "Login Successful", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onCancel() {
-                            Toast.makeText(Util.getApp(), "ERROR CALLBACK: Failed to save user", Toast.LENGTH_SHORT).show();
-                            Log.d(TAG,"ER CB: Failed to save user");
+
                         }
                     });
                 }
@@ -310,7 +304,6 @@ public class MealActivity extends DaggerAppCompatActivity {
                 autoCompleteTextView.setOnKeyListener(new View.OnKeyListener() {
                     @Override
                     public boolean onKey(View view, int i, KeyEvent keyEvent) {
-                        Toast.makeText(MealActivity.this,"pressed",Toast.LENGTH_LONG).show();
                         return false;
                     }
                 });
@@ -322,7 +315,6 @@ public class MealActivity extends DaggerAppCompatActivity {
                 autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Toast.makeText(MealActivity.this, "click listener", Toast.LENGTH_SHORT).show();
                         String chosenMeal = (String) adapterView.getAdapter().getItem(i);
                         int index = mealTitles.indexOf(chosenMeal);
                         mMealsPresenter.findMeal(ids.get(index));

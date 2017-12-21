@@ -31,12 +31,21 @@
         android:id="@+id/time_difference_tv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:text="12 mins ago"
         android:textColor="@color/grey"
         android:layout_gravity="center_horizontal"
         android:layout_weight="1"
         android:maxLines="1"
         android:padding="2dp"
         android:layout_marginLeft="2dp"/>
+
+    <TextView
+        android:id="@+id/collection_time_tv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="Your order will be ready for Collection at "
+        android:layout_weight="1"
+        android:padding="2dp"
+        android:layout_marginLeft="2dp"/>
+
 
 </LinearLayout>

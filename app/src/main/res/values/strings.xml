@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FattyzGrill</string>
+    <string name="app_name">Fattyz Grill</string>
     <string name="title_activity_meals">Fattyz Grill Mobile App</string>
     <string name="action_checkout">Checkout</string>
     <string name="order_button">Order</string>

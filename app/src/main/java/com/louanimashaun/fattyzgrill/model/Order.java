@@ -41,6 +41,10 @@ public class Order extends RealmObject {
 
     private Date createdAt;
 
+    private Date acceptedAt;
+
+    private Date collectionAt;
+
     public Order(RealmList<RealmString> mealIdsRealm, RealmList<RealmInteger> quantities, double totalPrice, boolean isOrderPending){
         this.mealIdsRealm = mealIdsRealm;
         quantitiesRealm = quantities;
@@ -131,5 +135,21 @@ public class Order extends RealmObject {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Date getAcceptedAt() {
+        return acceptedAt;
+    }
+
+    public void setAcceptedAt(Date acceptedAt) {
+        this.acceptedAt = acceptedAt;
+    }
+
+    public Date getCollectionAt() {
+        return collectionAt;
+    }
+
+    public void setCollectionAt(Date collectionAt) {
+        this.collectionAt = collectionAt;
     }
 }

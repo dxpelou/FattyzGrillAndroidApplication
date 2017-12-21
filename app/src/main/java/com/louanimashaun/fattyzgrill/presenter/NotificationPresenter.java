@@ -1,5 +1,7 @@
 package com.louanimashaun.fattyzgrill.presenter;
 
+import android.widget.Toast;
+
 import com.louanimashaun.fattyzgrill.contract.NotificationContract;
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealRepository;
@@ -10,8 +12,12 @@ import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Notification;
 import com.louanimashaun.fattyzgrill.model.Order;
 import com.louanimashaun.fattyzgrill.util.AdminUtil;
+import com.louanimashaun.fattyzgrill.util.Util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -132,7 +138,7 @@ public class NotificationPresenter implements NotificationContract.Presenter {
     }
 
     @Override
-    public void acceptOrder(String id){
+    public void acceptOrder(String id, final Calendar collectionTime){
 
         if(!AdminUtil.isAdmin()) {
             return;
@@ -140,6 +146,10 @@ public class NotificationPresenter implements NotificationContract.Presenter {
         mOrderRepository.getData(id, new DataSource.GetCallback<Order>() {
             @Override
             public void onDataLoaded(final Order orderData) {
+
+                if(orderData.isOrderAccepted()){
+                    Toast.makeText(Util.getApp(), "Order has already been accepted", Toast.LENGTH_SHORT);
+                }
                 // you have to create a new object, unless you have to work with a realm managed object
                 Order acceptedOrder = new Order();
 
@@ -152,6 +162,11 @@ public class NotificationPresenter implements NotificationContract.Presenter {
                 acceptedOrder.setSenderNotificationToken(orderData.getSenderNotificationToken());
                 acceptedOrder.setUserId(orderData.getUserId());
                 acceptedOrder.setOrderAccepted(true);
+                acceptedOrder.setAcceptedAt(Calendar.getInstance().getTime());
+                acceptedOrder.setCollectionAt(collectionTime.getTime());
+
+
+
 
                 mOrderRepository.saveData(acceptedOrder, null);
 

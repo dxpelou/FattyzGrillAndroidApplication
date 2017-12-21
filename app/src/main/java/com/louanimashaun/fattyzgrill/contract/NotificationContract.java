@@ -4,6 +4,7 @@ import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Notification;
 import com.louanimashaun.fattyzgrill.model.Order;
 
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -30,7 +31,7 @@ public interface NotificationContract {
 
         void onNotification();
 
-        void acceptOrder(String orderId);
+        void acceptOrder(String orderId, Calendar collectionTime);
 
         void openNotification(String notificationID);
     }

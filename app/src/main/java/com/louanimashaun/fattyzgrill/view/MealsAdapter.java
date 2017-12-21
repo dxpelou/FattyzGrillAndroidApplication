@@ -106,7 +106,6 @@ public class MealsAdapter extends RecyclerView.Adapter<MealsAdapter.MealViewHold
 
     public class MealViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        //TODO use butterknife
         public TextView title_tv, price_tv, category_tv;
 
         public MealViewHolder(View itemView, int viewType) {
