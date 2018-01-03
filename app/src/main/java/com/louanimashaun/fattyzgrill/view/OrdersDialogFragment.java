@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.widget.ArrayAdapter;
 
 import com.louanimashaun.fattyzgrill.model.Meal;
+import com.louanimashaun.fattyzgrill.model.Notification;
 import com.louanimashaun.fattyzgrill.model.Order;
 
 import java.util.List;
@@ -23,14 +24,16 @@ public class OrdersDialogFragment extends DialogFragment {
 
     private static List<Meal> mMeals;
     private static Order mOrder;
+    private static String mNotificationType;
     private ArrayAdapter mArrayAdapter;
     private Listeners.AcceptOrderClickListener mAcceptClickListener;
     private DialogInterface.OnClickListener mCancelClickListener;
 
 
-    public static OrdersDialogFragment getNewInstance(List<Meal> meals, Order order){
+    public static OrdersDialogFragment getNewInstance(List<Meal> meals, Order order, String type){
         mMeals = checkNotNull(meals);
         mOrder = checkNotNull(order);
+        mNotificationType = checkNotNull(type);
 
         return new OrdersDialogFragment();
     }
@@ -40,8 +43,11 @@ public class OrdersDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Order")
-                .setItems(createArray(), null)
-                .setPositiveButton("Accept", new DialogInterface.OnClickListener() {
+                .setItems(createArray(), null);
+
+        if(mNotificationType.equals("new_order") && !mOrder.isOrderAccepted()){
+
+                builder.setPositiveButton("Accept", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if(mAcceptClickListener != null ){
                             mAcceptClickListener.onClick(mOrder.getId());
@@ -57,6 +63,7 @@ public class OrdersDialogFragment extends DialogFragment {
                         }
                     }
                 });
+        }
 
         return builder.create();
     }

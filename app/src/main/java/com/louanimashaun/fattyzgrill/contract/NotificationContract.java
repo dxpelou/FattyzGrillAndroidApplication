@@ -18,7 +18,7 @@ public interface NotificationContract {
 
         void showNewNotification(Notification notification);
 
-        void showOrderList(List<Meal> meals, Order order);
+        void showOrderList(List<Meal> meals, Order order, String notificationType);
 
         void showNoNotifcations();
     }

@@ -16,6 +16,7 @@ import com.louanimashaun.fattyzgrill.util.Util;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -49,15 +50,19 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void onBindViewHolder(NotificationViewHolder holder, int position) {
         Notification notification =  mNotifications.get(position);
         Order order = mOrders.get(position);
-        DateFormat df = new SimpleDateFormat("dd-mm-yyyy HH:mm");
+        DateFormat df = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         DateFormat dfTime = new SimpleDateFormat("HH:mm");
 
         holder.title_tv.setText(StringUtil.convertToCamelCase(notification.getMessage()));
         Date date = notification.getCreatedAt();
-        // only need to handle null mock data
-        if(date == null) date = new Date();
 
-        holder.date_tv.setText(df.format(date));
+        if(notification.getType().equals("order_accepted")){
+            holder.date_tv.setText(df.format(order.getAcceptedAt()));
+        }else if(notification.getType().equals("new_order")){
+            holder.date_tv.setText(df.format(order.getCreatedAt()));
+
+        }
+
 
         String orderStatus = (order.isOrderAccepted()? "Order Status: Order Accepted": "Order Status: Order Pending");
         holder.order_status_tv.setText(orderStatus);
@@ -89,6 +94,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         setOrdersList(orders);
         notifyDataSetChanged();
     }
+
 
     public void addData(Notification notification){
         checkNotNull(notification);
@@ -137,5 +143,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     public void setNotificationClickListener(Listeners.NotificationOnClickListener listener){
         mClickListener = checkNotNull(listener);
     }
+
 
 }

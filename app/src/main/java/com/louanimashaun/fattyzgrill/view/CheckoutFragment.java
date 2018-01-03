@@ -147,4 +147,5 @@ public class CheckoutFragment extends DaggerFragment implements CheckoutContract
         ((CheckoutPresenter)mCheckoutPresenter).checkoutOrder();
     }
 
+
 }

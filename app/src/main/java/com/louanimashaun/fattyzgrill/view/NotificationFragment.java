@@ -105,8 +105,8 @@ public class NotificationFragment extends DaggerFragment implements Notification
     }
 
     @Override
-    public void showOrderList(List<Meal> meals, Order order) {
-        final OrdersDialogFragment ordersDialogFragment = OrdersDialogFragment.getNewInstance(meals, order);
+    public void showOrderList(List<Meal> meals, Order order, String notificationType) {
+        final OrdersDialogFragment ordersDialogFragment = OrdersDialogFragment.getNewInstance(meals, order, notificationType);
         ordersDialogFragment.setAcceptClickListener(new Listeners.AcceptOrderClickListener() {
             @Override
             public void onClick(final String orderId) {

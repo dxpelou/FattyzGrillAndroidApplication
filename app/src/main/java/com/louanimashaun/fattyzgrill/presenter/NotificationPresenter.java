@@ -11,6 +11,7 @@ import com.louanimashaun.fattyzgrill.di.ActivityScoped;
 import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Notification;
 import com.louanimashaun.fattyzgrill.model.Order;
+import com.louanimashaun.fattyzgrill.notifications.OrderNotification;
 import com.louanimashaun.fattyzgrill.util.AdminUtil;
 import com.louanimashaun.fattyzgrill.util.Util;
 
@@ -18,6 +19,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -62,7 +66,7 @@ public class NotificationPresenter implements NotificationContract.Presenter {
         mNotificationLocalDataSource.loadData(new DataSource.LoadCallback<Notification>() {
             @Override
             public void onDataLoaded(final List<Notification> notifications) {
-                List<String> orderIds = new ArrayList<>();
+                final List<String> orderIds = new ArrayList<>();
 
                 for(Notification notification : notifications){
                     //TODO change Extras member variable to orderId
@@ -74,11 +78,23 @@ public class NotificationPresenter implements NotificationContract.Presenter {
                 mOrderRepository.loadDataByIds(orderIds, new DataSource.LoadCallback<Order>() {
                     @Override
                     public void onDataLoaded(List<Order> orders) {
-                        mNotificationView.showNotifications(notifications, orders);
+                        List<OrderNotificationPair> pairs = createNotificationOrderPair(orders, notifications);
+                        pairs = sortNotifications(pairs);
+
+                        List<Notification> notificationsList = new ArrayList<>();
+                        List<Order> ordersList = new ArrayList<>();
+
+                        for (OrderNotificationPair pair : pairs){
+                            notificationsList.add(pair.notification);
+                            ordersList.add(pair.order);
+                        }
+
+                        mNotificationView.showNotifications(notificationsList, ordersList);
                     }
 
                     @Override
                     public void onDataNotAvailable() {
+
                         mNotificationView.showNoNotifcations();
                     }
                 });
@@ -101,8 +117,9 @@ public class NotificationPresenter implements NotificationContract.Presenter {
 
         mNotificationLocalDataSource.getData(notificationId, new DataSource.GetCallback<Notification>() {
             @Override
-            public void onDataLoaded(Notification notificationData) {
+            public void onDataLoaded(final Notification notificationData) {
                 String orderId = notificationData.getExtras();
+                final String notificationType = notificationData.getType();
 
                 mOrderRepository.getData(orderId, new DataSource.GetCallback<Order>() {
                     @Override
@@ -110,7 +127,7 @@ public class NotificationPresenter implements NotificationContract.Presenter {
                         mMealRepository.loadDataByIds(orderData.getMealIds(), new DataSource.LoadCallback<Meal>() {
                             @Override
                             public void onDataLoaded(List<Meal> data) {
-                                mNotificationView.showOrderList(data, orderData);
+                                mNotificationView.showOrderList(data, orderData, notificationType);
                             }
 
                             @Override
@@ -164,6 +181,7 @@ public class NotificationPresenter implements NotificationContract.Presenter {
                 acceptedOrder.setOrderAccepted(true);
                 acceptedOrder.setAcceptedAt(Calendar.getInstance().getTime());
                 acceptedOrder.setCollectionAt(collectionTime.getTime());
+                acceptedOrder.setCreatedAt(orderData.getCreatedAt());
 
 
 
@@ -208,5 +226,60 @@ public class NotificationPresenter implements NotificationContract.Presenter {
     @Override
     public void onNotification() {
         //mLocalDataSource.addNotificationChange();
+    }
+
+
+    public class OrderNotificationPair{
+
+        Notification notification;
+        Order order;
+    }
+
+    public List<OrderNotificationPair> sortNotifications(List<OrderNotificationPair> notifications){
+        Collections.sort(notifications, new Comparator<OrderNotificationPair>() {
+            @Override
+            public int compare(OrderNotificationPair o1, OrderNotificationPair o2) {
+                Date date1 = o1.order.getCreatedAt();
+                Date date2 = o2.order.getCreatedAt();
+
+                if(o1.notification.getType() == "order_accepted"){
+                    date1 = o1.order.getAcceptedAt();
+                }
+
+                if(o2.notification.getType() == "order_accepted"){
+                    date2 = o2.order.getAcceptedAt();
+                }
+
+                if(date1.before(date2)){
+                    return 1;
+                }else if (date2.before(date1)){
+                    return -1;
+                }else{
+                    return 0;
+                }
+            }
+        });
+        return notifications;
+    }
+
+
+    public List<OrderNotificationPair> createNotificationOrderPair(List<Order> orders, List<Notification> notifications){
+        List<OrderNotificationPair> pairs = new ArrayList<>();
+
+        for (Order order : orders){
+            OrderNotificationPair pair = new OrderNotificationPair();
+            pair.order = order;
+            pairs.add(pair);
+        }
+
+        for(int i = 0 ; i < notifications.size(); i++){
+            Notification notification = notifications.get(i);
+            OrderNotificationPair onp = pairs.get(i);
+
+            onp.notification = notification;
+            pairs.set(i, onp);
+        }
+
+        return pairs;
     }
 }

@@ -1,5 +1,7 @@
 package com.louanimashaun.fattyzgrill.presenter;
 
+import android.widget.Toast;
+
 import com.louanimashaun.fattyzgrill.contract.CheckoutContract;
 import com.louanimashaun.fattyzgrill.data.DataSource;
 import com.louanimashaun.fattyzgrill.data.MealRepository;
@@ -9,6 +11,7 @@ import com.louanimashaun.fattyzgrill.model.Meal;
 import com.louanimashaun.fattyzgrill.model.Order;
 import com.louanimashaun.fattyzgrill.notifications.TokenDataSource;
 import com.louanimashaun.fattyzgrill.util.ModelUtil;
+import com.louanimashaun.fattyzgrill.util.Util;
 import com.louanimashaun.fattyzgrill.view.Listeners;
 
 import java.util.ArrayList;
@@ -51,18 +54,18 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
     @Override
     public void loadCheckout() {
 
-        if(mSelectedMeals == null || mSelectedMeals.size() == 0){
+        if(mSelectedMeals == null){
 //            mCheckoutFragment.showNoCheckout();
-//            return;
+            return;
         }
 
-        List<String> mealIds = new ArrayList<>(mSelectedMeals.keySet());
+        List<String> mealIds = new ArrayList(mSelectedMeals.keySet());
 
        mMealRepository.loadDataByIds(mealIds, new DataSource.LoadCallback<Meal>() {
            @Override
            public void onDataLoaded(List<Meal> data) {
                List<Integer> quanitiesList = new ArrayList<Integer>(mSelectedMeals.values());
-               mCheckoutFragment.showCheckout(data,quanitiesList );
+               mCheckoutFragment.showCheckout(data, quanitiesList );
            }
 
            @Override
@@ -100,6 +103,7 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
                 Order order = createNewOrder(data,mSelectedMeals);
 
                 if(order.getSenderNotificationToken() == null){
+                    Toast.makeText(Util.getApp(), "Unable to make order, please try again later", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -108,6 +112,7 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
                     public void onComplete() {
                         mCheckoutFragment.notifyOrderSent();
                         mSelectedMeals = new HashMap<String, Integer>();
+                        mCheckoutChangedListener.onCheckoutChanged(mSelectedMeals);
                         loadCheckout();
                     }
 
@@ -194,7 +199,7 @@ public class CheckoutPresenter implements CheckoutContract.Presenter {
         String token = mNotificationSharedPreference.getRefreshToken();
 
         order.setSenderNotificationToken(token);
-        order.setCreatedAt(new Date());
+        order.setCreatedAt(Calendar.getInstance().getTime());
 
 
         return order;

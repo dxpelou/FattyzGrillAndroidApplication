@@ -63,6 +63,7 @@ public class OrderFirebaseMessagingService extends FirebaseMessagingService {
         notification.setTitle(TITLE);
         notification.setExtras(data.get(ORDER_ID));
         notification.setHasBeenOpened(false);
+        notification.setCreatedAt(new Date());
 
         String type = data.get(TYPE_KEY);
 
